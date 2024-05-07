@@ -5,9 +5,9 @@ import pygame
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 768))
+screen = pygame.display.set_mode((800, 600))
 running = True
-MOVE_SPEED = 5
+MOVE_SPEED = 1
 
 player_pos = pygame.Vector2(100, 100)
 
