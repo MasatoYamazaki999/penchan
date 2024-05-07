@@ -1,5 +1,5 @@
 #
-# Pythonお勉強用 2
+# Pythonお勉強用 3
 #
 import pygame
 
