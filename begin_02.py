@@ -21,7 +21,8 @@ while running:
     screen.fill("black")
 
     # 位置に円を描く
-    pygame.draw.circle(screen, "blue", player_pos, 20)
+    # pygame.draw.circle(screen, "blue", player_pos, 20)
+    pygame.draw.rect(screen, (255, 0, 0), [player_pos.x, player_pos.y, 50, 20])
 
     # キー入力による移動(位置の値を変えているだけ)
     keys = pygame.key.get_pressed()
