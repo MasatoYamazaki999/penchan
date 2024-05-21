@@ -1,0 +1,14 @@
+==パパメモ==
+
+・javascript用に位置行にする置換文字 以下を空に全て置換で一行になります。
+ ^ +|\n|\r
+
+・変更するソースの場所
+(あなだのHome 多分c:¥Users¥Hiro)/Penpen/BlocklyPond/en/pond/duck/generated/en/compressed.js
+
+テストテスト
+
+寛子
+E5 AF 9B
+
+E3 82 B9
