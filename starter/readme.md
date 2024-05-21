@@ -3,4 +3,5 @@ This is a starter project for the [Chris Courses Online Multiplayer Game Tutoria
 To get started, download this repo and double click `index.html` to see the single-player game we'll base our multiplayer-game off of.
 
 test001
+test002
 
