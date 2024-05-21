@@ -53,6 +53,7 @@ TYPE_BULLET = 'B'
 I_TRUE = 1
 I_FALSE = 0
 
+# for git commit test ! 
 #IP_PORT = [(IP_MASA, PORT_2222), (IP_MAMA, PORT_2222)]
 IP_PORT = [(IP_MASA, PORT_2222), (IP_MASA, PORT_2223)]
 
