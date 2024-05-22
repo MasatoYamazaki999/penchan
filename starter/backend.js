@@ -36,19 +36,19 @@ io.on('connection', (socket) => {
   socket.on('keydown', (keycode) => {
     switch(keycode) {
       case 'KeyW':
-        backEndPlayers[socket.id].y -= 5
+        backEndPlayers[socket.id].y -= 10
         break
   
       case 'KeyA':
-        backEndPlayers[socket.id].x -= 5
+        backEndPlayers[socket.id].x -= 10
         break
   
       case 'KeyS':
-        backEndPlayers[socket.id].y += 5
+        backEndPlayers[socket.id].y += 10
         break
   
       case 'KeyD':
-        backEndPlayers[socket.id].x += 5
+        backEndPlayers[socket.id].x += 10
         break
       }
   })
