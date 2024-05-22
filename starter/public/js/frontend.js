@@ -31,9 +31,12 @@ socket.on('updatePlayers', (backEndPlayers) => {
       frontEndPlayers[id].x = backEndPlayer.x
       frontEndPlayers[id].y = backEndPlayer.y
       
-      playerInputs.findIndex(input => {
+      const lastBackendInputIndex = playerInputs.findIndex(input => {
         return backEndPlayer.sequenceNumber === input.sequenceNumber
       })
+
+      playerInputs.splice(0, lastBackendInputIndex + 1)
+
 
     }
   }
