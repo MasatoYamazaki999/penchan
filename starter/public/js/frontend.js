@@ -30,6 +30,11 @@ socket.on('updatePlayers', (backEndPlayers) => {
       // if a player already exists
       frontEndPlayers[id].x = backEndPlayer.x
       frontEndPlayers[id].y = backEndPlayer.y
+      
+      playerInputs.findIndex(input => {
+        return backEndPlayer.sequenceNumber === input.sequenceNumber
+      })
+
     }
   }
 
@@ -70,27 +75,37 @@ const keys = {
 }
 
 const SPEED = 10
-
+const playerInputs = []
+let sequenceNumber = 0
 setInterval(() => {
   if(keys.w.pressed) {
+    sequenceNumber++
+    playerInputs.push({sequenceNumber, dx: 0, dy: -SPEED})
     frontEndPlayers[socket.id].y -= SPEED
-    socket.emit('keydown', 'KeyW')
+    socket.emit('keydown', { keycode: 'KeyW', sequenceNumber })
   }
   
   if (keys.a.pressed) {
+    sequenceNumber++
+    playerInputs.push({sequenceNumber, dx: -SPEED, dy: 0})
     frontEndPlayers[socket.id].x -= SPEED
-    socket.emit('keydown', 'KeyA')
+    socket.emit('keydown', { keycode: 'KeyA', sequenceNumber })
   }
 
   if (keys.s.pressed) {
+    sequenceNumber++
+    playerInputs.push({sequenceNumber, dx: 0, dy: SPEED})
     frontEndPlayers[socket.id].y += SPEED
-    socket.emit('keydown', 'KeyS')
+    socket.emit('keydown', { keycode: 'KeyS', sequenceNumber })
   }
 
   if (keys.d.pressed) {
+    sequenceNumber++
+    playerInputs.push({sequenceNumber, dx: SPEED, dy: 0})
     frontEndPlayers[socket.id].x += SPEED
-    socket.emit('keydown', 'KeyD')
+    socket.emit('keydown', { keycode: 'KeyD', sequenceNumber })
   }
+  console.log(playerInputs)
 }, 15)
 
 window.addEventListener('keydown', (event) => {
