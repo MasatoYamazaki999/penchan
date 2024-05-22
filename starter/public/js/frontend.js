@@ -45,8 +45,13 @@ socket.on('updatePlayers', (backEndPlayers) => {
         })
       } else {
         // for all other players
-        frontEndPlayers[id].x = backEndPlayer.x
-        frontEndPlayers[id].y = backEndPlayer.y
+
+        gsap.to(frontEndPlayers[id], {
+          x: backEndPlayer.x,
+          y: backEndPlayer.y,
+          duration: 0.015,
+          ease: 'linear'
+        })
       }
     }
   }
@@ -87,7 +92,7 @@ const keys = {
   },
 }
 
-const SPEED = 10
+const SPEED = 15
 const playerInputs = []
 let sequenceNumber = 0
 setInterval(() => {
