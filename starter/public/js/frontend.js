@@ -27,17 +27,27 @@ socket.on('updatePlayers', (backEndPlayers) => {
         color: backEndPlayer.color
       })
     } else {
-      // if a player already exists
-      frontEndPlayers[id].x = backEndPlayer.x
-      frontEndPlayers[id].y = backEndPlayer.y
-      
-      const lastBackendInputIndex = playerInputs.findIndex(input => {
-        return backEndPlayer.sequenceNumber === input.sequenceNumber
-      })
+      if (id === socket.id) {
+        // if a player already exists
+        frontEndPlayers[id].x = backEndPlayer.x
+        frontEndPlayers[id].y = backEndPlayer.y
+        
+        const lastBackendInputIndex = playerInputs.findIndex(input => {
+          return backEndPlayer.sequenceNumber === input.sequenceNumber
+        })
 
-      playerInputs.splice(0, lastBackendInputIndex + 1)
+        if (lastBackendInputIndex > -1)
+          playerInputs.splice(0, lastBackendInputIndex + 1)
 
-
+        playerInputs.forEach((input) => {
+          frontEndPlayers[id].x += input.dx
+          frontEndPlayers[id].y += input.dy
+        })
+      } else {
+        // for all other players
+        frontEndPlayers[id].x = backEndPlayer.x
+        frontEndPlayers[id].y = backEndPlayer.y
+      }
     }
   }
 
