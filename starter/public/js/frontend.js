@@ -69,24 +69,26 @@ const keys = {
   },
 }
 
+const SPEED = 10
+
 setInterval(() => {
   if(keys.w.pressed) {
-    frontEndPlayers[socket.id].y -= 30
+    frontEndPlayers[socket.id].y -= SPEED
     socket.emit('keydown', 'KeyW')
   }
   
   if (keys.a.pressed) {
-    frontEndPlayers[socket.id].x -= 30
+    frontEndPlayers[socket.id].x -= SPEED
     socket.emit('keydown', 'KeyA')
   }
 
   if (keys.s.pressed) {
-    frontEndPlayers[socket.id].y += 30
+    frontEndPlayers[socket.id].y += SPEED
     socket.emit('keydown', 'KeyS')
   }
 
   if (keys.d.pressed) {
-    frontEndPlayers[socket.id].x += 30
+    frontEndPlayers[socket.id].x += SPEED
     socket.emit('keydown', 'KeyD')
   }
 }, 15)
