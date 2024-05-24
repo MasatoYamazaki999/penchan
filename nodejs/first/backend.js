@@ -1,18 +1,18 @@
-const express = require("express")
+const express = require('express')
 const app = express()
 
 // socket.io setup
-const http = require("http")
+const http = require('http')
 const server = http.createServer(app)
-const { Server } = require("socket.io")
+const { Server } = require('socket.io')
 const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 })
 
 const port = 3000
 
-app.use(express.static("public"))
+app.use(express.static('public'))
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html")
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
 })
 
 const backEndPlayers = {}
@@ -21,8 +21,8 @@ const backEndProjectiles = {}
 const SPEED = 10
 let projectileId = 0
 
-io.on("connection", (socket) => {
-  console.log("a user connected")
+io.on('connection', (socket) => {
+  console.log('a user connected')
   backEndPlayers[socket.id] = {
     x: 500 * Math.random(),
     y: 500 * Math.random(),
@@ -30,9 +30,16 @@ io.on("connection", (socket) => {
     sequenceNumber: 0,
   }
 
-  io.emit("updatePlayers", backEndPlayers)
+  io.emit('updatePlayers', backEndPlayers)
 
-  socket.on("shoot", ({ x, y, angle }) => {
+  socket.on('initCanvas', ({ width, height }) => {
+    backEndPlayers[socket.id].canvas = {
+      width,
+      height,
+    }
+  })
+
+  socket.on('shoot', ({ x, y, angle }) => {
     projectileId++
 
     const velocity = {
@@ -44,34 +51,34 @@ io.on("connection", (socket) => {
       x,
       y,
       velocity,
-      playerId: socket.id
+      playerId: socket.id,
     }
 
     console.log(backEndProjectiles)
   })
 
-  socket.on("disconnect", (reason) => {
-    console.log("disconnect reason: " + reason)
+  socket.on('disconnect', (reason) => {
+    console.log('disconnect reason: ' + reason)
     delete backEndPlayers[socket.id]
-    io.emit("updatePlayers", backEndPlayers)
+    io.emit('updatePlayers', backEndPlayers)
   })
 
-  socket.on("keydown", ({ keycode, sequenceNumber }) => {
+  socket.on('keydown', ({ keycode, sequenceNumber }) => {
     backEndPlayers[socket.id].sequenceNumber = sequenceNumber
     switch (keycode) {
-      case "KeyW":
+      case 'KeyW':
         backEndPlayers[socket.id].y -= SPEED
         break
 
-      case "KeyA":
+      case 'KeyA':
         backEndPlayers[socket.id].x -= SPEED
         break
 
-      case "KeyS":
+      case 'KeyS':
         backEndPlayers[socket.id].y += SPEED
         break
 
-      case "KeyD":
+      case 'KeyD':
         backEndPlayers[socket.id].x += SPEED
         break
     }
@@ -84,13 +91,26 @@ setInterval(() => {
   for (const id in backEndProjectiles) {
     backEndProjectiles[id].x += backEndProjectiles[id].velocity.x
     backEndProjectiles[id].y += backEndProjectiles[id].velocity.y
+
+    const PROJECTILE_RADIUS = 5
+    if (
+      backEndProjectiles[id].x - PROJECTILE_RADIUS >=
+        backEndPlayers[backEndProjectiles[id].playerId]?.canvas.width ||
+      backEndProjectiles[id].x + PROJECTILE_RADIUS <= 0 ||
+      backEndProjectiles[id].y - PROJECTILE_RADIUS >=
+        backEndPlayers[backEndProjectiles[id].playerId]?.canvas.height ||
+      backEndProjectiles[id].y + PROJECTILE_RADIUS <= 0
+    ) {
+      delete backEndProjectiles[id]
+    }
   }
-  io.emit("updateProjectiles", backEndProjectiles)
-  io.emit("updatePlayers", backEndPlayers)
+
+  io.emit('updateProjectiles', backEndProjectiles)
+  io.emit('updatePlayers', backEndPlayers)
 }, 15)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
 })
 
-console.log("server did load")
+console.log('server did load')

@@ -1,9 +1,9 @@
-const canvas = document.querySelector("canvas")
-const c = canvas.getContext("2d")
+const canvas = document.querySelector('canvas')
+const c = canvas.getContext('2d')
 
 const socket = io()
 
-const scoreEl = document.querySelector("#scoreEl")
+const scoreEl = document.querySelector('#scoreEl')
 
 const devicePixelRatio = window.devicePixelRatio || 1
 
@@ -16,7 +16,11 @@ const y = canvas.height / 2
 const frontEndPlayers = {}
 const frontEndProjectiles = {}
 
-socket.on("updateProjectiles", (backEndProjectiles) => {
+socket.on('connect', () => {
+  socket.emit('initCanvas', { width: canvas.width, height: canvas.height })
+})
+
+socket.on('updateProjectiles', (backEndProjectiles) => {
   for (const id in backEndProjectiles) {
     const backEndProjectile = backEndProjectiles[id]
 
@@ -26,16 +30,22 @@ socket.on("updateProjectiles", (backEndProjectiles) => {
         y: backEndProjectile.y,
         radius: 3,
         color: frontEndPlayers[backEndProjectile.playerId]?.color,
-        velocity: backEndProjectile.velocity
+        velocity: backEndProjectile.velocity,
       })
     } else {
       frontEndProjectiles[id].x += backEndProjectiles[id].velocity.x
       frontEndProjectiles[id].y += backEndProjectiles[id].velocity.y
     }
   }
+
+  for (const frontEndProjectileId in frontEndProjectiles) {
+    if (!backEndProjectiles[frontEndProjectileId]){
+      delete frontEndProjectiles[frontEndProjectileId]
+    }
+  }
 })
 
-socket.on("updatePlayers", (backEndPlayers) => {
+socket.on('updatePlayers', (backEndPlayers) => {
   for (const id in backEndPlayers) {
     const backEndPlayer = backEndPlayers[id]
 
@@ -72,7 +82,7 @@ socket.on("updatePlayers", (backEndPlayers) => {
           x: backEndPlayer.x,
           y: backEndPlayer.y,
           duration: 0.015,
-          ease: "linear",
+          ease: 'linear',
         })
       }
     }
@@ -87,7 +97,7 @@ socket.on("updatePlayers", (backEndPlayers) => {
 let animationId
 function animate() {
   animationId = requestAnimationFrame(animate)
-  c.fillStyle = "rgba(0, 0, 0, 0.1)"
+  c.fillStyle = 'rgba(0, 0, 0, 0.1)'
   c.fillRect(0, 0, canvas.width, canvas.height)
 
   for (const id in frontEndPlayers) {
@@ -131,70 +141,70 @@ setInterval(() => {
     sequenceNumber++
     playerInputs.push({ sequenceNumber, dx: 0, dy: -SPEED })
     frontEndPlayers[socket.id].y -= SPEED
-    socket.emit("keydown", { keycode: "KeyW", sequenceNumber })
+    socket.emit('keydown', { keycode: 'KeyW', sequenceNumber })
   }
 
   if (keys.a.pressed) {
     sequenceNumber++
     playerInputs.push({ sequenceNumber, dx: -SPEED, dy: 0 })
     frontEndPlayers[socket.id].x -= SPEED
-    socket.emit("keydown", { keycode: "KeyA", sequenceNumber })
+    socket.emit('keydown', { keycode: 'KeyA', sequenceNumber })
   }
 
   if (keys.s.pressed) {
     sequenceNumber++
     playerInputs.push({ sequenceNumber, dx: 0, dy: SPEED })
     frontEndPlayers[socket.id].y += SPEED
-    socket.emit("keydown", { keycode: "KeyS", sequenceNumber })
+    socket.emit('keydown', { keycode: 'KeyS', sequenceNumber })
   }
 
   if (keys.d.pressed) {
     sequenceNumber++
     playerInputs.push({ sequenceNumber, dx: SPEED, dy: 0 })
     frontEndPlayers[socket.id].x += SPEED
-    socket.emit("keydown", { keycode: "KeyD", sequenceNumber })
+    socket.emit('keydown', { keycode: 'KeyD', sequenceNumber })
   }
 }, 15)
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener('keydown', (event) => {
   if (!frontEndPlayers[socket.id]) return
 
   switch (event.code) {
-    case "KeyW":
+    case 'KeyW':
       keys.w.pressed = true
       break
 
-    case "KeyA":
+    case 'KeyA':
       keys.a.pressed = true
       break
 
-    case "KeyS":
+    case 'KeyS':
       keys.s.pressed = true
       break
 
-    case "KeyD":
+    case 'KeyD':
       keys.d.pressed = true
       break
   }
 })
 
-window.addEventListener("keyup", (event) => {
+window.addEventListener('keyup', (event) => {
   if (!frontEndPlayers[socket.id]) return
 
   switch (event.code) {
-    case "KeyW":
+    case 'KeyW':
       keys.w.pressed = false
       break
 
-    case "KeyA":
+    case 'KeyA':
       keys.a.pressed = false
       break
 
-    case "KeyS":
+    case 'KeyS':
       keys.s.pressed = false
       break
 
-    case "KeyD":
+    case 'KeyD':
       keys.d.pressed = false
       break
   }
