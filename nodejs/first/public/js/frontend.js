@@ -42,7 +42,11 @@ socket.on("updatePlayers", (backEndPlayers) => {
         playerInputs.forEach((input) => {
           frontEndPlayers[id].x += input.dx;
           frontEndPlayers[id].y += input.dy;
-        });
+        })
+      } else {
+        // for all other players
+        frontEndPlayers[id].x = backEndPlayer.x;
+        frontEndPlayers[id].y = backEndPlayer.y;
       }
     }
   }
