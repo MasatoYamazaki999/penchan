@@ -47,6 +47,13 @@ socket.on("updatePlayers", (backEndPlayers) => {
         // for all other players
         frontEndPlayers[id].x = backEndPlayer.x;
         frontEndPlayers[id].y = backEndPlayer.y;
+
+        gsap.to(frontEndPlayers[id], {
+          x: backEndPlayer.x,
+          y: backEndPlayer.y,
+          duration: 0.015,
+          ease: 'linear'
+        })
       }
     }
   }
