@@ -28,7 +28,7 @@ socket.on('updateProjectiles', (backEndProjectiles) => {
       frontEndProjectiles[id] = new Projectile({
         x: backEndProjectile.x,
         y: backEndProjectile.y,
-        radius: 3,
+        radius: 5,
         color: frontEndPlayers[backEndProjectile.playerId]?.color,
         velocity: backEndProjectile.velocity,
       })
