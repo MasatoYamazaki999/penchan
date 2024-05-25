@@ -19,6 +19,7 @@ const backEndPlayers = {}
 const backEndProjectiles = {}
 
 const SPEED = 10
+const RADIUS = 10
 let projectileId = 0
 
 io.on('connection', (socket) => {
@@ -32,10 +33,15 @@ io.on('connection', (socket) => {
 
   io.emit('updatePlayers', backEndPlayers)
 
-  socket.on('initCanvas', ({ width, height }) => {
+  socket.on('initCanvas', ({ width, height, devicePixelRatio }) => {
     backEndPlayers[socket.id].canvas = {
       width,
-      height,
+      height
+    }
+    backEndPlayers[socket.id].radius = RADIUS
+
+    if (devicePixelRatio > 1) {
+      backEndPlayers[socket.id].radius = 2 * RADIUS
     }
   })
 
