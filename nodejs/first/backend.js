@@ -59,7 +59,6 @@ io.on('connection', (socket) => {
       velocity,
       playerId: socket.id,
     }
-
     console.log(backEndProjectiles)
   })
 
@@ -108,6 +107,25 @@ setInterval(() => {
       backEndProjectiles[id].y + PROJECTILE_RADIUS <= 0
     ) {
       delete backEndProjectiles[id]
+      continue
+    }
+
+    for (const playerId in backEndPlayers) {
+      const backEndPlayer = backEndPlayers[playerId]
+
+      const DISTANCE = Math.hypot(
+        backEndProjectiles[id].x - backEndPlayer.x,
+        backEndProjectiles[id].y - backEndPlayer.y
+      )
+      
+      if (
+        DISTANCE < PROJECTILE_RADIUS + backEndPlayer.radius &&
+        backEndProjectiles[id].playerId !== playerId
+      ) {
+        delete backEndProjectiles[id]
+        delete backEndPlayers[playerId]
+        break
+      }
     }
   }
 
