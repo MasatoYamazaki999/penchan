@@ -12,6 +12,9 @@
         padding: 0.5em;
         border: 1px solid #999;
       }
+      .select {
+        width: 100px;
+      }
     </style>
     <script>
       //
@@ -40,7 +43,7 @@
       };
 
       var all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
-      console.log(all_array);
+      //console.log(all_array);
       function create_option() {
         let arr = [" ", "１", "２", "３", "４", "５", "６", "７", "８", "９"];
         let sl = document.getElementById("select1");
@@ -54,34 +57,39 @@
       // 画面起動時
       //
       window.onload = function () {
-        console.log("program start");
         create_option();
       };
+      function check_hit(inp_num, ans_num) {
+        let hit = 0;
+        for (let i = 0; i < 4; i++) {
+          console.log(inp_num[i] + " " + ans_num[i]);
+          if (inp_num[i] == ans_num[i]) {
+            hit++;
+          }
+        }
+        return hit;
+      }
       //
       // Hit and Blow
       //
-      function hit_and_blow(input_number) {
-        console.log("this is " + input_number);
-        const t1 = input_number.charAt(0);
-        const t2 = input_number.charAt(1);
-        const t3 = input_number.charAt(2);
-        const t4 = input_number.charAt(3);
-        for (const num of all_array) {
-          hit = 0;
-          blow = 0;
-          for (const i of Array(4)) {
-            console.log(i);
-          }
-          const n1 = num[0];
-          const n2 = num[1];
-          const n3 = num[2];
-          const n4 = num[3];
+      function hit_and_blow(inum) {
+        for (const tnum of all_array) {
+          let hit = check_hit(inum, tnum);
+          let blow = 0;
+          console.log("hit " + hit);
 
-          console.log(t1 + " : " + n1);
-          console.log(t2 + " : " + n2);
-          console.log(t3 + " : " + n3);
-          console.log(t4 + " : " + n4);
+          // } else {
+          //   for (let j = 0; j < 4; j++) {
+          //     if (i != j) if (inum[i] == tnum[j]) blow++;
+          //   }
+          // }
 
+          result_text = hit + " hit " + blow + " blow";
+          console.log("result " + result_text);
+          let sl = document.getElementById("result");
+          let opt = document.createElement("option");
+          opt.text = result_text;
+          sl.appendChild(opt);
           break;
         }
       }
@@ -116,6 +124,9 @@
           <select id="select2"></select>
           <select id="select3"></select>
           <select id="select4"></select>
+        </div>
+        <div>
+          <select id="result" class="select"></select>
         </div>
       </body>
     </html>
