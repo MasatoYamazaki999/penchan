@@ -9,11 +9,11 @@ class Player {
   draw() {
     c.beginPath()
     c.arc(
-      this.x,
-      this.y,
-      this.radius * window.devicePixelRatio,
-      0,
-      Math.PI * 2,
+      this.x, 
+      this.y, 
+      this.radius * window.devicePixelRatio, 
+      0, 
+      Math.PI * 2, 
       false
     )
     c.fillStyle = this.color

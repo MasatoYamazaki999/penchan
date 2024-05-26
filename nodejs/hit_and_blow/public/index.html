@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <style>
+      body {
+        margin: 4;
+      }
+      .input_number {
+        display: inline-block;
+        width: 70px;
+        padding: 0.5em;
+        border: 1px solid #999;
+      }
+    </style>
+    <script>
+      //
+      // 9 permutation 4 同一数値なしの順列算出(3024個)
+      //
+      const permutation = (nums, k) => {
+        let ans = [];
+        if (nums.length < k) {
+          return [];
+        }
+        if (k === 1) {
+          for (let i = 0; i < nums.length; i++) {
+            ans[i] = [nums[i]];
+          }
+        } else {
+          for (let i = 0; i < nums.length; i++) {
+            let parts = nums.slice(0);
+            parts.splice(i, 1)[0];
+            let row = permutation(parts, k - 1);
+            for (let j = 0; j < row.length; j++) {
+              ans.push([nums[i]].concat(row[j]));
+            }
+          }
+        }
+        return ans;
+      };
+
+      var all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+      console.log(all_array);
+      function create_option() {
+        let arr = [" ", "１", "２", "３", "４", "５", "６", "７", "８", "９"];
+        let sl = document.getElementById("select1");
+        for (let num in arr) {
+          let op = document.createElement("option");
+          op.text = arr[num];
+          sl.appendChild(op);
+        }
+      }
+      //
+      // 画面起動時
+      //
+      window.onload = function () {
+        console.log("program start");
+        create_option();
+      };
+      //
+      // Hit and Blow
+      //
+      function hit_and_blow(input_number) {
+        console.log("this is " + input_number);
+        const t1 = input_number.charAt(0);
+        const t2 = input_number.charAt(1);
+        const t3 = input_number.charAt(2);
+        const t4 = input_number.charAt(3);
+        for (const num of all_array) {
+          hit = 0;
+          blow = 0;
+          for (const i of Array(4)) {
+            console.log(i);
+          }
+          const n1 = num[0];
+          const n2 = num[1];
+          const n3 = num[2];
+          const n4 = num[3];
+
+          console.log(t1 + " : " + n1);
+          console.log(t2 + " : " + n2);
+          console.log(t3 + " : " + n3);
+          console.log(t4 + " : " + n4);
+
+          break;
+        }
+      }
+      //
+      // 検証
+      //
+      function onClick() {
+        input_number = document.getElementById("in_num");
+        hit_and_blow(input_number.value);
+      }
+    </script>
+  </head>
+  <body>
+    <!-- <!DOCTYPE html> -->
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Hit And Blow ver 0.01</title>
+      </head>
+      <body>
+        <h4>Hit And Blow</h4>
+        <div>
+          <input
+            class="input_number"
+            type="text"
+            id="in_num"
+            oninput="value = value.replace(/[０-９]/g, s => 
+              String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');"
+          />
+          <button type="button" onclick="onClick()">検証</button>
+          <select id="select1"></select>
+          <select id="select2"></select>
+          <select id="select3"></select>
+          <select id="select4"></select>
+        </div>
+      </body>
+    </html>
+  </body>
+</html>
