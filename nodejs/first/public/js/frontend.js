@@ -60,6 +60,9 @@ socket.on('updatePlayers', (backEndPlayers) => {
         radius: 10,
         color: backEndPlayer.color,
       })
+      document.querySelector(
+        '#playerLabels'
+      ).innerHTML += `<div data-id="${id}">${id}:0</div>`
     } else {
       if (id === socket.id) {
         // if a player already exists
@@ -91,8 +94,12 @@ socket.on('updatePlayers', (backEndPlayers) => {
       }
     }
   }
+
+  // this is where we delete frontend players
   for (const id in frontEndPlayers) {
     if (!backEndPlayers[id]) {
+      const divToDelete = document.querySelector(`div[data-id="${id}"`)
+      divToDelete.parentNode.removeChild(divToDelete)
       delete frontEndPlayers[id]
     }
   }
