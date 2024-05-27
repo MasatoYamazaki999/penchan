@@ -17,6 +17,9 @@
       }
     </style>
     <script>
+      var all_array = [];
+      var score = 0;
+      var answer = [];
       //
       // 9 permutation 4 同一数値なしの順列算出(3024個)
       //
@@ -42,63 +45,107 @@
         return ans;
       };
 
-      var all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
-      //console.log(all_array);
+      //
+      // create option guide
+      //
       function create_option() {
         let arr = [" ", "１", "２", "３", "４", "５", "６", "７", "８", "９"];
-        let sl = document.getElementById("select1");
-        for (let num in arr) {
-          let op = document.createElement("option");
-          op.text = arr[num];
-          sl.appendChild(op);
+        for (let n = 1; n < 5; n++) {
+          let sel = document.getElementById("select" + n);
+          for (let num in arr) {
+            let op = document.createElement("option");
+            op.text = arr[num];
+            sel.appendChild(op);
+          }
         }
       }
       //
       // 画面起動時
       //
       window.onload = function () {
-        create_option();
+        onReset();
       };
-      function check_hit(inp_num, ans_num) {
+
+      //
+      // HIT数 BLOW数 算出
+      //
+      function check_hit_blow_num(inp_num, target_num) {
         let hit = 0;
+        let blow = 0;
         for (let i = 0; i < 4; i++) {
-          console.log(inp_num[i] + " " + ans_num[i]);
-          if (inp_num[i] == ans_num[i]) {
+          // hit
+          if (inp_num[i] == target_num[i]) {
             hit++;
+          } else {
+            // blow
+            for (let j = 0; j < 4; j++) {
+              if (i != j) {
+                if (inp_num[i] == target_num[j]) {
+                  blow++;
+                }
+              }
+            }
           }
         }
-        return hit;
+        return [hit, blow];
       }
       //
-      // Hit and Blow
+      // check hit and blow main logic
       //
-      function hit_and_blow(inum) {
-        for (const tnum of all_array) {
-          let hit = check_hit(inum, tnum);
-          let blow = 0;
-          console.log("hit " + hit);
-
-          // } else {
-          //   for (let j = 0; j < 4; j++) {
-          //     if (i != j) if (inum[i] == tnum[j]) blow++;
-          //   }
-          // }
-
-          result_text = hit + " hit " + blow + " blow";
-          console.log("result " + result_text);
-          let sl = document.getElementById("result");
-          let opt = document.createElement("option");
-          opt.text = result_text;
-          sl.appendChild(opt);
-          break;
+      function check_main(inp_num) {
+        const ans_hit_blow = check_hit_blow_num(inp_num, answer);
+        score++;
+        let checked_array = [];
+        for (const target_num of all_array) {
+          const one_hit_blow = check_hit_blow_num(inp_num, target_num);
+          if (JSON.stringify(ans_hit_blow) === JSON.stringify(one_hit_blow)) {
+            checked_array.push(target_num);
+          }
         }
+        all_array = checked_array;
+        console.log("残り: " + checked_array.length);
+        return ans_hit_blow;
       }
       //
       // 検証
       //
       function onClick() {
         input_number = document.getElementById("in_num");
-        hit_and_blow(input_number.value);
+        let result = check_main(input_number.value);
+
+        if (all_array.length == 1) {
+          document.getElementById("reset").disabled = null;
+          document.getElementById("run").disabled = "disabled";
+          result_text = "解きました! 回数(" + score + ")";
+        } else {
+          result_text =
+            score +
+            " : " +
+            input_number.value +
+            " : " +
+            result[0] +
+            " hit " +
+            result[1] +
+            " blow";
+        }
+
+        document.querySelector(
+          "#result"
+        ).innerHTML += `<div>${result_text}</div>`;
+      }
+      //
+      // 開始
+      //
+      function onReset() {
+        create_option();
+        document.getElementById("in_num").value = "";
+        document.querySelector("#result").innerHTML = "";
+        document.getElementById("reset").disabled = "disabled";
+        document.getElementById("run").disabled = null;
+        all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+        score = 0;
+        answer = all_array[Math.trunc(Math.random() * all_array.length)];
+        console.log("ans is " + answer);
       }
     </script>
   </head>
@@ -112,21 +159,25 @@
       <body>
         <h4>Hit And Blow</h4>
         <div>
+          <button id="reset" type="button" onclick="onReset()">開始</button>
+        </div>
+        <span style="margin-bottom: 8px;">-------------</span>
+        <div>
           <input
             class="input_number"
             type="text"
             id="in_num"
-            oninput="value = value.replace(/[０-９]/g, s => 
-              String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g,'');"
+            oninput="javascript: this.value = this.value.slice(0, 4)"
           />
-          <button type="button" onclick="onClick()">検証</button>
+          <button id="run" type="button" onclick="onClick()">検証</button>
           <select id="select1"></select>
           <select id="select2"></select>
           <select id="select3"></select>
           <select id="select4"></select>
         </div>
         <div>
-          <select id="result" class="select"></select>
+          <span style="margin-bottom: 8px;">-------------</span>
+          <div id="result"></div>
         </div>
       </body>
     </html>
