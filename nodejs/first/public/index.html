@@ -2,11 +2,18 @@
   <head>
     <style>
       body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
         margin: 0;
+      }
+
+      input::placeholder {
+        color: #94a3b8;
       }
       canvas {
         width: 100%;
-        height: 50%;
+        height: 100%;
       }
     </style>
   </head>
@@ -22,10 +29,60 @@
         background: rgba(0, 0, 0, 0.5);
       "
     >
-      <span style="margin-bottom: 8px">Leaderboard</span>
+      <span style="margin-bottom: 8px;">Leaderboard</span>
       <div id="playerLabels"></div>
     </div>
     <canvas></canvas>
+
+    <!-- username input -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      "
+    >
+      <form id="usernameForm">
+        <div>
+          <input
+            id="usernameInput"
+            type="text"
+            placeholder="Username"
+            style="
+              padding: 12px;
+              border-radius: 20px;
+              border: none;
+              background: #475569;
+              color: #cbd5e1;
+            "
+          />
+        </div>
+        <div style="text-align: center; margin-top: 8px;">
+          <button
+            style="
+              padding: 8px 20px;
+              border-radius: 100px;
+              border: none;
+              background-image: linear-gradient(
+                to right,
+                rgb(6, 182, 212),
+                rgb(59, 130, 246)
+              );
+              color: white;
+              cursor: pointer;
+            "
+          >
+            Start!
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- username input end -->
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
@@ -40,11 +97,5 @@
     <script src="./js/classes/Projectile.js"></script>
     <script src="./js/frontend.js"></script>
     <script src="./js/eventListeners.js"></script>
-
-  <p>Hello penchan!</p>
-  <form action="">
-    <input type="text" id="input_message" required minlength="4" maxlength="8" size="10"　autocomplete="off" />
-    <button type="submit">Send</button>
-  </form>
   </body>
 </html>
