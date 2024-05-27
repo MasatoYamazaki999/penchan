@@ -116,7 +116,12 @@
         input_number = document.getElementById("in_num");
         let result = check_main(input_number.value);
 
-        result_text =
+        if (all_array.length == 1) {
+          document.getElementById("reset").disabled = null;
+          document.getElementById("run").disabled = "disabled";
+          result_text = "解きました! 回数(" + score + ")";
+        } else {
+          result_text =
             score +
             " : " +
             input_number.value +
@@ -125,11 +130,6 @@
             " hit " +
             result[1] +
             " blow";
-
-        if (result[0] == 4) {
-          document.getElementById("reset").disabled = null;
-          document.getElementById("run").disabled = "disabled";
-          result_text += "<br>解きました! 回数(" + score + ")";
         }
 
         document.querySelector(

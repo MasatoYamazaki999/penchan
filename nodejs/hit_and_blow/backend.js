@@ -12,6 +12,9 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 })
 
+app.get('/a', (req, res) => {
+  res.sendFile(__dirname + '/public/hit_and_blow.html')
+})
 
 server.listen(port, () => {
   console.log('lisen')
