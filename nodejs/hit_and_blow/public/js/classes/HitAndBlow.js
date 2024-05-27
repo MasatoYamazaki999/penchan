@@ -22,7 +22,7 @@ class HitAndBlow {
       }
       return result;
     };
-    self.all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+    this.all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
   }
   getHitAndBlow(inp_num, target_num) {
     let hit = 0;
@@ -45,3 +45,6 @@ class HitAndBlow {
     return [hit, blow];
   }
 }
+
+
+

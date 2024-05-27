@@ -17,12 +17,14 @@ app.get('/', (req, res) => {
 })
 
 const backEndPlayers = {}
+//var all_array = []
+
 io.on('connection', (socket) => {
   console.log('a user connected')
 
   io.emit('updatePlayers', backEndPlayers)
 
-  socket.on('initGame', ({ username, width, height }) => { 
+  socket.on('initGame', ({ username: username, width: width, height: height }) => {
     // create backEndPlayers.
     backEndPlayers[socket.id] = {
       username

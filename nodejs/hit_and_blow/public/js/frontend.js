@@ -19,7 +19,6 @@ socket.on("updatePlayers", (backEndPlayers) => {
       frontEndPlayers[id] = new Player({
         username: backEndPlayer.username
       });
-
       document.querySelector("#playerLabels").innerHTML += `<div data-id="${id}"></div>`;
     } else {
       // update player
@@ -41,10 +40,23 @@ function animate() {
 }
 
 animate();
+var all_array = []
 
 document.querySelector("#usernameForm").addEventListener("submit", (event) => {
+  console.log('form submited.')
   // ページリロードをprevent(妨げる)する。
   event.preventDefault();
+  const hb = new HitAndBlow()
+
+  inp = document.querySelector("#usernameInput").value
+  if (inp.length != 4) return
+
+  console.log("inp: " + inp[0] + ":" + inp[1]+ ":" + inp[2]+ ":" + inp[3])
+
+  console.log(hb.getHitAndBlow(inp, hb.all_array[0]))
+
+  console.log(" FRONT END " + hb.all_array.length)
+
   // 初期化
   socket.emit("initGame", {
     width: canvas.width,
