@@ -51,12 +51,14 @@ document.querySelector("#usernameForm").addEventListener("submit", (event) => {
   inp = document.querySelector("#usernameInput").value
   if (inp.length != 4) return
 
+
   console.log("inp: " + inp[0] + ":" + inp[1]+ ":" + inp[2]+ ":" + inp[3])
 
   console.log(hb.getHitAndBlow(inp, hb.all_array[0]))
 
   console.log(" FRONT END " + hb.all_array.length)
 
+  console.log("ラズパイ最高!")
   // 初期化
   socket.emit("initGame", {
     width: canvas.width,
