@@ -11,6 +11,7 @@ c.scale(devicePixelRatio, devicePixelRatio);
 const frontEndPlayers = {};
 
 socket.on("updatePlayers", (backEndPlayers) => {
+  //console.log(frontEndPlayers)
   for (const id in backEndPlayers) {
     const backEndPlayer = backEndPlayers[id];
 
@@ -19,11 +20,16 @@ socket.on("updatePlayers", (backEndPlayers) => {
       frontEndPlayers[id] = new Player({
         username: backEndPlayer.username
       });
-      document.querySelector("#playerLabels").innerHTML += `<div data-id="${id}"></div>`;
+      //document.querySelector("#member").innerHTML += `<div>${frontEndPlayers[id].username}</div>`;
     } else {
       // update player
-      document.querySelector(`div[data-id="${id}"`).innerHTML = "";
+      //document.querySelector(`div[data-id="${id}"`).innerHTML = "";
     }
+  }
+  // 参加者表示
+  document.querySelector("#member").innerHTML = '';
+  for (const id in frontEndPlayers) {
+    document.querySelector("#member").innerHTML += `<div>${frontEndPlayers[id].username}</div>`;
   }
 
   // this is where we delete frontend players
@@ -32,37 +38,47 @@ socket.on("updatePlayers", (backEndPlayers) => {
       delete frontEndPlayers[id];
     }
   }
+  
 });
 
-function animate() {
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  //frontEndPlayer.draw();
-}
+// function animate() {
+//   c.clearRect(0, 0, canvas.width, canvas.height);
+//   //frontEndPlayer.draw();
+// }
 
-animate();
+// animate();
 var all_array = []
+var count = 0
 
-document.querySelector("#usernameForm").addEventListener("submit", (event) => {
-  console.log('form submited.')
+// 参加
+document.querySelector("#nameForm").addEventListener("submit", (event) => {
   // ページリロードをprevent(妨げる)する。
   event.preventDefault();
+  // inp_name = document.querySelector("#nameInput").value
+  // document.querySelector("#member").innerHTML += `<div>${inp_name}</div>`;
+
+  document.querySelector("#gameBoad").style.display = 'block'
+  document.querySelector("#nameInput").disabled = 'true'
+  document.querySelector("#btnJoin").disabled = 'true'
+
+  socket.emit("join", {
+    username: document.querySelector("#nameInput").value
+  });
+  
+});
+
+// 検証、再開
+document.querySelector("#numForm").addEventListener("submit", (event) => {
+  // ページリロードをprevent(妨げる)する。
+  event.preventDefault();
+  const submitButton = event.submitter.name
   const hb = new HitAndBlow()
 
-  inp = document.querySelector("#usernameInput").value
+  inp = document.querySelector("#numInput").value
   if (inp.length != 4) return
+  result = hb.getHitAndBlow(inp, hb.all_array[0])
+  count++
+  strResult = count.toString().padStart(3, '0') + ": " + result[0] + " hit " + result[1] + " blow"
+  document.querySelector("#playResult").innerHTML += `<div>${strResult}</div>`;
 
-
-  console.log("inp: " + inp[0] + ":" + inp[1]+ ":" + inp[2]+ ":" + inp[3])
-
-  console.log(hb.getHitAndBlow(inp, hb.all_array[0]))
-
-  console.log(" FRONT END " + hb.all_array.length)
-
-  console.log("ラズパイ最高!")
-  // 初期化
-  socket.emit("initGame", {
-    width: canvas.width,
-    height: canvas.height,
-    username: document.querySelector("#usernameInput").value
-  });
 });

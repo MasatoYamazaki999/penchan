@@ -24,16 +24,16 @@ io.on('connection', (socket) => {
 
   io.emit('updatePlayers', backEndPlayers)
 
-  socket.on('initGame', ({ username: username, width: width, height: height }) => {
+  socket.on('join', ({ username: username }) => {
     // create backEndPlayers.
     backEndPlayers[socket.id] = {
       username
     }
-    // where we init our canvas
-    backEndPlayers[socket.id].canvas = {
-      width,
-      height
-    }
+    // // where we init our canvas
+    // backEndPlayers[socket.id].canvas = {
+    //   width,
+    //   height
+    // }
   })
 
   socket.on('disconnect', (reason) => {
@@ -42,6 +42,12 @@ io.on('connection', (socket) => {
     io.emit('updatePlayers', backEndPlayers)
   })
 })
+
+// backend ticker
+setInterval(() => {
+  //console.log(backEndPlayers)
+  io.emit('updatePlayers', backEndPlayers)
+}, 1000)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
