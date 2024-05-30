@@ -27,13 +27,14 @@ io.on('connection', (socket) => {
   socket.on('join', ({ username: username }) => {
     // create backEndPlayers.
     backEndPlayers[socket.id] = {
-      username
+      username: username,
+      history: [],
+      target: false
     }
-    // // where we init our canvas
-    // backEndPlayers[socket.id].canvas = {
-    //   width,
-    //   height
-    // }
+  })
+  socket.on('updateHistory', ({ message: message }) => {
+    backEndPlayers[socket.id].history.push(message)
+    //console.log(backEndPlayers)
   })
 
   socket.on('disconnect', (reason) => {

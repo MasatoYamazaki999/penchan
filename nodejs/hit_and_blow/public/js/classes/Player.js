@@ -1,5 +1,7 @@
 class Player {
-  constructor({ username }) {
-    this.username = username;
+  constructor({ username, history, target }) {
+    this.username = username
+    this.history = history
+    this.target = target
   }
 }
