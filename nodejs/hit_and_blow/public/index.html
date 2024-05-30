@@ -25,10 +25,11 @@
         width: 50%;
         text-align: left;
         border: 1px solid #9a1818;
+        padding-left: 10px;
       }
       .container {
         display: table;
-        width: 410px;
+        width: 340px;
         height: 200px;
       }
     </style>
@@ -60,7 +61,7 @@
             <div>
               <select id='select' size='4' style='width: 100px;' class='scrollbox'></select>
             </div>
-            <button name="run" id="btnJoin">開始</button>
+            <button name="run" id="btnRun">開始</button>
           </form>
           <!-- entryBoad end -->
         </div>
@@ -69,8 +70,8 @@
           <form id="numForm">
             <div style="text-align: left;">
               <input id="numInput" type="text" placeholder="数を入れてね" />
-              <button name="validate">検証</button>
-              <button name="reset" disabled>再開</button>
+              <button name="validate" id="btnValidate">検証</button>
+              <button name="reset" id="btnReset" disabled>再開</button>
             </div>
             <div class="container">
               <div id="playResult" class="box"></div>

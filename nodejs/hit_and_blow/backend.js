@@ -28,7 +28,8 @@ io.on('connection', (socket) => {
     backEndPlayers[socket.id] = {
       username: username,
       history: [],
-      target: false
+      target: '',
+      now: false
     }
   })
   socket.on('run', ({ target: target }) => {

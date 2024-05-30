@@ -4,27 +4,35 @@ const frontEndPlayers = {}
 
 const g_opt = document.createElement('option')
 
+var prevLen = 0
+
 socket.on('updatePlayers', (backEndPlayers) => {
   //console.log(frontEndPlayers)
   for (const id in backEndPlayers) {
     const backEndPlayer = backEndPlayers[id]
 
     if (!frontEndPlayers[id]) {
-      // create new player
+      // 新規プレイヤーの場合
       frontEndPlayers[id] = new Player({
         username: backEndPlayer.username,
         history: backEndPlayer.history,
         target: backEndPlayer.target,
+        now: backEndPlayer.now
       })
 
       // 参加者追加
-      let selText = `<option data-id="${id}">`
-      selText += backEndPlayer.username
-      selText += '</option>'
-      document.querySelector('#select').innerHTML += selText
+      if (id != socket.id) {
+        // 自分以外の場合
+        let selText = `<option data-id="${id}">`
+        selText += backEndPlayer.username
+        selText += '</option>'
+        document.querySelector('#select').innerHTML += selText
+      }
     } else {
+      // すでに参加済みの場合
       frontEndPlayers[id].history = backEndPlayer.history
       frontEndPlayers[id].target = backEndPlayer.target
+      frontEndPlayers[id].now = backEndPlayer.now
     }
   }
   //console.log(frontEndPlayers)
@@ -38,12 +46,20 @@ socket.on('updatePlayers', (backEndPlayers) => {
       document.querySelector('#playResult').innerHTML = `${disp}`
     } else {
       // 対戦相手の場合
-      if (id==frontEndPlayers[socket.id].target) {
+      if (id == frontEndPlayers[socket.id]?.target) {
         disp = ''
         for (const data of frontEndPlayers[id].history) {
           disp += data + '</br>'
         }
         document.querySelector('#enemyResult').innerHTML = `${disp}`
+
+        // 検証ボタンを押下可能にする(前回より結果が増えた時)
+        const nowLen = frontEndPlayers[id].history.length
+        //console.log('prev: ' + prevLen + ' now: ' + nowLen)
+        if(prevLen < nowLen) {
+          document.querySelector('#btnValidate').disabled = ''
+          prevLen = nowLen
+        }
       }
     }
   }
@@ -52,8 +68,8 @@ socket.on('updatePlayers', (backEndPlayers) => {
   for (const id in frontEndPlayers) {
     if (!backEndPlayers[id]) {
       // 参加リストから削除
-      const divToDelete = document.querySelector(`option[data-id="${id}"]`);
-      divToDelete.parentNode.removeChild(divToDelete);
+      const divToDelete = document.querySelector(`option[data-id="${id}"]`)
+      divToDelete.parentNode.removeChild(divToDelete)
 
       delete frontEndPlayers[id]
     }
@@ -69,28 +85,25 @@ document.querySelector('#nameForm').addEventListener('submit', (event) => {
   document.querySelector('#nameInput').disabled = 'true'
   document.querySelector('#btnJoin').disabled = 'true'
   socket.emit('join', {
-    username: document.querySelector('#nameInput').value
+    username: document.querySelector('#nameInput').value,
   })
 })
 
 // 開始
 document.querySelector('#runForm').addEventListener('submit', (event) => {
   event.preventDefault()
-
   let sel = document.querySelector('#select')
   let target = sel[sel.selectedIndex].getAttribute('data-id')
-  console.log("selected001: " + target)
   socket.emit('run', {
-    target: target
+    target: target,
   })
-  document.querySelector('#select').disabled = "disabled"
+  document.querySelector('#select').disabled = 'disabled'
 })
 
 // 検証、再開
 document.querySelector('#numForm').addEventListener('submit', (event) => {
-  // ページリロードをprevent(妨げる)する。
   event.preventDefault()
-  const submitButton = event.submitter.name
+  //const submitButton = event.submitter.name
   const hb = new HitAndBlow()
 
   inp = document.querySelector('#numInput').value
@@ -110,4 +123,7 @@ document.querySelector('#numForm').addEventListener('submit', (event) => {
   socket.emit('updateHistory', {
     message: strResult,
   })
+
+  // 検証ボタンをdisableにする
+  document.querySelector('#btnValidate').disabled = 'disabled'
 })
