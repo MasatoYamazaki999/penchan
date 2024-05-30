@@ -18,7 +18,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
         username: backEndPlayer.username,
         history: backEndPlayer.history,
         target: backEndPlayer.target,
-        now: backEndPlayer.now,
+        battle: backEndPlayer.battle,
       })
       // 参加者追加(自分以外)
       // if (id != socket.id) {
@@ -32,7 +32,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
       // すでに参加済みの場合
       frontEndPlayers[id].history = backEndPlayer.history
       frontEndPlayers[id].target = backEndPlayer.target
-      frontEndPlayers[id].now = backEndPlayer.now
+      frontEndPlayers[id].battle = backEndPlayer.battle
     }
   }
 
@@ -77,13 +77,19 @@ socket.on('updatePlayers', (backEndPlayers) => {
   }
 
   // 参加者メンバーの表示
-  //console.log('前:' + prevMemberLen + '今:' + cnt)
+  //
+  // 人数が変わるか、又はbattleが変われば再表示にする!!!!!!!!!!!!
+  //
   if (prevMemberLen != cnt) {
     let dispStr = ''
     for (const id in frontEndPlayers) {
       if (id != socket.id) {
         const frontEndPlayer = frontEndPlayers[id]
-        dispStr += `<option data-id="${id}">`
+        if (frontEndPlayer.battle) {
+          dispStr += `<option data-id="${id}" disabled>`
+        } else {
+          dispStr += `<option data-id="${id}">`
+        }
         dispStr += frontEndPlayer.username
         dispStr += '</option>'
       }
@@ -111,6 +117,8 @@ document.querySelector('#runForm').addEventListener('submit', (event) => {
   event.preventDefault()
   let sel = document.querySelector('#select')
   let target = sel[sel.selectedIndex].getAttribute('data-id')
+  frontEndPlayers[socket.id].battle = true
+
   socket.emit('run', {
     target: target,
   })

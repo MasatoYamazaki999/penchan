@@ -29,12 +29,15 @@ io.on('connection', (socket) => {
       username: username,
       history: [],
       target: '',
-      now: false
+      battle: false
     }
   })
   socket.on('run', ({ target: target }) => {
     console.log(target)
     backEndPlayers[socket.id].target = target
+    backEndPlayers[socket.id].battle = true
+    io.emit('updatePlayers', backEndPlayers)
+    console.log(backEndPlayers[socket.id].battle)
   })
   
   socket.on('updateHistory', ({ message: message }) => {
