@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 })
 
 const backEndPlayers = {}
-//var all_array = []
 
 io.on('connection', (socket) => {
   console.log('a user connected')
@@ -32,9 +31,13 @@ io.on('connection', (socket) => {
       target: false
     }
   })
+  socket.on('run', ({ target: target }) => {
+    console.log(target)
+    backEndPlayers[socket.id].target = target
+  })
+  
   socket.on('updateHistory', ({ message: message }) => {
     backEndPlayers[socket.id].history.push(message)
-    //console.log(backEndPlayers)
   })
 
   socket.on('disconnect', (reason) => {
@@ -48,7 +51,7 @@ io.on('connection', (socket) => {
 setInterval(() => {
   //console.log(backEndPlayers)
   io.emit('updatePlayers', backEndPlayers)
-}, 1000)
+}, 200)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)

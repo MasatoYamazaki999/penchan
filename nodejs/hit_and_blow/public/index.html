@@ -11,12 +11,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         margin: 0;
-        background: gray;
-      }
-      canvas {
-        width: 100%;
-        height: 100%;
-        background-image: url("/img/leaves.webp");
       }
       .scrollbox {
         width: 203px;
@@ -41,7 +35,6 @@
   </head>
   <body style="display: flex; align-items: center; justify-content: center;">
     <div>
-      <canvas> </canvas>
       <!-- form start -->
       <div
         style="
@@ -62,9 +55,12 @@
               <input id="nameInput" type="text" placeholder="名前を入れてね" />
               <button name="join" id="btnJoin">参加</button>
             </div>
+          </form>
+          <form id="runForm" style="margin-bottom: 0px;">
             <div>
-              <div id="members"></div>
+              <select id='select' size='4' style='width: 100px;' class='scrollbox'></select>
             </div>
+            <button name="run" id="btnJoin">開始</button>
           </form>
           <!-- entryBoad end -->
         </div>

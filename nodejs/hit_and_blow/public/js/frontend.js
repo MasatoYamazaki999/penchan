@@ -1,12 +1,4 @@
-const canvas = document.querySelector('canvas')
-const c = canvas.getContext('2d')
 const socket = io()
-const devicePixelRatio = window.devicePixelRatio || 1
-
-canvas.width = 1024 * devicePixelRatio
-canvas.height = 576 * devicePixelRatio
-
-c.scale(devicePixelRatio, devicePixelRatio)
 
 const frontEndPlayers = {}
 
@@ -24,18 +16,18 @@ socket.on('updatePlayers', (backEndPlayers) => {
         history: backEndPlayer.history,
         target: backEndPlayer.target,
       })
-      // 参加者追加
-      let selText = "<select id='select' size='4' style='width: 100px;' class='scrollbox'>"
-      selText += "<option id='opt1'>Masato</option>"
-      selText += "<option id='opt2'>Hiroko</option>"
-      selText += '</select>'
 
-      document.querySelector('#members').innerHTML = selText
+      // 参加者追加
+      let selText = `<option data-id="${id}">`
+      selText += backEndPlayer.username
+      selText += '</option>'
+      document.querySelector('#select').innerHTML += selText
     } else {
       frontEndPlayers[id].history = backEndPlayer.history
+      frontEndPlayers[id].target = backEndPlayer.target
     }
   }
-
+  //console.log(frontEndPlayers)
   for (const id in frontEndPlayers) {
     // 対戦内容表示
     if (socket.id == id) {
@@ -45,24 +37,29 @@ socket.on('updatePlayers', (backEndPlayers) => {
       }
       document.querySelector('#playResult').innerHTML = `${disp}`
     } else {
-      // !!! when target is true
-      disp = ''
-      for (const data of frontEndPlayers[id].history) {
-        disp += data + '</br>'
+      // 対戦相手の場合
+      if (id==frontEndPlayers[socket.id].target) {
+        disp = ''
+        for (const data of frontEndPlayers[id].history) {
+          disp += data + '</br>'
+        }
+        document.querySelector('#enemyResult').innerHTML = `${disp}`
       }
-      document.querySelector('#enemyResult').innerHTML = `${disp}`
     }
   }
 
   // 消えた人のオブジェクト削除
   for (const id in frontEndPlayers) {
     if (!backEndPlayers[id]) {
+      // 参加リストから削除
+      const divToDelete = document.querySelector(`option[data-id="${id}"]`);
+      divToDelete.parentNode.removeChild(divToDelete);
+
       delete frontEndPlayers[id]
     }
   }
 })
 
-var all_array = []
 var count = 0
 
 // 参加
@@ -71,10 +68,22 @@ document.querySelector('#nameForm').addEventListener('submit', (event) => {
   document.querySelector('#gameBoad').style.display = 'block'
   document.querySelector('#nameInput').disabled = 'true'
   document.querySelector('#btnJoin').disabled = 'true'
-
   socket.emit('join', {
-    username: document.querySelector('#nameInput').value,
+    username: document.querySelector('#nameInput').value
   })
+})
+
+// 開始
+document.querySelector('#runForm').addEventListener('submit', (event) => {
+  event.preventDefault()
+
+  let sel = document.querySelector('#select')
+  let target = sel[sel.selectedIndex].getAttribute('data-id')
+  console.log("selected001: " + target)
+  socket.emit('run', {
+    target: target
+  })
+  document.querySelector('#select').disabled = "disabled"
 })
 
 // 検証、再開
@@ -101,6 +110,4 @@ document.querySelector('#numForm').addEventListener('submit', (event) => {
   socket.emit('updateHistory', {
     message: strResult,
   })
-
-  //document.querySelector("#playResult").innerHTML += `<div>${strResult}</div>`;
 })

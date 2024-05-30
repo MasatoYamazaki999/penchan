@@ -183,28 +183,24 @@ setInterval(() => {
   if (keys.w.pressed) {
     sequenceNumber++;
     playerInputs.push({ sequenceNumber, dx: 0, dy: -SPEED });
-    // frontEndPlayers[socket.id].y -= SPEED;
     socket.emit("keydown", { keycode: "KeyW", sequenceNumber });
   }
 
   if (keys.a.pressed) {
     sequenceNumber++;
     playerInputs.push({ sequenceNumber, dx: -SPEED, dy: 0 });
-    // frontEndPlayers[socket.id].x -= SPEED;
     socket.emit("keydown", { keycode: "KeyA", sequenceNumber });
   }
 
   if (keys.s.pressed) {
     sequenceNumber++;
     playerInputs.push({ sequenceNumber, dx: 0, dy: SPEED });
-    // frontEndPlayers[socket.id].y += SPEED;
     socket.emit("keydown", { keycode: "KeyS", sequenceNumber });
   }
 
   if (keys.d.pressed) {
     sequenceNumber++;
     playerInputs.push({ sequenceNumber, dx: SPEED, dy: 0 });
-    // frontEndPlayers[socket.id].x += SPEED;
     socket.emit("keydown", { keycode: "KeyD", sequenceNumber });
   }
 }, 15);
