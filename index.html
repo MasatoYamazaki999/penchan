@@ -1,0 +1,226 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <style>
+      body {
+        margin: 4;
+      }
+      .input_number {
+        display: inline-block;
+        width: 70px;
+        padding: 0.5em;
+        border: 1px solid #999;
+      }
+      .select {
+        width: 100px;
+      }
+    </style>
+    <script>
+      var all_array = [];
+      var score = 0;
+      var answer = [];
+      //
+      // 9 permutation 4 同一数値なしの順列算出(3024個)
+      //
+      const permutation = (nums, k) => {
+        let ans = [];
+        if (nums.length < k) {
+          return [];
+        }
+        if (k === 1) {
+          for (let i = 0; i < nums.length; i++) {
+            ans[i] = [nums[i]];
+          }
+        } else {
+          for (let i = 0; i < nums.length; i++) {
+            let parts = nums.slice(0);
+            parts.splice(i, 1)[0];
+            let row = permutation(parts, k - 1);
+            for (let j = 0; j < row.length; j++) {
+              ans.push([nums[i]].concat(row[j]));
+            }
+          }
+        }
+        return ans;
+      };
+
+      //
+      // create option guide
+      //
+      function create_option() {
+        let arr = [" ", "１", "２", "３", "４", "５", "６", "７", "８", "９"];
+        for (let n = 1; n < 5; n++) {
+          let sel = document.getElementById("select" + n);
+          for (let num in arr) {
+            let op = document.createElement("option");
+            op.text = arr[num];
+            sel.appendChild(op);
+          }
+        }
+      }
+      //
+      // 画面起動時
+      //
+      window.onload = function () {
+        onReset();
+      };
+
+      //
+      // HIT数 BLOW数 算出
+      //
+      function check_hit_blow_num(inp_num, target_num) {
+        let hit = 0;
+        let blow = 0;
+        for (let i = 0; i < 4; i++) {
+          // hit
+          if (inp_num[i] == target_num[i]) {
+            hit++;
+          } else {
+            // blow
+            for (let j = 0; j < 4; j++) {
+              if (i != j) {
+                if (inp_num[i] == target_num[j]) {
+                  blow++;
+                }
+              }
+            }
+          }
+        }
+        return [hit, blow];
+      }
+      //
+      // check hit and blow main logic
+      //
+      function check_main(inp_num) {
+        const ans_hit_blow = check_hit_blow_num(inp_num, answer);
+        score++;
+        let checked_array = [];
+        for (const target_num of all_array) {
+          const one_hit_blow = check_hit_blow_num(inp_num, target_num);
+          if (JSON.stringify(ans_hit_blow) === JSON.stringify(one_hit_blow)) {
+            checked_array.push(target_num);
+          }
+        }
+        all_array = checked_array;
+        console.log("残り: " + checked_array.length);
+        return ans_hit_blow;
+      }
+      //
+      // 検証
+      //
+      function onClick() {
+        input_number = document.getElementById("in_num");
+        let result = check_main(input_number.value);
+
+        if (all_array.length == 1) {
+          document.getElementById("reset").disabled = null;
+          document.getElementById("run").disabled = "disabled";
+          result_text = "解きました! 回数(" + score + ")";
+        } else {
+          result_text =
+            score +
+            " : " +
+            input_number.value +
+            " : " +
+            result[0] +
+            " hit " +
+            result[1] +
+            " blow";
+        }
+
+        document.querySelector(
+          "#result"
+        ).innerHTML += `<div>${result_text}</div>`;
+      }
+      //
+      // 開始
+      //
+      function onReset() {
+        create_option();
+        document.getElementById("in_num").value = "";
+        document.querySelector("#result").innerHTML = "";
+        document.getElementById("reset").disabled = "disabled";
+        document.getElementById("run").disabled = null;
+        all_array = permutation([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+        score = 0;
+        answer = all_array[Math.trunc(Math.random() * all_array.length)];
+        console.log("ans is " + answer);
+      }
+    </script>
+  </head>
+  <body>
+    <!-- <!DOCTYPE html> -->
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Hit And Blow ver 0.01</title>
+      </head>
+      <body>
+        <h3>Hit And Blow - ver 1.01</h3>
+
+        <div style="display: table; width: 100%;">
+          <div style="display: table-cell; width: 100px;">
+            <button id="reset" type="button" onclick="onReset()">開始</button>
+            <input
+              class="input_number"
+              type="text"
+              id="in_num"
+              oninput="javascript: this.value = this.value.slice(0, 4)"
+            />
+            <button id="run" type="button" onclick="onClick()">検証</button>
+            <div id="result"></div>
+          </div>
+          <div style="display: table-cell; width: 100px; align-content: ;">
+            <div style="display: table; width: 100%;">
+              <div style="display: table-row;">
+                <select id="select1"></select>
+                <select id="select2"></select>
+                <select id="select3"></select>
+                <select id="select4"></select>
+              </div>
+              <div style="display: table-row;" id="checkArea">
+                <input type="checkbox">1</input>
+                <input type="checkbox">1</input>
+                <input type="checkbox">1</input>
+                <input type="checkbox">1</input></br>
+                <input type="checkbox">2</input>
+                <input type="checkbox">2</input>
+                <input type="checkbox">2</input>
+                <input type="checkbox">2</input></br>
+                <input type="checkbox">3</input>
+                <input type="checkbox">3</input>
+                <input type="checkbox">3</input>
+                <input type="checkbox">3</input></br>
+                <input type="checkbox">4</input>
+                <input type="checkbox">4</input>
+                <input type="checkbox">4</input>
+                <input type="checkbox">4</input></br>
+                <input type="checkbox">5</input>
+                <input type="checkbox">5</input>
+                <input type="checkbox">5</input>
+                <input type="checkbox">5</input></br>
+                <input type="checkbox">6</input>
+                <input type="checkbox">6</input>
+                <input type="checkbox">6</input>
+                <input type="checkbox">6</input></br>
+                <input type="checkbox">7</input>
+                <input type="checkbox">7</input>
+                <input type="checkbox">7</input>
+                <input type="checkbox">7</input></br>
+                <input type="checkbox">8</input>
+                <input type="checkbox">8</input>
+                <input type="checkbox">8</input>
+                <input type="checkbox">8</input></br>
+                <input type="checkbox">9</input>
+                <input type="checkbox">9</input>
+                <input type="checkbox">9</input>
+                <input type="checkbox">9</input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  </body>
+</html>
