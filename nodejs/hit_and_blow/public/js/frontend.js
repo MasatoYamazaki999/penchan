@@ -4,7 +4,8 @@ const frontEndPlayers = {}
 
 const g_opt = document.createElement('option')
 
-var prevLen = 0
+var prevBattleLen = 0
+var prevMemberLen = 0
 
 socket.on('updatePlayers', (backEndPlayers) => {
   //console.log(frontEndPlayers)
@@ -17,17 +18,16 @@ socket.on('updatePlayers', (backEndPlayers) => {
         username: backEndPlayer.username,
         history: backEndPlayer.history,
         target: backEndPlayer.target,
-        now: backEndPlayer.now
+        now: backEndPlayer.now,
       })
-
-      // 参加者追加
-      if (id != socket.id) {
-        // 自分以外の場合
-        let selText = `<option data-id="${id}">`
-        selText += backEndPlayer.username
-        selText += '</option>'
-        document.querySelector('#select').innerHTML += selText
-      }
+      // 参加者追加(自分以外)
+      // if (id != socket.id) {
+      //   // 自分以外の場合
+      //   let selText = `<option data-id="${id}">`
+      //   selText += backEndPlayer.username
+      //   selText += '</option>'
+      //   document.querySelector('#select').innerHTML += selText
+      // }
     } else {
       // すでに参加済みの場合
       frontEndPlayers[id].history = backEndPlayer.history
@@ -35,8 +35,10 @@ socket.on('updatePlayers', (backEndPlayers) => {
       frontEndPlayers[id].now = backEndPlayer.now
     }
   }
-  //console.log(frontEndPlayers)
+
+  let cnt = 0
   for (const id in frontEndPlayers) {
+    cnt++
     // 対戦内容表示
     if (socket.id == id) {
       disp = ''
@@ -56,14 +58,13 @@ socket.on('updatePlayers', (backEndPlayers) => {
         // 検証ボタンを押下可能にする(前回より結果が増えた時)
         const nowLen = frontEndPlayers[id].history.length
         //console.log('prev: ' + prevLen + ' now: ' + nowLen)
-        if(prevLen < nowLen) {
+        if (prevBattleLen < nowLen) {
           document.querySelector('#btnValidate').disabled = ''
-          prevLen = nowLen
+          prevBattleLen = nowLen
         }
       }
     }
   }
-
   // 消えた人のオブジェクト削除
   for (const id in frontEndPlayers) {
     if (!backEndPlayers[id]) {
@@ -73,6 +74,22 @@ socket.on('updatePlayers', (backEndPlayers) => {
 
       delete frontEndPlayers[id]
     }
+  }
+
+  // 参加者メンバーの表示
+  //console.log('前:' + prevMemberLen + '今:' + cnt)
+  if (prevMemberLen != cnt) {
+    let dispStr = ''
+    for (const id in frontEndPlayers) {
+      if (id != socket.id) {
+        const frontEndPlayer = frontEndPlayers[id]
+        dispStr += `<option data-id="${id}">`
+        dispStr += frontEndPlayer.username
+        dispStr += '</option>'
+      }
+    }
+    prevMemberLen = cnt
+    document.querySelector('#select').innerHTML = dispStr
   }
 })
 

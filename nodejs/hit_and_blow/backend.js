@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 setInterval(() => {
   //console.log(backEndPlayers)
   io.emit('updatePlayers', backEndPlayers)
-}, 200)
+}, 500)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
