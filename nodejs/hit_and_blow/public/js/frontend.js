@@ -8,10 +8,10 @@ var prevBattleLen = 0
 var prevMemberLen = 0
 
 socket.on('updatePlayers', (backEndPlayers) => {
-  //console.log(frontEndPlayers)
+
   for (const id in backEndPlayers) {
     const backEndPlayer = backEndPlayers[id]
-
+    // バックにあってフロントにない
     if (!frontEndPlayers[id]) {
       // 新規プレイヤーの場合
       frontEndPlayers[id] = new Player({
@@ -21,7 +21,8 @@ socket.on('updatePlayers', (backEndPlayers) => {
         battle: backEndPlayer.battle,
         ans: backEndPlayer.ans
       })
-      // 参加者追加(自分以外)
+      // 新規参加の場合は参加者に追加表示(自分除く)
+      // ※後で、表示はまとめて下でやる。
       if (id != socket.id) {
         const selText = `<label id="${id}"><input type="radio" name="selMember" id="${id}" `
           + `value="${id}">${backEndPlayer.username}</label>`
@@ -36,8 +37,11 @@ socket.on('updatePlayers', (backEndPlayers) => {
     }
   }
 
+  //
+  // 対戦結果表示(常時表示)
+  //
   for (const id in frontEndPlayers) {
-    // 対戦内容表示
+    // 自分の場合
     if (socket.id == id) {
       disp = ''
       for (const data of frontEndPlayers[id].history) {
@@ -45,7 +49,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
       }
       document.querySelector('#playResult').innerHTML = `${disp}`
     } else {
-      // 対戦相手の場合
+      // 相手の場合
       if (id == frontEndPlayers[socket.id]?.target) {
         disp = ''
         for (const data of frontEndPlayers[id].history) {
@@ -63,8 +67,10 @@ socket.on('updatePlayers', (backEndPlayers) => {
       }
     }
   }
+
   // 消えた人のオブジェクト削除
   for (const id in frontEndPlayers) {
+    // フロントにあってバックにないものは削除
     if (!backEndPlayers[id]) {
       // 参加リストから削除
       const divToDelete = document.querySelector(`label[id="${id}"]`)
@@ -73,18 +79,23 @@ socket.on('updatePlayers', (backEndPlayers) => {
       delete frontEndPlayers[id]
     }
   }
-  // 人数が変わるか、又はbattleが変われば再表示にする!!!!!!!!!!!!
+  
+  // 表示処理
+  // モード　初期状態　
 })
 
 // 検証回数
 var count = 0
 
-// 自分の数決定
+// 決定ボタン押下
 document.querySelector('#ansForm').addEventListener('submit', (event) => {
   event.preventDefault()
 
+  // 回答ボード
   document.querySelector('#ansBoad').style.display = 'block'
+  // 回答入力
   document.querySelector('#ansInput').disabled = 'true'
+  // 回答ボタン
   document.querySelector('#btnAns').disabled = 'true'
 
   socket.emit('ans', {
@@ -92,12 +103,14 @@ document.querySelector('#ansForm').addEventListener('submit', (event) => {
   })
 })
 
-// 参加
+// 参加ボタン押下
 document.querySelector('#nameForm').addEventListener('submit', (event) => {
   event.preventDefault()
-
+  // ゲームボード
   document.querySelector('#gameBoad').style.display = 'block'
+  // 名前入力
   document.querySelector('#nameInput').disabled = 'true'
+  // 参加ボタン
   document.querySelector('#btnJoin').disabled = 'true'
 
   socket.emit('join', {
@@ -105,10 +118,10 @@ document.querySelector('#nameForm').addEventListener('submit', (event) => {
   })
 })
 
-// 開始
+// 開始ボタン押下
 document.querySelector('#runForm').addEventListener('submit', (event) => {
   event.preventDefault()
-
+  // 開始ボタン
   document.querySelector('#btnRun').disabled = 'true'
 
   let runForm = document.querySelector(`#runForm`)
@@ -122,7 +135,7 @@ document.querySelector('#runForm').addEventListener('submit', (event) => {
 })
 
 const hb = new HitAndBlow()
-// 検証、再開
+// 検証ボタン押下
 document.querySelector('#numForm').addEventListener('submit', (event) => {
   event.preventDefault()
 
