@@ -32,12 +32,15 @@ io.on('connection', (socket) => {
       battle: false
     }
   })
+  socket.on('ans', ({ ans: ans }) => {
+    backEndPlayers[socket.id].ans = ans
+    io.emit('updatePlayers', backEndPlayers)
+  })
+
   socket.on('run', ({ target: target }) => {
-    console.log(target)
     backEndPlayers[socket.id].target = target
     backEndPlayers[socket.id].battle = true
     io.emit('updatePlayers', backEndPlayers)
-    console.log(backEndPlayers[socket.id].battle)
   })
   
   socket.on('updateHistory', ({ message: message }) => {
@@ -45,7 +48,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', (reason) => {
-    console.log('disconnect reason: ' + reason)
     delete backEndPlayers[socket.id]
     io.emit('updatePlayers', backEndPlayers)
   })
