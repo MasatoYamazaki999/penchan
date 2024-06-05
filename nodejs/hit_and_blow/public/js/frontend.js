@@ -99,7 +99,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
     case GAME_MODE.init:
       // ガイド表示
       document.querySelector('#guide').innerHTML =
-        '名前を入れて参加ボタンを押してね'
+        '名前を入れて</br>参加ボタンを押してね'
       // 名前入力
       document.querySelector('#nameInput').disabled = false
       // 参加ボタン
@@ -121,7 +121,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
     case GAME_MODE.joind:
       // ガイド表示
       document.querySelector('#guide').innerHTML =
-        '対戦相手を選んで開始ボタンを押してね'
+        '対戦相手を選んで</br>開始ボタンを押してね'
       // 名前入力
       document.querySelector('#nameInput').disabled = true
       // 参加ボタン
@@ -143,7 +143,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
     case GAME_MODE.wait:
       // ガイド表示
       document.querySelector('#guide').innerHTML =
-        '自分の数を入れで決定ボタンを押してね'
+        '自分の数を入れて</br>決定ボタンを押してね'
       // 名前入力
       document.querySelector('#nameInput').disabled = true
       // 参加ボタン
@@ -165,7 +165,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
     case GAME_MODE.play:
       // ガイド表示
       document.querySelector('#guide').innerHTML =
-        '予想する相手の数字を入れて検証ボタンを押してね'
+        '予想する相手の数字を入れて</br>検証ボタンを押してね'
       // 名前入力
       document.querySelector('#nameInput').disabled = true
       // 参加ボタン
