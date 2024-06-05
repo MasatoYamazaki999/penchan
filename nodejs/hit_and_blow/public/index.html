@@ -1,44 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="content-language" content="jp" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="google" content="notranslate" />
-    <style>
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        margin: 0;
-      }
-      .scrollbox {
-        width: 203px;
-        height: 50px;
-        border: 1px solid #181c9a;
-        overflow-y: scroll;
-        text-align: left;
-        margin-top: 2px;
-      }
-      .box {
-        display: table-cell;
-        width: 50%;
-        text-align: left;
-        border: 1px solid #181c9a;
-        padding-left: 10px;
-      }
-      .container {
-        display: table;
-        width: 340px;
-        height: 200px;
-      }
-    </style>
-  </head>
-  <body style="display: flex; align-items: center; justify-content: center;">
-    <div>
-      <!-- form start -->
-      <div
-        style="
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="content-language" content="jp" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="google" content="notranslate" />
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      margin: 0;
+    }
+
+    .member {
+      width: 200px;
+      height: 10px;
+      border: 1px solid #3d9a18;
+      overflow-y: scroll;
+      text-align: left;
+      margin-top: 2px;
+    }
+
+    .scrollbox {
+      width: 203px;
+      height: 50px;
+      border: 1px solid #181c9a;
+      overflow-y: scroll;
+      text-align: left;
+      margin-top: 2px;
+    }
+
+    .box {
+      display: table-cell;
+      width: 50%;
+      text-align: left;
+      border: 1px solid #181c9a;
+      padding-left: 10px;
+    }
+
+    .container {
+      display: table;
+      width: 340px;
+      height: 200px;
+    }
+  </style>
+</head>
+
+<body style="display: flex; align-items: center; justify-content: center;">
+  <div>
+    <!-- form start -->
+    <div style="
           display: block;
           align-items: left;
           justify-content: left;
@@ -47,63 +60,61 @@
           right: 0;
           bottom: 0;
           left: 30px;
-        "
-      >
+        ">
       <div id="nameBoad">
-          <!-- nameBoad start test -->
-          <form id="nameForm" style="margin-bottom: 0px;">
-            <div style="text-align: left;">
-              <label>HIT and BLOW ver. 0.01</label>
-              <input id="nameInput" type="text" placeholder="名前を入れてね" />
-              <button name="join" id="btnJoin">参加</button>
-            </div>
-          </form>
-          <form id="runForm" style="margin-bottom: 0px;">
-            <div>
-              <div id="memberList"></div>
-            </div>
-            <button name="run" id="btnRun">開始</button>
-          </form>
-          <!-- nameBoad end -->
-        </div>
-        <div id="ansBoad">
-          <!-- ansBoad start -->
-          <form id="ansForm" style="margin-bottom: 0px;">
-            <div style="text-align: left;">
-              <input id="ansInput" type="text" placeholder="自分の数(4桁)を入れてね" />
-              <button name="ans" id="btnAns">決定</button>
-            </div>
-          </form>
-          <!-- ansBoad end -->
-        </div>
-        <div id="gameBoad" style="display: block;">
-          <!-- gameBoad start -->
-          <form id="numForm">
-            <div style="text-align: left;">
-              <input id="numInput" type="text" placeholder="数を入れてね" />
-              <button name="validate" id="btnValidate">検証</button>
-              <button name="reset" id="btnReset" disabled>再開</button>
-            </div>
-            <div class="container">
-              <div id="playResult" class="box"></div>
-              <div id="enemyResult" class="box"></div>
-            </div>
-          </form>
-          <!-- gameBoad end -->
-        </div>
+        <div id="guide" style="color: blue;"></div>
+        <!-- nameBoad start test -->
+        <form id="nameForm" style="margin-bottom: 0px;">
+          <div style="text-align: left;">
+            <label>HIT and BLOW ver. 0.02</label></br>
+            <input id="nameInput" type="text" placeholder="名前を入れてね" />
+            <button name="join" id="btnJoin">参加</button>
+          </div>
+        </form>
+        <form id="runForm" style="margin-bottom: 0px;">
+          <div>
+            <div id="memberList"></div>
+          </div>
+          <button name="run" id="btnRun">開始</button>
+        </form>
+        <!-- nameBoad end -->
+      </div>
+      <div id="ansBoad">
+        <!-- ansBoad start -->
+        <form id="ansForm" style="margin-bottom: 0px;">
+          <div style="text-align: left;">
+            <input id="ansInput" type="text" placeholder="自分の数(4桁)を入れてね" />
+            <button name="ans" id="btnAns">決定</button>
+          </div>
+        </form>
+        <!-- ansBoad end -->
+      </div>
+      <div id="gameBoad" style="display: block;">
+        <!-- gameBoad start -->
+        <form id="numForm">
+          <div style="text-align: left;">
+            <input id="numInput" type="text" placeholder="数を入れてね" />
+            <button name="validate" id="btnValidate">検証</button>
+            <button name="reset" id="btnReset">再開</button>
+          </div>
+          <div class="container">
+            <div id="playResult" class="box"></div>
+            <div id="enemyResult" class="box"></div>
+          </div>
+        </form>
+        <!-- gameBoad end -->
       </div>
     </div>
+  </div>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
-      integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-    <script src="./js/classes/HitAndBlow.js"></script>
-    <script src="./js/classes/Player.js"></script>
-    <script src="./js/frontend.js"></script>
-    <script src="./js/eventListeners.js"></script>
-  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
+    integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script src="./js/classes/HitAndBlow.js"></script>
+  <script src="./js/classes/Player.js"></script>
+  <script src="./js/frontend.js"></script>
+  <script src="./js/eventListeners.js"></script>
+</body>
+
 </html>

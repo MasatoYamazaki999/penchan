@@ -30,9 +30,11 @@ io.on('connection', (socket) => {
       username: username,
       history: [],
       target: '',
-      battle: false
+      battle: false,
+      win: false,
     }
   })
+
   socket.on('ans', ({ ans: ans }) => {
     backEndPlayers[socket.id].ans = ans
     io.emit('updatePlayers', backEndPlayers)
@@ -41,11 +43,22 @@ io.on('connection', (socket) => {
   socket.on('run', ({ target: target }) => {
     backEndPlayers[socket.id].target = target
     backEndPlayers[socket.id].battle = true
+    backEndPlayers[socket.id].win = false
     io.emit('updatePlayers', backEndPlayers)
   })
-  
-  socket.on('updateHistory', ({ message: message }) => {
+
+  socket.on('updateHistory', ({ message: message, win: win }) => {
     backEndPlayers[socket.id].history.push(message)
+    backEndPlayers[socket.id].win = win
+    if (win) {
+      // 相手の勝ち
+      io.emit('updatePlayers', backEndPlayers)
+      console.log('server 相手のwin: ' + win)
+    }
+  })
+
+  socket.on('reset', () => {
+    io.emit('updatePlayers', backEndPlayers)
   })
 
   socket.on('disconnect', (reason) => {
@@ -56,7 +69,6 @@ io.on('connection', (socket) => {
 
 // backend ticker
 setInterval(() => {
-  //console.log(backEndPlayers)
   io.emit('updatePlayers', backEndPlayers)
 }, 500)
 
