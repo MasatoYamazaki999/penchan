@@ -7,6 +7,8 @@ const g_opt = document.createElement('option')
 var prevBattleLen = 0
 var prevMemberLen = 0
 
+const hb = new HitAndBlow()
+
 const GAME_MODE = {
   init: 'INIT',
   joind: 'JOIND',
@@ -69,14 +71,6 @@ socket.on('updatePlayers', (backEndPlayers) => {
           disp += data + '</br>'
         }
         document.querySelector('#enemyResult').innerHTML = `${disp}`
-        const enemyLen = frontEndPlayers[id].history.length
-        const myLen = frontEndPlayers[socket.id].history.length
-        //console.log(myLen + ' : ' + enemyLen)
-        // 検証ボタンを押下可能にする(前回より結果が増えた時)
-        // ※先手後手で比較記号を変える事! 先手後手プロパが必要
-        // if (myLen == enemyLen) {
-        //   document.querySelector('#btnValidate').disabled = ''
-        // }
       }
     }
   }
@@ -94,7 +88,6 @@ socket.on('updatePlayers', (backEndPlayers) => {
   }
 
   // 表示処理
-
   switch (game_mode) {
     case GAME_MODE.init:
       // ガイド表示
@@ -282,7 +275,6 @@ document.querySelector('#ansForm').addEventListener('submit', (event) => {
   })
 })
 
-const hb = new HitAndBlow()
 // 検証ボタン押下
 document.querySelector('#numForm').addEventListener('submit', (event) => {
   event.preventDefault()
