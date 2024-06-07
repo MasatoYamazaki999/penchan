@@ -77,8 +77,6 @@ class GenericObject {
 const image = new Image();
 image.src = platform;
 
-console.log(image);
-
 const player = new Player();
 const platforms = [
   new Platform({
@@ -92,13 +90,13 @@ const platforms = [
     image,
   }),
 ];
-// const genericObjects = [
-//   new GenericObject[{
-//     x: 0,
-//     y: 0,
-//     image
-//   }]
-// ]
+const genericObjects = [
+  new GenericObject({
+    x: 0,
+    y: 0,
+    image
+  })
+]
 
 const keys = {
   right: {

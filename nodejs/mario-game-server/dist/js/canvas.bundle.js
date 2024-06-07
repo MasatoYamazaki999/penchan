@@ -244,7 +244,6 @@ var GenericObject = /*#__PURE__*/function () {
 
 var image = new Image();
 image.src = _img_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"];
-console.log(image);
 var player = new Player();
 var platforms = [new Platform({
   x: -1,
@@ -254,14 +253,12 @@ var platforms = [new Platform({
   x: image.width - 3,
   y: 470,
   image: image
-})]; // const genericObjects = [
-//   new GenericObject[{
-//     x: 0,
-//     y: 0,
-//     image
-//   }]
-// ]
-
+})];
+var genericObjects = [new GenericObject({
+  x: 0,
+  y: 0,
+  image: image
+})];
 var keys = {
   right: {
     pressed: false
