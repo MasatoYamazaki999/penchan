@@ -35,7 +35,6 @@ class Player {
     this.position.y += this.velocity.y
 
     if (this.position.y + this.height + this.velocity.y <= canvas.height) this.velocity.y += gravity
-    else this.velocity.y = 0
   }
 }
 
@@ -73,33 +72,46 @@ class GenericObject {
   }
 }
 
-function createImage() {
+function createImage(imageSrc) {
   const image = new Image()
-  image.src = platform
+  image.src = imageSrc
+  return image
 }
 
-const player = new Player()
-const platforms = [
+let platformImage = createImage(platform)
+
+let player = new Player()
+let platforms = [
   new Platform({
     x: -1,
     y: 470,
-    image,
+    image: platformImage,
   }),
   new Platform({
-    x: image.width - 3,
+    x: platformImage.width - 3,
     y: 470,
-    image,
+    image: platformImage,
+  }),
+  new Platform({
+    x: platformImage.width * 2 + 100,
+    y: 470,
+    image: platformImage,
   }),
 ]
-const genericObjects = [
+let genericObjects = [
   new GenericObject({
-    x: 0,
-    y: 0,
-    image,
+    x: -1,
+    y: -1,
+    image: createImage(background),
+  }),
+  new GenericObject({
+    x: -1,
+    y: -1,
+    image: createImage(hills),
   }),
 ]
 
-const keys = {
+let keys = {
   right: {
     pressed: false,
   },
@@ -110,10 +122,51 @@ const keys = {
 
 let scrollOffset = 0
 
+function init() {
+  platformImage = createImage(platform)
+
+  player = new Player()
+  platforms = [
+    new Platform({
+      x: -1,
+      y: 470,
+      image: platformImage,
+    }),
+    new Platform({
+      x: platformImage.width - 3,
+      y: 470,
+      image: platformImage,
+    }),
+    new Platform({
+      x: platformImage.width * 2 + 100,
+      y: 470,
+      image: platformImage,
+    }),
+  ]
+  genericObjects = [
+    new GenericObject({
+      x: -1,
+      y: -1,
+      image: createImage(background),
+    }),
+    new GenericObject({
+      x: -1,
+      y: -1,
+      image: createImage(hills),
+    }),
+  ]
+
+  scrollOffset = 0
+}
+
 function animate() {
   requestAnimationFrame(animate)
   c.fillStyle = 'white'
   c.fillRect(0, 0, canvas.width, canvas.height)
+
+  genericObjects.forEach((genericObject) => {
+    genericObject.draw()
+  })
 
   platforms.forEach((platform) => {
     platform.draw()
@@ -132,10 +185,17 @@ function animate() {
       platforms.forEach((platform) => {
         platform.position.x -= 5
       })
+      genericObjects.forEach((genericObject) => {
+        genericObject.position.x -= 3
+      })
     } else if (keys.left.pressed) {
       scrollOffset -= 5
+
       platforms.forEach((platform) => {
         platform.position.x += 5
+      })
+      genericObjects.forEach((genericObject) => {
+        genericObject.position.x += 3
       })
     }
   }
@@ -154,6 +214,11 @@ function animate() {
 
   if (scrollOffset > 2000) {
     console.log('you win')
+  }
+
+  // lose condition
+  if (player.position.y > canvas.height) {
+    init()
   }
 }
 
