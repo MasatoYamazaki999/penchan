@@ -147,8 +147,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 console.log(_img_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"]);
-var canvas = document.querySelector("canvas");
-var c = canvas.getContext("2d");
+var canvas = document.querySelector('canvas');
+var c = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 var gravity = 0.5;
@@ -172,7 +172,7 @@ var Player = /*#__PURE__*/function () {
   _createClass(Player, [{
     key: "draw",
     value: function draw() {
-      c.fillStyle = "red";
+      c.fillStyle = 'red';
       c.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
   }, {
@@ -242,8 +242,11 @@ var GenericObject = /*#__PURE__*/function () {
   return GenericObject;
 }();
 
-var image = new Image();
-image.src = _img_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"];
+function createImage() {
+  var image = new Image();
+  image.src = _img_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"];
+}
+
 var player = new Player();
 var platforms = [new Platform({
   x: -1,
@@ -271,7 +274,7 @@ var scrollOffset = 0;
 
 function animate() {
   requestAnimationFrame(animate);
-  c.fillStyle = "white";
+  c.fillStyle = 'white';
   c.fillRect(0, 0, canvas.width, canvas.height);
   platforms.forEach(function (platform) {
     platform.draw();
@@ -306,55 +309,55 @@ function animate() {
   });
 
   if (scrollOffset > 2000) {
-    console.log("you win");
+    console.log('you win');
   }
 }
 
 animate();
-window.addEventListener("keydown", function (_ref3) {
+window.addEventListener('keydown', function (_ref3) {
   var keyCode = _ref3.keyCode;
 
   switch (keyCode) {
     case 65:
-      console.log("left");
+      console.log('left');
       keys.left.pressed = true;
       break;
 
     case 83:
-      console.log("down");
+      console.log('down');
       break;
 
     case 68:
-      console.log("right");
+      console.log('right');
       keys.right.pressed = true;
       break;
 
     case 87:
-      console.log("up"); //player.velocity.y -= 20;
+      console.log('up'); //player.velocity.y -= 20;
 
       break;
   }
 });
-window.addEventListener("keyup", function (_ref4) {
+window.addEventListener('keyup', function (_ref4) {
   var keyCode = _ref4.keyCode;
 
   switch (keyCode) {
     case 65:
-      console.log("left");
+      console.log('left');
       keys.left.pressed = false;
       break;
 
     case 83:
-      console.log("down");
+      console.log('down');
       break;
 
     case 68:
-      console.log("right");
+      console.log('right');
       keys.right.pressed = false;
       break;
 
     case 87:
-      console.log("up");
+      console.log('up');
       player.velocity.y -= 20;
       break;
   }
