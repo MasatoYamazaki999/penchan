@@ -92,13 +92,13 @@ const platforms = [
     image,
   }),
 ];
-const genericObjects = [
-  new GenericObject[{
-    x: 0,
-    y: 0,
-    image
-  }]
-]
+// const genericObjects = [
+//   new GenericObject[{
+//     x: 0,
+//     y: 0,
+//     image
+//   }]
+// ]
 
 const keys = {
   right: {

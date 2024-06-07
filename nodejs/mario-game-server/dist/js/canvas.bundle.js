@@ -254,12 +254,14 @@ var platforms = [new Platform({
   x: image.width - 3,
   y: 470,
   image: image
-})];
-var genericObjects = [new GenericObject[{
-  x: 0,
-  y: 0,
-  image: image
-}]()];
+})]; // const genericObjects = [
+//   new GenericObject[{
+//     x: 0,
+//     y: 0,
+//     image
+//   }]
+// ]
+
 var keys = {
   right: {
     pressed: false
