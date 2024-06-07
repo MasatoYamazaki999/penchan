@@ -3,6 +3,11 @@ import hills from '../img/hills.png'
 import background from '../img/background.png'
 import platformSmallTall from '../img/platformSmallTall.png'
 
+import spriteRunLeft from '../img/spriteRunLeft.png'
+import spriteRunRight from '../img/spriteRunRight.png'
+import spriteStandLeft from '../img/spriteStandLeft.png'
+import spriteStandRight from '../img/spriteStandRight.png'
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -14,20 +19,32 @@ class Player {
   constructor() {
     this.speed = 10
     this.position = {
-      x: 10,
-      y: 10,
+      x: 100,
+      y: 100,
     }
     this.velocity = {
       x: 0,
-      y: 1,
+      y: 0,
     }
-    this.width = 30
-    this.height = 30
+    this.width = 66
+    this.height = 150
+
+    this.image = createImage(spriteStandRight)
+    this.frames = 0
   }
 
   draw() {
-    c.fillStyle = 'red'
-    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    c.drawImage(
+      this.image,
+      0,
+      0,
+      177,
+      400,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    )
   }
 
   update() {
@@ -35,7 +52,8 @@ class Player {
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
-    if (this.position.y + this.height + this.velocity.y <= canvas.height) this.velocity.y += gravity
+    if (this.position.y + this.height + this.velocity.y <= canvas.height)
+      this.velocity.y += gravity
   }
 }
 
@@ -103,7 +121,12 @@ function init() {
   player = new Player()
   platforms = [
     new Platform({
-      x: platformImage.width * 4 + 300 - 2 + platformImage.width - platformSmallTallImage.width,
+      x:
+        platformImage.width * 4 +
+        300 -
+        2 +
+        platformImage.width -
+        platformSmallTallImage.width,
       y: 270,
       image: createImage(platformSmallTall),
     }),
@@ -202,7 +225,8 @@ function animate() {
   platforms.forEach((platform) => {
     if (
       player.position.y + player.height <= platform.position.y &&
-      player.position.y + player.height + player.velocity.y >= platform.position.y &&
+      player.position.y + player.height + player.velocity.y >=
+        platform.position.y &&
       player.position.x + player.width >= platform.position.x &&
       player.position.x <= platform.position.x + platform.width
     ) {
