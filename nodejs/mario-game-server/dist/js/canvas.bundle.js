@@ -247,11 +247,13 @@ var Player = /*#__PURE__*/function () {
     this.sprites = {
       stand: {
         right: createImage(_img_spriteStandRight_png__WEBPACK_IMPORTED_MODULE_7__["default"]),
+        left: createImage(_img_spriteStandLeft_png__WEBPACK_IMPORTED_MODULE_6__["default"]),
         cropWidth: 177,
         width: 66
       },
       run: {
         right: createImage(_img_spriteRunRight_png__WEBPACK_IMPORTED_MODULE_5__["default"]),
+        left: createImage(_img_spriteRunLeft_png__WEBPACK_IMPORTED_MODULE_4__["default"]),
         cropWidth: 341,
         width: 127.875
       }
@@ -269,7 +271,7 @@ var Player = /*#__PURE__*/function () {
     key: "update",
     value: function update() {
       this.frames++;
-      if (this.frames > 59 && this.currentSprite === this.sprites.stand.right) this.frames = 0;else if (this.frames > 29 && this.currentSprite === this.sprites.run.right) this.frames = 0;
+      if (this.frames > 59 && (this.currentSprite === this.sprites.stand.right || this.currentSprite === this.sprites.stand.left)) this.frames = 0;else if (this.frames > 29 && (this.currentSprite === this.sprites.run.right || this.currentSprite === this.sprites.run.left)) this.frames = 0;
       this.draw();
       this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
@@ -463,6 +465,9 @@ window.addEventListener('keydown', function (_ref3) {
     case 65:
       console.log('left');
       keys.left.pressed = true;
+      player.currentSprite = player.sprites.run.left;
+      player.currentCropWidth = player.sprites.run.cropWidth;
+      player.width = player.sprites.run.width;
       break;
 
     case 83:
@@ -490,6 +495,9 @@ window.addEventListener('keyup', function (_ref4) {
     case 65:
       console.log('left');
       keys.left.pressed = false;
+      player.currentSprite = player.sprites.stand.left;
+      player.currentCropWidth = player.sprites.stand.cropWidth;
+      player.width = player.sprites.stand.width;
       break;
 
     case 83:

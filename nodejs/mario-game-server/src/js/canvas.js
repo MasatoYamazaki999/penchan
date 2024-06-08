@@ -34,11 +34,13 @@ class Player {
     this.sprites = {
       stand: {
         right: createImage(spriteStandRight),
+        left: createImage(spriteStandLeft),
         cropWidth: 177,
         width: 66,
       },
       run: {
         right: createImage(spriteRunRight),
+        left: createImage(spriteRunLeft),
         cropWidth: 341,
         width: 127.875,
       },
@@ -64,9 +66,18 @@ class Player {
 
   update() {
     this.frames++
-    if (this.frames > 59 && this.currentSprite === this.sprites.stand.right)
+
+    if (
+      this.frames > 59 &&
+      (this.currentSprite === this.sprites.stand.right ||
+        this.currentSprite === this.sprites.stand.left)
+    )
       this.frames = 0
-    else if (this.frames > 29 && this.currentSprite === this.sprites.run.right)
+    else if (
+      this.frames > 29 &&
+      (this.currentSprite === this.sprites.run.right ||
+        this.currentSprite === this.sprites.run.left)
+    )
       this.frames = 0
 
     this.draw()
@@ -273,6 +284,9 @@ window.addEventListener('keydown', ({ keyCode }) => {
     case 65:
       console.log('left')
       keys.left.pressed = true
+      player.currentSprite = player.sprites.run.left
+      player.currentCropWidth = player.sprites.run.cropWidth
+      player.width = player.sprites.run.width
       break
 
     case 83:
@@ -299,6 +313,9 @@ window.addEventListener('keyup', ({ keyCode }) => {
     case 65:
       console.log('left')
       keys.left.pressed = false
+      player.currentSprite = player.sprites.stand.left
+      player.currentCropWidth = player.sprites.stand.cropWidth
+      player.width = player.sprites.stand.width
       break
 
     case 83:
