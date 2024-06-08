@@ -13,15 +13,41 @@ const image = new Image()
 image.src = './img/Pellet Town.png'
 
 class Sprite {
-  constructor({ position, velocity }) {
+  constructor({ position, velocity, image }) {
     this.position = position
-    this.velocity = velocity
+    this.image = image
+  }
+
+  draw() {
+    ctx.drawImage(this.image, this.position.x, this.position.y)
   }
 }
 
+const background = new Sprite({
+  position: {
+    x: -740,
+    y: -600,
+  },
+  image: image,
+})
+
+const keys = {
+  w: {
+    pressed: false,
+  },
+  a: {
+    pressed: false,
+  },
+  s: {
+    pressed: false,
+  },
+  d: {
+    pressed: false,
+  },
+}
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  ctx.drawImage(image, -740, -600)
+  background.draw()
   ctx.drawImage(
     playerImage,
     0,
@@ -38,28 +64,62 @@ function display() {
 function animate() {
   window.requestAnimationFrame(animate)
   display()
+
+  if (keys.w.pressed && lastkey === 'w') background.position.y += 3
+  else if (keys.a.pressed && lastkey === 'a') background.position.x += 3
+  else if (keys.s.pressed && lastkey === 's') background.position.y -= 3
+  else if (keys.d.pressed && lastkey === 'd') background.position.x -= 3
 }
 
 animate()
-
+let lastkey = ''
 window.addEventListener('keydown', (e) => {
   switch (e.key) {
     case 'w':
+      keys.w.pressed = true
+			lastkey = 'w'
       break
 
     case 'a':
+      keys.a.pressed = true
+			lastkey = 'a'
       break
 
     case 's':
+      keys.s.pressed = true
+			lastkey = 's'
       break
 
     case 'd':
+      keys.d.pressed = true
+			lastkey = 'd'
       break
   }
 })
-// const game = setInterval(function () {
-//   display();
-// }, 100);
+window.addEventListener('keyup', (e) => {
+  switch (e.key) {
+    case 'w':
+      keys.w.pressed = false
+      break
+
+    case 'a':
+      keys.a.pressed = false
+      break
+
+    case 's':
+      keys.s.pressed = false
+      break
+
+    case 'd':
+      keys.d.pressed = false
+      break
+  }
+})
+
 socket.on('update', () => {
   console.log('front 004')
 })
+
+// const game = setInterval(function () {
+//   display();
+// }, 100);
