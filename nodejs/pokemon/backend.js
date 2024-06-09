@@ -16,16 +16,12 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
   io.emit('update')
 })
 
-
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`);
 });
-
-
-console.log("server did load....");
+console.log("server load good!");
