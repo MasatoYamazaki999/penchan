@@ -8,19 +8,6 @@ let collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, 70 + i))
 }
-class Boundary {
-  static width = 48
-  static height = 48
-  constructor({ position }) {
-    this.position = position
-    this.width = Boundary.width
-    this.height = Boundary.height
-  }
-  draw() {
-    ctx.fillStyle = 'rgba(255, 0, 0, 0.0)'
-    ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
-  }
-}
 
 const boundaries = []
 const offset = {
@@ -41,46 +28,38 @@ collisionsMap.forEach((row, i) => {
   })
 })
 
-const playerImage = new Image()
-playerImage.src = './img/playerDown.png'
-
 const image = new Image()
 image.src = './img/Pellet Town.png'
 
-class Sprite {
-  constructor({ position, velocity, image, frames = { max: 1 } }) {
-    this.position = position
-    this.image = image
-    this.frames = frames
-    this.image.onload = () => {
-      this.width = this.image.width / this.frames.max
-      this.height = this.image.height
-    }
-  }
+const foregroundImage = new Image()
+foregroundImage.src = './img/foregroundObjects.png'
 
-  draw() {
-    ctx.drawImage(
-      this.image,
-      0,
-      0,
-      this.image.width / this.frames.max,
-      this.image.height,
-      this.position.x,
-      this.position.y,
-      this.image.width / this.frames.max,
-      this.image.height
-    )
-  }
-}
+const playerUpImage = new Image()
+playerUpImage.src = './img/playerUp.png'
+
+const playerDownImage = new Image()
+playerDownImage.src = './img/playerDown.png'
+
+const playerLeftImage = new Image()
+playerLeftImage.src = './img/playerLeft.png'
+
+const playerRightImage = new Image()
+playerRightImage.src = './img/playerRight.png'
 
 const player = new Sprite({
   position: {
     x: canvas.width / 2 - 192 / 4 / 2,
     y: canvas.height / 2 + 30 / 2,
   },
-  image: playerImage,
+  image: playerDownImage,
   frames: {
     max: 4,
+  },
+  sprites: {
+    up: playerUpImage,
+    left: playerLeftImage,
+    right: playerRightImage,
+    down: playerDownImage,
   },
 })
 const background = new Sprite({
@@ -91,6 +70,13 @@ const background = new Sprite({
   image: image,
 })
 
+const foreground = new Sprite({
+  position: {
+    x: offset.x,
+    y: offset.y,
+  },
+  image: foregroundImage,
+})
 const keys = {
   w: {
     pressed: false,
@@ -108,15 +94,15 @@ const keys = {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  background.draw()
 
+  background.draw()
   boundaries.forEach((boundary) => {
     boundary.draw()
   })
-
   player.draw()
+  foreground.draw()
 }
-const movables = [background, ...boundaries]
+const movables = [background, ...boundaries, foreground]
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
@@ -129,7 +115,10 @@ function animate() {
   window.requestAnimationFrame(animate)
   display()
   let moving = true
+  player.moving = false
   if (keys.w.pressed && lastkey === 'w') {
+    player.moving = true
+    player.image = player.sprites.up
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
       if (
@@ -154,6 +143,8 @@ function animate() {
         movabl.position.y += 3
       })
   } else if (keys.a.pressed && lastkey === 'a') {
+    player.moving = true
+    player.image = player.sprites.left
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
       if (
@@ -178,6 +169,8 @@ function animate() {
         movabl.position.x += 3
       })
   } else if (keys.s.pressed && lastkey === 's') {
+    player.moving = true
+    player.image = player.sprites.down
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
       if (
@@ -202,6 +195,8 @@ function animate() {
         movabl.position.y -= 3
       })
   } else if (keys.d.pressed && lastkey === 'd') {
+    player.moving = true
+    player.image = player.sprites.right
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
       if (
