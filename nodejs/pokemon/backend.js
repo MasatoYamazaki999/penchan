@@ -1,20 +1,20 @@
 // express setup
-const express = require("express");
-const app = express();
+const express = require('express')
+const app = express()
 
 // socket.io setup
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+const http = require('http')
+const server = http.createServer(app)
+const { Server } = require('socket.io')
+const io = new Server(server)
 
-const port = 3000;
+const port = 3000
 
-app.use(express.static("public"));
+app.use(express.static('public'))
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
+})
 
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
@@ -22,6 +22,6 @@ io.on('connection', (socket) => {
 })
 
 server.listen(port, () => {
-  console.log(`Im listening on port ${port}`);
-});
-console.log("server load good!");
+  console.log(`Im listening on port ${port}`)
+})
+console.log('server load good!')
