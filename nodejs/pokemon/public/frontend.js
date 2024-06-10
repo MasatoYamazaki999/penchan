@@ -2,8 +2,12 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 const socket = io()
 
-canvas.width = 1024
-canvas.height = 576
+const devicePixelRatio = window.devicePixelRatio || 1
+
+canvas.width = 480 * devicePixelRatio
+canvas.height = 800 * devicePixelRatio
+
+ctx.scale(devicePixelRatio, devicePixelRatio)
 
 let collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
@@ -17,8 +21,8 @@ for (let i = 0; i < battleZonesData.length; i += 70) {
 
 const boundaries = []
 const offset = {
-  x: -740,
-  y: -600,
+  x: -1000,
+  y: -500,
 }
 
 collisionsMap.forEach((row, i) => {
@@ -70,8 +74,10 @@ playerRightImage.src = './img/playerRight.png'
 
 const player = new Sprite({
   position: {
-    x: canvas.width / 2 - 192 / 4 / 2,
-    y: canvas.height / 2 + 30 / 2,
+    x: 220,
+    y: 380,
+    // x: canvas.width / 2 - 192 / 4 / 2,
+    // y: canvas.height / 2 + 30 / 2,
   },
   image: playerDownImage,
   frames: {
@@ -304,31 +310,28 @@ socket.on('update', () => {
 
 window.addEventListener('touchstart', (e) => {
   e.preventDefault()
+  const canvas = document.querySelector('canvas')
+  const { top, left } = canvas.getBoundingClientRect()
+  const playerPosition = {
+    x: 220,
+    y: 380,
+  }
+  const angle = Math.atan2(
+    e.touches[0].pageY - top - playerPosition.y,
+    e.touches[0].pageX  - left - playerPosition.x
+  )
 
-  const touches = e.touches
+  let point = { x: playerPosition.x, y: playerPosition.y, angle: angle }
 
-  let x = Math.floor(touches[0].pageX)
-  let y = Math.floor(touches[0].pageY)
+  keys.s.pressed = true
+  lastkey = 's'
 
-  let cx = canvas.width / 2 - 192 / 4 / 2
-  let cy = canvas.height / 2 + 30 / 2
-  
-  let center = { x: cx, y: cy };
-  let player = { x: x, y: y };
-  let radian = Math.atan2( center.y - player.y, center.x - player.y );
-  let degree = radian * (180 / Math.PI);
-
-  let point = {x, y}
   socket.emit('mouse', point)
-
-  //keys.s.pressed = true
-  //lastkey = 's'
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
 
-  //keys.s.pressed = false
-  //lastkey = ''
+  keys.s.pressed = false
+  lastkey = ''
 })
-
