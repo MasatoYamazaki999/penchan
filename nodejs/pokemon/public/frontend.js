@@ -7,6 +7,9 @@ const devicePixelRatio = window.devicePixelRatio || 1
 canvas.width = 480 * devicePixelRatio
 canvas.height = 800 * devicePixelRatio
 
+const canvas_width_half = canvas.width / 2
+const canvas_height_half = canvas.height / 2
+
 ctx.scale(devicePixelRatio, devicePixelRatio)
 
 let collisionsMap = []
@@ -76,8 +79,6 @@ const player = new Sprite({
   position: {
     x: 220,
     y: 380,
-    // x: canvas.width / 2 - 192 / 4 / 2,
-    // y: canvas.height / 2 + 30 / 2,
   },
   image: playerDownImage,
   frames: {
@@ -133,125 +134,34 @@ function display() {
   player.draw()
   foreground.draw()
 }
+
 const movables = [background, ...boundaries, foreground, ...battleZones]
-function rectangularCollision({ rectangle1, rectangle2 }) {
-  return (
-    rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-    rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-    rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-    rectangle1.position.y + rectangle1.height >= rectangle2.position.y
-  )
-}
 
 function move() {
-  let moving = true
-  player.moving = false
-  if (keys.w.pressed && lastkey === 'w') {
-    player.moving = true
-    player.image = player.sprites.up
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i]
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x,
-              y: boundary.position.y + 3,
-            },
-          },
-        })
-      ) {
-        console.log('colliding')
-        moving = false
-        break
+  if (player.moving) {
+    const v = player.velocity
+    const absX = Math.abs(v.x)
+    const absY = Math.abs(v.y)
+    if(absY > absX){
+      if(v.y > 0) {
+        player.image = player.sprites.down
+      } else {
+        player.image = player.sprites.up
       }
+    } else {
+      if(v.x > 0) {
+        player.image = player.sprites.right
+      } else {
+        player.image = player.sprites.left
+      }      
     }
-    if (moving)
-      movables.forEach((movabl) => {
-        movabl.position.y += 3
-      })
-  } else if (keys.a.pressed && lastkey === 'a') {
-    player.moving = true
-    player.image = player.sprites.left
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i]
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x + 3,
-              y: boundary.position.y,
-            },
-          },
-        })
-      ) {
-        console.log('colliding')
-        moving = false
-        break
-      }
-    }
-    if (moving)
-      movables.forEach((movabl) => {
-        movabl.position.x += 3
-      })
-  } else if (keys.s.pressed && lastkey === 's') {
-    player.moving = true
-    player.image = player.sprites.down
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i]
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x,
-              y: boundary.position.y - 3,
-            },
-          },
-        })
-      ) {
-        console.log('colliding')
-        moving = false
-        break
-      }
-    }
-    if (moving)
-      movables.forEach((movabl) => {
-        movabl.position.y -= 3
-      })
-  } else if (keys.d.pressed && lastkey === 'd') {
-    player.moving = true
-    player.image = player.sprites.right
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i]
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x - 3,
-              y: boundary.position.y,
-            },
-          },
-        })
-      ) {
-        console.log('colliding')
-        moving = false
-        break
-      }
-    }
-    if (moving)
-      movables.forEach((movabl) => {
-        movabl.position.x -= 3
-      })
+    movables.forEach((movabl) => {
+      movabl.position.x -= player.velocity.x
+      movabl.position.y -= player.velocity.y
+    })
   }
 }
+
 function animate() {
   window.requestAnimationFrame(animate)
   display()
@@ -259,50 +169,6 @@ function animate() {
 }
 
 animate()
-
-let lastkey = ''
-window.addEventListener('keydown', (e) => {
-  switch (e.key) {
-    case 'w':
-      keys.w.pressed = true
-      lastkey = 'w'
-      break
-
-    case 'a':
-      keys.a.pressed = true
-      lastkey = 'a'
-      break
-
-    case 's':
-      keys.s.pressed = true
-      lastkey = 's'
-      break
-
-    case 'd':
-      keys.d.pressed = true
-      lastkey = 'd'
-      break
-  }
-})
-window.addEventListener('keyup', (e) => {
-  switch (e.key) {
-    case 'w':
-      keys.w.pressed = false
-      break
-
-    case 'a':
-      keys.a.pressed = false
-      break
-
-    case 's':
-      keys.s.pressed = false
-      break
-
-    case 'd':
-      keys.d.pressed = false
-      break
-  }
-})
 
 socket.on('update', () => {
   console.log('front 004')
@@ -313,25 +179,24 @@ window.addEventListener('touchstart', (e) => {
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
-    x: 220,
-    y: 380,
+    x: canvas_width_half,
+    y: canvas_height_half,
   }
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
-    e.touches[0].pageX  - left - playerPosition.x
+    e.touches[0].pageX - left - playerPosition.x
   )
+  const velocity = {
+    x: Math.cos(angle) * 5,
+    y: Math.sin(angle) * 5,
+  }
+  player.velocity = velocity
+  player.moving = true
 
-  let point = { x: playerPosition.x, y: playerPosition.y, angle: angle }
-
-  keys.s.pressed = true
-  lastkey = 's'
-
-  socket.emit('mouse', point)
+  socket.emit('mouse', velocity)
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
-
-  keys.s.pressed = false
-  lastkey = ''
+  player.moving = false
 })
