@@ -24,16 +24,24 @@ io.on('connection', (socket) => {
   backEndPlayers[socket.id] = {
     position: {
       x: 220,
-      y: 380,
+      y: 500,
     },
   }
 
+  cnt = 1
   io.emit('updatePlayers', backEndPlayers)
 
   socket.on('mouse', (e) => {
     console.log(e)
   })
-  
+
+  socket.on('move', (backendPlayer) => {
+    console.log(backendPlayer.position.x + ' : ' + backendPlayer.position.y)
+    backEndPlayers[socket.id].position.x = backendPlayer.position.x
+    backEndPlayers[socket.id].position.y = backendPlayer.position.y
+    io.emit('updatePlayers', backEndPlayers)
+  })
+
   socket.on('disconnect', (reason) => {
     console.log('disconnect reason: ' + reason)
     delete backEndPlayers[socket.id]

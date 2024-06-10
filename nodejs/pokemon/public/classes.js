@@ -1,3 +1,41 @@
+class SpritePlayer {
+  constructor({ position, image, frames = { max: 1 }, sprites }) {
+    this.drawOk = false
+    this.position = position
+    this.image = image
+    this.frames = { ...frames, val: 0, elapsed: 0 }
+    this.image.decode().then(() => {
+      this.width = this.image.width / this.frames.max
+      this.height = this.image.height
+    })
+    this.moving = false
+    this.sprites = sprites
+    this.velocity = { x: 0, y: 0 }
+  }
+
+  draw(isMain) {
+    ctx.drawImage(
+      this.image,
+      this.frames.val * this.width,
+      0,
+      this.image.width / this.frames.max,
+      this.image.height,
+      this.position.x,
+      this.position.y,
+      this.image.width / this.frames.max,
+      this.image.height
+    )
+    if (!this.moving) return
+    if (this.frames.max > 1) {
+      this.frames.elapsed++
+    }
+    if (this.frames.elapsed % 10 === 0) {
+      if (this.frames.val < this.frames.max - 1) this.frames.val++
+      else this.frames.val = 0
+    }
+  }
+}
+
 class Sprite {
   constructor({ position, image, frames = { max: 1 }, sprites }) {
     this.drawOk = false
@@ -7,7 +45,6 @@ class Sprite {
     this.image.decode().then(() => {
       this.width = this.image.width / this.frames.max
       this.height = this.image.height
-      this.drawOk = true
     })
     this.moving = false
     this.sprites = sprites
@@ -15,26 +52,24 @@ class Sprite {
   }
 
   draw() {
-    if (this.drawOk) {
-      ctx.drawImage(
-        this.image,
-        this.frames.val * this.width,
-        0,
-        this.image.width / this.frames.max,
-        this.image.height,
-        this.position.x,
-        this.position.y,
-        this.image.width / this.frames.max,
-        this.image.height
-      )
-      if (!this.moving) return
-      if (this.frames.max > 1) {
-        this.frames.elapsed++
-      }
-      if (this.frames.elapsed % 10 === 0) {
-        if (this.frames.val < this.frames.max - 1) this.frames.val++
-        else this.frames.val = 0
-      }
+    ctx.drawImage(
+      this.image,
+      this.frames.val * this.width,
+      0,
+      this.image.width / this.frames.max,
+      this.image.height,
+      this.position.x,
+      this.position.y,
+      this.image.width / this.frames.max,
+      this.image.height
+    )
+    if (!this.moving) return
+    if (this.frames.max > 1) {
+      this.frames.elapsed++
+    }
+    if (this.frames.elapsed % 10 === 0) {
+      if (this.frames.val < this.frames.max - 1) this.frames.val++
+      else this.frames.val = 0
     }
   }
 }

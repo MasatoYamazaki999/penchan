@@ -98,7 +98,11 @@ function display() {
   // プレイヤー
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    frontEndPlayer.draw()
+    if(id===socket.id){
+      frontEndPlayer.draw(true)
+    } else {
+      frontEndPlayer.draw(false)
+    }
   }
   // 前景
   foreground.draw()
@@ -124,7 +128,8 @@ function move() {
       if (
         rectangularCollision({
           rectangle1: {
-            position: frontEndPlayers[socket.id].position,
+            //position: frontEndPlayers[socket.id].position,
+            position: { x: 220, y: 380 },
             width: 48,
             height: 68,
           },
@@ -172,6 +177,10 @@ function move() {
         movabl.position.x -= frontEndPlayers[socket.id].velocity.x
         movabl.position.y -= frontEndPlayers[socket.id].velocity.y
       })
+      frontEndPlayers[socket.id].position.x -= frontEndPlayers[socket.id].velocity.x
+      frontEndPlayers[socket.id].position.y -= frontEndPlayers[socket.id].velocity.y
+      socket.emit('move', frontEndPlayers[socket.id])
+      //console.log(frontEndPlayers[socket.id].position)
       //console.log(frontEndPlayers[socket.id])
       //console.log(foreground.position.x + ' : ' + foreground.position.y)
     }
@@ -192,12 +201,11 @@ socket.on('updatePlayers', (backEndPlayers) => {
     const backEndPlayer = backEndPlayers[id]
     // 初参加プレイヤー
     if (!frontEndPlayers[id]) {
-      const rx = 10 * Math.random()
-      const ry = 10 * Math.random()
-      frontEndPlayers[id] = new Sprite({
+
+      frontEndPlayers[id] = new SpritePlayer({
         position: {
-          x: 220 + rx,
-          y: 380 + ry,
+          x: backEndPlayer.position.x,
+          y: backEndPlayer.position.y,
         },
         image: playerDownImage,
         frames: {
@@ -211,7 +219,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
         },
       })
     } else {
-      // 参加済プレイヤー
+      // // 新規以外のプレイヤー
       // if (id === socket.id) {
       //   // if a player already exists
       //   frontEndPlayers[id].position = backEndPlayer.position;
@@ -224,7 +232,7 @@ socket.on('updatePlayers', (backEndPlayers) => {
       delete frontEndPlayers[id]
     }
   }
-  console.log(frontEndPlayers)
+  //console.log(frontEndPlayers)
 })
 
 window.addEventListener('touchstart', (e) => {
