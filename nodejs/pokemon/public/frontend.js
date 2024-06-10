@@ -147,143 +147,34 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 const movables = [background, ...boundaries, foreground, ...battleZones]
 
 function move() {
-  //if (player.moving) {
-    // const v = player.velocity
-    // const absX = Math.abs(v.x)
-    // const absY = Math.abs(v.y)
-    // if (absY > absX) {
-    //   if (v.y > 0) {
-    //     // 下に移動可能か判定
-    //     for (let i = 0; i < boundaries.length; i++) {
-    //       const boundary = boundaries[i]
-    //       if (
-    //         rectangularCollision({
-    //           rectangle1: player,
-    //           rectangle2: {
-    //             ...boundary,
-    //             position: {
-    //               x: boundary.position.x,
-    //               y: boundary.position.y + 3,
-    //             },
-    //           },
-    //         })
-    //       ) {
-    //         console.log('colliding')
-    //         player.moving = false
-    //         socket.emit('mouse', 'coliding......')
-    //         break
-    //       }
-    //     }
-    //     // ---
-    //     if (player.moving) player.image = player.sprites.down
-    //   } else {
-    //     // 上に移動可能か判定
-    //     for (let i = 0; i < boundaries.length; i++) {
-    //       const boundary = boundaries[i]
-    //       if (
-    //         rectangularCollision({
-    //           rectangle1: player,
-    //           rectangle2: {
-    //             ...boundary,
-    //             position: {
-    //               x: boundary.position.x,
-    //               y: boundary.position.y - 3,
-    //             },
-    //           },
-    //         })
-    //       ) {
-    //         console.log('colliding')
-    //         player.moving = false
-    //         socket.emit('mouse', 'coliding......')
-    //         break
-    //       }
-    //     }
-    //     // ---
-    //     if (player.moving) player.image = player.sprites.up
-    //   }
-    // } else {
-    //   if (v.x > 0) {
-    //     // 右に移動可能か判定
-    //     for (let i = 0; i < boundaries.length; i++) {
-    //       const boundary = boundaries[i]
-    //       if (
-    //         rectangularCollision({
-    //           rectangle1: player,
-    //           rectangle2: {
-    //             ...boundary,
-    //             position: {
-    //               x: boundary.position.x - 3,
-    //               y: boundary.position.y,
-    //             },
-    //           },
-    //         })
-    //       ) {
-    //         console.log('colliding')
-    //         player.moving = false
-    //         socket.emit('mouse', 'coliding......')
-    //         break
-    //       }
-    //     }
-    //     // ---
-    //     if (player.moving) player.image = player.sprites.right
-    //   } else {
-    //     // 左に移動可能か判定
-    //     for (let i = 0; i < boundaries.length; i++) {
-    //       const boundary = boundaries[i]
-    //       if (
-    //         rectangularCollision({
-    //           rectangle1: player,
-    //           rectangle2: {
-    //             ...boundary,
-    //             position: {
-    //               x: boundary.position.x + 3,
-    //               y: boundary.position.y,
-    //             },
-    //           },
-    //         })
-    //       ) {
-    //         console.log('colliding')
-    //         player.moving = false
-    //         socket.emit('mouse', 'coliding......')
-    //         break
-    //       }
-    //     }
-    //     // ---
-    //     if (player.moving) {
-    //       player.image = player.sprites.left
-    //     }
-    //   }
-    // }
-    // // -----------
-
-    // 移動前に移動可能か確認
-    let moving = true
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i]
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x - player.velocity.x,
-              y: boundary.position.y - player.velocity.y,
-            },
+  // 移動前に移動可能か確認
+  let moving = true
+  //player.moving = true
+  for (let i = 0; i < boundaries.length; i++) {
+    const boundary = boundaries[i]
+    if (
+      rectangularCollision({
+        rectangle1: player,
+        rectangle2: {
+          ...boundary,
+          position: {
+            x: boundary.position.x - player.velocity.x,
+            y: boundary.position.y - player.velocity.y,
           },
-        })
-      ) {
-        console.log('colliding')
-        moving = false
-        socket.emit('mouse', 'coliding......')
-        break
-      }
-    }
-    if (moving)
-      movables.forEach((movabl) => {
-        movabl.position.x -= player.velocity.x
-        movabl.position.y -= player.velocity.y
+        },
       })
-  //}
+    ) {
+      console.log('colliding')
+      moving = false
+      player.moving = false
+      break
+    }
+  }
+  if (moving && player.moving)
+    movables.forEach((movabl) => {
+      movabl.position.x -= player.velocity.x
+      movabl.position.y -= player.velocity.y
+    })
 }
 
 function animate() {
@@ -323,4 +214,5 @@ window.addEventListener('touchstart', (e) => {
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
   player.moving = false
+  socket.emit('mouse', '離した!')
 })
