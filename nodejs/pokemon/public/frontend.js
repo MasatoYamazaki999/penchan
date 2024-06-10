@@ -309,15 +309,17 @@ window.addEventListener('touchstart', (e) => {
 
   let x = Math.floor(touches[0].pageX)
   let y = Math.floor(touches[0].pageY)
-  let cx = canvas.width / 2
-  let cy = canvas.height / 2
+
+  let cx = canvas.width / 2 - 192 / 4 / 2
+  let cy = canvas.height / 2 + 30 / 2
   
   let center = { x: cx, y: cy };
   let player = { x: x, y: y };
   let radian = Math.atan2( center.y - player.y, center.x - player.y );
   let degree = radian * (180 / Math.PI);
 
-  socket.emit('mouse', degree)
+  let point = {x, y}
+  socket.emit('mouse', point)
 
   //keys.s.pressed = true
   //lastkey = 's'
