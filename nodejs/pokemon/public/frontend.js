@@ -4,9 +4,15 @@ const socket = io()
 
 canvas.width = 1024
 canvas.height = 576
+
 let collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, 70 + i))
+}
+
+let battleZonesMap = []
+for (let i = 0; i < battleZonesData.length; i += 70) {
+  battleZonesMap.push(battleZonesData.slice(i, 70 + i))
 }
 
 const boundaries = []
@@ -14,10 +20,26 @@ const offset = {
   x: -740,
   y: -600,
 }
+
 collisionsMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
     if (symbol === 1025)
       boundaries.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      )
+  })
+})
+
+const battleZones = []
+battleZonesMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    if (symbol === 1025)
+      battleZones.push(
         new Boundary({
           position: {
             x: j * Boundary.width + offset.x,
@@ -99,10 +121,13 @@ function display() {
   boundaries.forEach((boundary) => {
     boundary.draw()
   })
+  battleZones.forEach((battleZone) => {
+    battleZone.draw()
+  })
   player.draw()
   foreground.draw()
 }
-const movables = [background, ...boundaries, foreground]
+const movables = [background, ...boundaries, foreground, ...battleZones]
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
@@ -111,9 +136,8 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
     rectangle1.position.y + rectangle1.height >= rectangle2.position.y
   )
 }
-function animate() {
-  window.requestAnimationFrame(animate)
-  display()
+
+function move() {
   let moving = true
   player.moving = false
   if (keys.w.pressed && lastkey === 'w') {
@@ -222,8 +246,14 @@ function animate() {
       })
   }
 }
+function animate() {
+  window.requestAnimationFrame(animate)
+  display()
+  move()
+}
 
 animate()
+
 let lastkey = ''
 window.addEventListener('keydown', (e) => {
   switch (e.key) {
@@ -272,6 +302,31 @@ socket.on('update', () => {
   console.log('front 004')
 })
 
-// const game = setInterval(function () {
-//   display();
-// }, 100);
+window.addEventListener('touchstart', (e) => {
+  e.preventDefault()
+
+  const touches = e.touches
+
+  let x = Math.floor(touches[0].pageX)
+  let y = Math.floor(touches[0].pageY)
+  let cx = canvas.width / 2
+  let cy = canvas.height / 2
+  
+  let center = { x: cx, y: cy };
+  let player = { x: x, y: y };
+  let radian = Math.atan2( center.y - player.y, center.x - player.y );
+  let degree = radian * (180 / Math.PI);
+
+  socket.emit('mouse', degree)
+
+  //keys.s.pressed = true
+  //lastkey = 's'
+})
+
+window.addEventListener('touchend', (e) => {
+  e.preventDefault()
+
+  //keys.s.pressed = false
+  //lastkey = ''
+})
+

@@ -19,6 +19,11 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
   io.emit('update')
+
+  socket.on('mouse',(e) => { 
+    console.log(e)
+  })
+
 })
 
 server.listen(port, () => {
