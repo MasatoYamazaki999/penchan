@@ -1,5 +1,5 @@
 class Sprite {
-  constructor({ position, velocity, image, frames = { max: 1 }, sprites, goal }) {
+  constructor({ position, velocity, image, frames = { max: 1 }, sprites }) {
     this.position = position
     this.image = image
     this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -9,6 +9,7 @@ class Sprite {
     }
     this.moving = false
     this.sprites = sprites
+    this.velocity = { x: 0, y: 0 }
   }
 
   draw() {
