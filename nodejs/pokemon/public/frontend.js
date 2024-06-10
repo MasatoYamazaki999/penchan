@@ -17,11 +17,6 @@ for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, 70 + i))
 }
 
-let battleZonesMap = []
-for (let i = 0; i < battleZonesData.length; i += 70) {
-  battleZonesMap.push(battleZonesData.slice(i, 70 + i))
-}
-
 const boundaries = []
 const offset = {
   x: -1000,
@@ -42,23 +37,8 @@ collisionsMap.forEach((row, i) => {
   })
 })
 
-const battleZones = []
-battleZonesMap.forEach((row, i) => {
-  row.forEach((symbol, j) => {
-    if (symbol === 1025)
-      battleZones.push(
-        new Boundary({
-          position: {
-            x: j * Boundary.width + offset.x,
-            y: i * Boundary.height + offset.y,
-          },
-        })
-      )
-  })
-})
-
-const image = new Image()
-image.src = './img/Pellet Town.png'
+const backgroundImage = new Image()
+backgroundImage.src = './img/Pellet Town.png'
 
 const foregroundImage = new Image()
 foregroundImage.src = './img/foregroundObjects.png'
@@ -96,7 +76,7 @@ const background = new Sprite({
     x: offset.x,
     y: offset.y,
   },
-  image: image,
+  image: backgroundImage,
 })
 
 const foreground = new Sprite({
@@ -123,15 +103,15 @@ const keys = {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-
+  // 背景
   background.draw()
+  // 衝突用
   boundaries.forEach((boundary) => {
     boundary.draw()
   })
-  battleZones.forEach((battleZone) => {
-    battleZone.draw()
-  })
+  // プレイヤー
   player.draw()
+  // 前景
   foreground.draw()
 }
 // detect collision
@@ -144,12 +124,11 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   )
 }
 
-const movables = [background, ...boundaries, foreground, ...battleZones]
+const movables = [background, ...boundaries, foreground]
 
 function move() {
   // 移動前に移動可能か確認
   let moving = true
-  //player.moving = true
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]
     if (
@@ -164,17 +143,38 @@ function move() {
         },
       })
     ) {
-      console.log('colliding')
+      //console.log('colliding')
       moving = false
       player.moving = false
       break
     }
   }
-  if (moving && player.moving)
+  if (moving && player.moving) {
+
+    // プレイヤー画像選定
+    const v = player.velocity
+    const absX = Math.abs(v.x)
+    const absY = Math.abs(v.y)
+    if (absY > absX) {
+      if (v.y > 0) {
+        player.image = player.sprites.down
+      } else {
+        player.image = player.sprites.up
+      }
+    } else {
+      if (v.x > 0) {
+        player.image = player.sprites.right
+      } else {
+        player.image = player.sprites.left
+      }
+    }
+    // プレイヤー以外の移動
     movables.forEach((movabl) => {
       movabl.position.x -= player.velocity.x
       movabl.position.y -= player.velocity.y
     })
+    console.log(foreground.position.x + ' : ' + foreground.position.y)
+  }
 }
 
 function animate() {
@@ -207,12 +207,34 @@ window.addEventListener('touchstart', (e) => {
   }
   player.velocity = velocity
   player.moving = true
+})
 
-  socket.emit('mouse', velocity)
+window.addEventListener('mousedown', (e) => {
+  e.preventDefault()
+  const canvas = document.querySelector('canvas')
+  const { top, left } = canvas.getBoundingClientRect()
+  const playerPosition = {
+    x: canvas_width_half,
+    y: canvas_height_half,
+  }
+  const angle = Math.atan2(
+    e.offsetY - top - playerPosition.y,
+    e.offsetX - left - playerPosition.x
+  )
+  const velocity = {
+    x: Math.cos(angle) * 5,
+    y: Math.sin(angle) * 5,
+  }
+  player.velocity = velocity
+  player.moving = true
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
   player.moving = false
-  socket.emit('mouse', '離した!')
+})
+
+window.addEventListener('mouseup', (e) => {
+  e.preventDefault()
+  player.moving = false
 })
