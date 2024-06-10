@@ -18,6 +18,8 @@ for (let i = 0; i < collisions.length; i += 70) {
 }
 
 const boundaries = []
+const frontEndPlayers = {}
+
 const offset = {
   x: -1000,
   y: -500,
@@ -55,22 +57,6 @@ playerLeftImage.src = './img/playerLeft.png'
 const playerRightImage = new Image()
 playerRightImage.src = './img/playerRight.png'
 
-const player = new Sprite({
-  position: {
-    x: 220,
-    y: 380,
-  },
-  image: playerDownImage,
-  frames: {
-    max: 4,
-  },
-  sprites: {
-    up: playerUpImage,
-    left: playerLeftImage,
-    right: playerRightImage,
-    down: playerDownImage,
-  },
-})
 const background = new Sprite({
   position: {
     x: offset.x,
@@ -110,7 +96,10 @@ function display() {
     boundary.draw()
   })
   // プレイヤー
-  player.draw()
+  for (const id in frontEndPlayers) {
+    const frontEndPlayer = frontEndPlayers[id]
+    frontEndPlayer.draw()
+  }
   // 前景
   foreground.draw()
 }
@@ -131,49 +120,61 @@ function move() {
   let moving = true
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]
-    if (
-      rectangularCollision({
-        rectangle1: player,
-        rectangle2: {
-          ...boundary,
-          position: {
-            x: boundary.position.x - player.velocity.x,
-            y: boundary.position.y - player.velocity.y,
+    if (frontEndPlayers[socket.id]) {
+      if (
+        rectangularCollision({
+          rectangle1: {
+            position: frontEndPlayers[socket.id].position,
+            width: 48,
+            height: 68,
           },
-        },
-      })
-    ) {
-      //console.log('colliding')
-      moving = false
-      player.moving = false
-      break
+          rectangle2: {
+            ...boundary,
+            position: {
+              x: boundary.position.x - frontEndPlayers[socket.id].velocity.x,
+              y: boundary.position.y - frontEndPlayers[socket.id].velocity.y,
+            },
+          },
+        })
+      ) {
+        //console.log('colliding')
+        moving = false
+        frontEndPlayers[socket.id].moving = false
+        break
+      }
     }
   }
-  if (moving && player.moving) {
-
-    // プレイヤー画像選定
-    const v = player.velocity
-    const absX = Math.abs(v.x)
-    const absY = Math.abs(v.y)
-    if (absY > absX) {
-      if (v.y > 0) {
-        player.image = player.sprites.down
+  if (frontEndPlayers[socket.id]) {
+    if (moving && frontEndPlayers[socket.id].moving) {
+      // プレイヤー画像選定
+      const v = frontEndPlayers[socket.id].velocity
+      const absX = Math.abs(v.x)
+      const absY = Math.abs(v.y)
+      if (absY > absX) {
+        if (v.y > 0) {
+          frontEndPlayers[socket.id].image =
+            frontEndPlayers[socket.id].sprites.down
+        } else {
+          frontEndPlayers[socket.id].image =
+            frontEndPlayers[socket.id].sprites.up
+        }
       } else {
-        player.image = player.sprites.up
+        if (v.x > 0) {
+          frontEndPlayers[socket.id].image =
+            frontEndPlayers[socket.id].sprites.right
+        } else {
+          frontEndPlayers[socket.id].image =
+            frontEndPlayers[socket.id].sprites.left
+        }
       }
-    } else {
-      if (v.x > 0) {
-        player.image = player.sprites.right
-      } else {
-        player.image = player.sprites.left
-      }
+      // プレイヤー以外の移動
+      movables.forEach((movabl) => {
+        movabl.position.x -= frontEndPlayers[socket.id].velocity.x
+        movabl.position.y -= frontEndPlayers[socket.id].velocity.y
+      })
+      //console.log(frontEndPlayers[socket.id])
+      //console.log(foreground.position.x + ' : ' + foreground.position.y)
     }
-    // プレイヤー以外の移動
-    movables.forEach((movabl) => {
-      movabl.position.x -= player.velocity.x
-      movabl.position.y -= player.velocity.y
-    })
-    console.log(foreground.position.x + ' : ' + foreground.position.y)
   }
 }
 
@@ -185,8 +186,45 @@ function animate() {
 
 animate()
 
-socket.on('update', () => {
-  console.log('front 004')
+socket.on('updatePlayers', (backEndPlayers) => {
+  console.log('in updatePlayers')
+  for (const id in backEndPlayers) {
+    const backEndPlayer = backEndPlayers[id]
+    // 初参加プレイヤー
+    if (!frontEndPlayers[id]) {
+      const rx = 10 * Math.random()
+      const ry = 10 * Math.random()
+      frontEndPlayers[id] = new Sprite({
+        position: {
+          x: 220 + rx,
+          y: 380 + ry,
+        },
+        image: playerDownImage,
+        frames: {
+          max: 4,
+        },
+        sprites: {
+          up: playerUpImage,
+          left: playerLeftImage,
+          right: playerRightImage,
+          down: playerDownImage,
+        },
+      })
+    } else {
+      // 参加済プレイヤー
+      // if (id === socket.id) {
+      //   // if a player already exists
+      //   frontEndPlayers[id].position = backEndPlayer.position;
+      // }
+    }
+  }
+  // this is where we delete frontend players
+  for (const id in frontEndPlayers) {
+    if (!backEndPlayers[id]) {
+      delete frontEndPlayers[id]
+    }
+  }
+  console.log(frontEndPlayers)
 })
 
 window.addEventListener('touchstart', (e) => {
@@ -205,8 +243,8 @@ window.addEventListener('touchstart', (e) => {
     x: Math.cos(angle) * 5,
     y: Math.sin(angle) * 5,
   }
-  player.velocity = velocity
-  player.moving = true
+  frontEndPlayers[socket.id].velocity = velocity
+  frontEndPlayers[socket.id].moving = true
 })
 
 window.addEventListener('mousedown', (e) => {
@@ -225,16 +263,16 @@ window.addEventListener('mousedown', (e) => {
     x: Math.cos(angle) * 5,
     y: Math.sin(angle) * 5,
   }
-  player.velocity = velocity
-  player.moving = true
+  frontEndPlayers[socket.id].velocity = velocity
+  frontEndPlayers[socket.id].moving = true
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
-  player.moving = false
+  frontEndPlayers[socket.id].moving = false
 })
 
 window.addEventListener('mouseup', (e) => {
   e.preventDefault()
-  player.moving = false
+  frontEndPlayers[socket.id].moving = false
 })

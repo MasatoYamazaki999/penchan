@@ -6,9 +6,11 @@ const app = express()
 const http = require('http')
 const server = http.createServer(app)
 const { Server } = require('socket.io')
-const io = new Server(server)
+const io = new Server(server, { pingInterval: 1000, pingTimeout: 3000 })
 
 const port = 3000
+
+const backEndPlayers = {}
 
 app.use(express.static('public'))
 
@@ -18,12 +20,25 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
-  io.emit('update')
 
-  socket.on('mouse',(e) => { 
+  backEndPlayers[socket.id] = {
+    position: {
+      x: 220,
+      y: 380,
+    },
+  }
+
+  io.emit('updatePlayers', backEndPlayers)
+
+  socket.on('mouse', (e) => {
     console.log(e)
   })
-
+  
+  socket.on('disconnect', (reason) => {
+    console.log('disconnect reason: ' + reason)
+    delete backEndPlayers[socket.id]
+    io.emit('updatePlayers', backEndPlayers)
+  })
 })
 
 server.listen(port, () => {
