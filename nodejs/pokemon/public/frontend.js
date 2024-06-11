@@ -98,11 +98,7 @@ function display() {
   // プレイヤー
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    if(id===socket.id){
-      frontEndPlayer.draw(true)
-    } else {
-      frontEndPlayer.draw(false)
-    }
+    frontEndPlayer.draw()
   }
   // 前景
   foreground.draw()
@@ -128,8 +124,8 @@ function move() {
       if (
         rectangularCollision({
           rectangle1: {
-            //position: frontEndPlayers[socket.id].position,
-            position: { x: 220, y: 380 },
+            position: frontEndPlayers[socket.id].position,
+            //position: { x: 220, y: 500 },
             width: 48,
             height: 68,
           },
@@ -137,7 +133,7 @@ function move() {
             ...boundary,
             position: {
               x: boundary.position.x - frontEndPlayers[socket.id].velocity.x,
-              y: boundary.position.y - frontEndPlayers[socket.id].velocity.y,
+              y: boundary.position.y - frontEndPlayers[socket.id].velocity.y
             },
           },
         })
@@ -177,9 +173,10 @@ function move() {
         movabl.position.x -= frontEndPlayers[socket.id].velocity.x
         movabl.position.y -= frontEndPlayers[socket.id].velocity.y
       })
-      frontEndPlayers[socket.id].position.x -= frontEndPlayers[socket.id].velocity.x
-      frontEndPlayers[socket.id].position.y -= frontEndPlayers[socket.id].velocity.y
-      socket.emit('move', frontEndPlayers[socket.id])
+      // frontEndPlayers[socket.id].world = background.position
+      // frontEndPlayers[socket.id].position.x -= frontEndPlayers[socket.id].velocity.x
+      // frontEndPlayers[socket.id].position.y -= frontEndPlayers[socket.id].velocity.y
+      // socket.emit('move', frontEndPlayers[socket.id])
       //console.log(frontEndPlayers[socket.id].position)
       //console.log(frontEndPlayers[socket.id])
       //console.log(foreground.position.x + ' : ' + foreground.position.y)
