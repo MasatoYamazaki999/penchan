@@ -41,7 +41,6 @@ io.on('connection', (socket) => {
   })
   
   socket.on('updateWorld', (world) => {
-    //console.log(world)
     backEndPlayers[socket.id].world = world
   })
 
@@ -57,7 +56,7 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
   io.emit('updatePlayers', backEndPlayers, sockets)
-}, 15)
+}, 20)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
