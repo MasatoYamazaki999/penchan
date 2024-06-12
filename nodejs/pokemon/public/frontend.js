@@ -254,7 +254,7 @@ window.addEventListener('touchstart', (e) => {
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 200,
+    y: canvas_height_half + 205,
   }
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
