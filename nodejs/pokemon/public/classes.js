@@ -1,5 +1,5 @@
 class SpritePlayer {
-  constructor({ position, image, frames = { max: 1 }, sprites, world }) {
+  constructor({ position, image, frames = { max: 1 }, sprites, socket, world }) {
     this.drawOk = false
     this.position = position
     this.image = image
@@ -11,18 +11,24 @@ class SpritePlayer {
     this.moving = false
     this.sprites = sprites
     this.velocity = { x: 0, y: 0 }
-    this.world = world
   }
 
-  draw() {
+  draw(mine) {
+    let px = this.position.x
+    let py = this.position.y
+    if(mine){
+
+    } else {
+
+    }
     ctx.drawImage(
       this.image,
       this.frames.val * this.width,
       0,
       this.image.width / this.frames.max,
       this.image.height,
-      this.position.x,
-      this.position.y,
+      px,
+      py,
       this.image.width / this.frames.max,
       this.image.height
     )

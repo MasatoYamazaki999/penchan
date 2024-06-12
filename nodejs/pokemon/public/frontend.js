@@ -10,6 +10,9 @@ canvas.height = 800 * devicePixelRatio
 const canvas_width_half = canvas.width / 2
 const canvas_height_half = canvas.height / 2
 
+let myid = ''
+let sockets = []
+
 ctx.scale(devicePixelRatio, devicePixelRatio)
 
 let collisionsMap = []
@@ -89,6 +92,8 @@ const keys = {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
+  document.getElementById('socketId').innerHTML = myid + '</br>'
+
   // 背景
   background.draw()
   // 衝突用
@@ -96,10 +101,20 @@ function display() {
     boundary.draw()
   })
   // プレイヤー
+  console.log("== start ========")
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    frontEndPlayer.draw()
+    
+    console.log(frontEndPlayer.world)
+
+    if(frontEndPlayer.socket === myid){
+      frontEndPlayer.draw(true)
+    } else {
+      frontEndPlayer.draw(false)
+    }
+    
   }
+  console.log("-- end ----------")
   // 前景
   foreground.draw()
 }
@@ -121,11 +136,15 @@ function move() {
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]
     if (frontEndPlayers[socket.id]) {
+      
       if (
         rectangularCollision({
           rectangle1: {
-            position: frontEndPlayers[socket.id].position,
-            //position: { x: 220, y: 500 },
+            position: {
+              x: frontEndPlayers[socket.id].position.x,
+              y: frontEndPlayers[socket.id].position.y
+            },
+            //position: { x: 220, y: 380 },
             width: 48,
             height: 68,
           },
@@ -138,7 +157,6 @@ function move() {
           },
         })
       ) {
-        //console.log('colliding')
         moving = false
         frontEndPlayers[socket.id].moving = false
         break
@@ -168,18 +186,13 @@ function move() {
             frontEndPlayers[socket.id].sprites.left
         }
       }
-      // プレイヤー以外の移動
+      // 移動
       movables.forEach((movabl) => {
         movabl.position.x -= frontEndPlayers[socket.id].velocity.x
         movabl.position.y -= frontEndPlayers[socket.id].velocity.y
       })
-      // frontEndPlayers[socket.id].world = background.position
-      // frontEndPlayers[socket.id].position.x -= frontEndPlayers[socket.id].velocity.x
-      // frontEndPlayers[socket.id].position.y -= frontEndPlayers[socket.id].velocity.y
-      // socket.emit('move', frontEndPlayers[socket.id])
-      //console.log(frontEndPlayers[socket.id].position)
-      //console.log(frontEndPlayers[socket.id])
-      //console.log(foreground.position.x + ' : ' + foreground.position.y)
+      frontEndPlayers[socket.id].world = background.position
+      socket.emit('updateWorld', background.position)
     }
   }
 }
@@ -192,8 +205,17 @@ function animate() {
 
 animate()
 
-socket.on('updatePlayers', (backEndPlayers) => {
-  console.log('in updatePlayers')
+socket.on('firstConnect', (backEndPlayers) => {
+  myid = socket.id
+})
+
+socket.on('disConnect', (backEndPlayers) => {
+  
+})
+
+socket.on('updatePlayers', (backEndPlayers, pSockets) => {
+  sockets = pSockets
+
   for (const id in backEndPlayers) {
     const backEndPlayer = backEndPlayers[id]
     // 初参加プレイヤー
@@ -214,13 +236,14 @@ socket.on('updatePlayers', (backEndPlayers) => {
           right: playerRightImage,
           down: playerDownImage,
         },
+        socket: backEndPlayer.socket,
+        world: {}
       })
     } else {
-      // // 新規以外のプレイヤー
-      // if (id === socket.id) {
-      //   // if a player already exists
-      //   frontEndPlayers[id].position = backEndPlayer.position;
-      // }
+      if (id === socket.id) {
+        frontEndPlayers[id].socket = backEndPlayer.socket;
+      }
+      frontEndPlayers[id].world = backEndPlayer.world;
     }
   }
   // this is where we delete frontend players
@@ -229,7 +252,6 @@ socket.on('updatePlayers', (backEndPlayers) => {
       delete frontEndPlayers[id]
     }
   }
-  //console.log(frontEndPlayers)
 })
 
 window.addEventListener('touchstart', (e) => {

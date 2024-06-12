@@ -12,6 +12,8 @@ const port = 3000
 
 const backEndPlayers = {}
 
+let sockets = []
+
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
@@ -21,35 +23,43 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
 
+  sockets.push(socket.id)
+
   backEndPlayers[socket.id] = {
     position: {
       x: 220,
       y: 500,
     },
+    socket: socket.id,
+    world: {}
   }
-
-  cnt = 1
-  io.emit('updatePlayers', backEndPlayers)
+  io.emit('firstConnect', backEndPlayers)
+  io.emit('updatePlayers', backEndPlayers, sockets)
 
   socket.on('mouse', (e) => {
     console.log(e)
   })
-
-  socket.on('move', (backendPlayer) => {
-    console.log(backendPlayer.position.x + ' : ' + backendPlayer.position.y)
-    backEndPlayers[socket.id].position.x = backendPlayer.position.x
-    backEndPlayers[socket.id].position.y = backendPlayer.position.y
-    io.emit('updatePlayers', backEndPlayers)
+  
+  socket.on('updateWorld', (world) => {
+    console.log(world)
+    backEndPlayers[socket.id].world = world
   })
 
   socket.on('disconnect', (reason) => {
-    console.log('disconnect reason: ' + reason)
+    console.log('disconnect ' + socket.id)
+    sockets = sockets.filter((item) => item !== socket.id);
+
+    io.emit('disConnect', backEndPlayers)
     delete backEndPlayers[socket.id]
-    io.emit('updatePlayers', backEndPlayers)
+    io.emit('updatePlayers', backEndPlayers, sockets)
   })
 })
+
+setInterval(() => {
+  io.emit('updatePlayers', backEndPlayers, sockets)
+}, 200)
 
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
 })
-console.log('server load good!')
+
