@@ -101,20 +101,14 @@ function display() {
     boundary.draw()
   })
   // プレイヤー
-  console.log("== start ========")
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    
-    console.log(frontEndPlayer.world)
-
     if(frontEndPlayer.socket === myid){
       frontEndPlayer.draw(true)
     } else {
       frontEndPlayer.draw(false)
     }
-    
   }
-  console.log("-- end ----------")
   // 前景
   foreground.draw()
 }
