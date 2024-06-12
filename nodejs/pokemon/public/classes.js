@@ -19,8 +19,10 @@ class SpritePlayer {
     if(mine){
 
     } else {
-      px += background.position.x - this.world.x
-      py += background.position.y - this.world.y
+      if(this.world){
+        px += background.position.x - this.world.x
+        py += background.position.y - this.world.y  
+      }
     }
     ctx.drawImage(
       this.image,

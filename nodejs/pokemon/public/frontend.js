@@ -270,7 +270,7 @@ window.addEventListener('touchstart', (e) => {
 
 window.addEventListener('mousedown', (e) => {
   e.preventDefault()
-
+  console.log(e.clientX, e.clientY)
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
