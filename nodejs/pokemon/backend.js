@@ -1,3 +1,4 @@
+
 // express setup
 const express = require('express')
 const app = express()
@@ -6,6 +7,7 @@ const app = express()
 const http = require('http')
 const server = http.createServer(app)
 const { Server } = require('socket.io')
+
 const io = new Server(server, { pingInterval: 1000, pingTimeout: 3000 })
 
 const port = 3000
@@ -32,15 +34,15 @@ io.on('connection', (socket) => {
     },
     socket: socket.id,
     moving: false,
-    velocity: {x: 0, y: 0},
-    world: {x: 0, y: 0},
+    velocity: { x: 0, y: 0 },
+    world: { x: 0, y: 0 },
   }
   io.emit('updatePlayers', backEndPlayers, sockets)
 
   socket.on('mouse', (e) => {
     console.log(e)
   })
-  
+
   socket.on('updateWorld', (world, moving, velocity) => {
     backEndPlayers[socket.id].world = world
     backEndPlayers[socket.id].moving = moving
@@ -49,7 +51,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', (reason) => {
     console.log('disconnect ' + socket.id)
-    sockets = sockets.filter((item) => item !== socket.id);
+    sockets = sockets.filter((item) => item !== socket.id)
 
     delete backEndPlayers[socket.id]
     io.emit('updatePlayers', backEndPlayers, sockets)
@@ -63,4 +65,3 @@ setInterval(() => {
 server.listen(port, () => {
   console.log(`Im listening on port ${port}`)
 })
-
