@@ -31,24 +31,26 @@ io.on('connection', (socket) => {
       y: 500,
     },
     socket: socket.id,
-    world: {}
+    moving: false,
+    velocity: {x: 0, y: 0},
+    world: {x: 0, y: 0},
   }
-  io.emit('firstConnect', backEndPlayers)
   io.emit('updatePlayers', backEndPlayers, sockets)
 
   socket.on('mouse', (e) => {
     console.log(e)
   })
   
-  socket.on('updateWorld', (world) => {
+  socket.on('updateWorld', (world, moving, velocity) => {
     backEndPlayers[socket.id].world = world
+    backEndPlayers[socket.id].moving = moving
+    backEndPlayers[socket.id].velocity = velocity
   })
 
   socket.on('disconnect', (reason) => {
     console.log('disconnect ' + socket.id)
     sockets = sockets.filter((item) => item !== socket.id);
 
-    io.emit('disConnect', backEndPlayers)
     delete backEndPlayers[socket.id]
     io.emit('updatePlayers', backEndPlayers, sockets)
   })

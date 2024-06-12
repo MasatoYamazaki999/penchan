@@ -10,7 +10,6 @@ canvas.height = 800 * devicePixelRatio
 const canvas_width_half = canvas.width / 2
 const canvas_height_half = canvas.height / 2
 
-let myid = ''
 let sockets = []
 
 ctx.scale(devicePixelRatio, devicePixelRatio)
@@ -92,7 +91,7 @@ const keys = {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  document.getElementById('socketId').innerHTML = myid + '</br>'
+  document.getElementById('socketId').innerHTML = sockets + '</br>'
 
   // 背景
   background.draw()
@@ -103,7 +102,7 @@ function display() {
   // プレイヤー
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    if(frontEndPlayer.socket === myid){
+    if(frontEndPlayer.socket === socket.id){
       frontEndPlayer.draw(true)
     } else {
       frontEndPlayer.draw(false)
@@ -129,8 +128,7 @@ function move() {
   let moving = true
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]
-    if (frontEndPlayers[socket.id]) {
-      
+    if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
       if (
         rectangularCollision({
           rectangle1: {
@@ -159,34 +157,17 @@ function move() {
   }
   if (frontEndPlayers[socket.id]) {
     if (moving && frontEndPlayers[socket.id].moving) {
-      // プレイヤー画像選定
-      const v = frontEndPlayers[socket.id].velocity
-      const absX = Math.abs(v.x)
-      const absY = Math.abs(v.y)
-      if (absY > absX) {
-        if (v.y > 0) {
-          frontEndPlayers[socket.id].image =
-            frontEndPlayers[socket.id].sprites.down
-        } else {
-          frontEndPlayers[socket.id].image =
-            frontEndPlayers[socket.id].sprites.up
-        }
-      } else {
-        if (v.x > 0) {
-          frontEndPlayers[socket.id].image =
-            frontEndPlayers[socket.id].sprites.right
-        } else {
-          frontEndPlayers[socket.id].image =
-            frontEndPlayers[socket.id].sprites.left
-        }
-      }
+      // // プレイヤー画像選定
       // 移動
       movables.forEach((movabl) => {
         movabl.position.x -= frontEndPlayers[socket.id].velocity.x
         movabl.position.y -= frontEndPlayers[socket.id].velocity.y
       })
       frontEndPlayers[socket.id].world = background.position
-      socket.emit('updateWorld', background.position)
+      socket.emit('updateWorld', 
+        frontEndPlayers[socket.id].world, 
+        frontEndPlayers[socket.id].moving, 
+        frontEndPlayers[socket.id].velocity)
     }
   }
 }
@@ -198,14 +179,6 @@ function animate() {
 }
 
 animate()
-
-socket.on('firstConnect', (backEndPlayers) => {
-  myid = socket.id
-})
-
-socket.on('disConnect', (backEndPlayers) => {
-  
-})
 
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
@@ -231,11 +204,16 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
           down: playerDownImage,
         },
         socket: backEndPlayer.socket,
-        world: {}
+        world: background.position,
+        velocity: backEndPlayer.velocity,
+        moving: backEndPlayer.moving
       })
     } else {
       if (id === socket.id) {
-        frontEndPlayers[id].socket = backEndPlayer.socket;
+        //frontEndPlayers[id].socket = backEndPlayer.socket;
+      } else {
+        frontEndPlayers[id].velocity = backEndPlayer.velocity
+        frontEndPlayers[id].moving = backEndPlayer.moving
       }
       frontEndPlayers[id].world = backEndPlayer.world;
     }
@@ -254,7 +232,7 @@ window.addEventListener('touchstart', (e) => {
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 200,
+    y: canvas_height_half + 300,
   }
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
@@ -266,16 +244,19 @@ window.addEventListener('touchstart', (e) => {
   }
   frontEndPlayers[socket.id].velocity = velocity
   frontEndPlayers[socket.id].moving = true
+  socket.emit('updateWorld', 
+    frontEndPlayers[socket.id].world, 
+    frontEndPlayers[socket.id].moving, 
+    frontEndPlayers[socket.id].velocity)
 })
 
 window.addEventListener('mousedown', (e) => {
   e.preventDefault()
-  console.log(e.clientX, e.clientY)
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 200,
+    y: canvas_height_half + 100,
   }
   const angle = Math.atan2(
     e.offsetY - top - playerPosition.y,
@@ -287,14 +268,26 @@ window.addEventListener('mousedown', (e) => {
   }
   frontEndPlayers[socket.id].velocity = velocity
   frontEndPlayers[socket.id].moving = true
+  socket.emit('updateWorld', 
+    frontEndPlayers[socket.id].world, 
+    frontEndPlayers[socket.id].moving, 
+    frontEndPlayers[socket.id].velocity)
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
   frontEndPlayers[socket.id].moving = false
+  socket.emit('updateWorld', 
+    frontEndPlayers[socket.id].world, 
+    frontEndPlayers[socket.id].moving, 
+    frontEndPlayers[socket.id].velocity)
 })
 
 window.addEventListener('mouseup', (e) => {
   e.preventDefault()
   frontEndPlayers[socket.id].moving = false
+  socket.emit('updateWorld', 
+    frontEndPlayers[socket.id].world, 
+    frontEndPlayers[socket.id].moving, 
+    frontEndPlayers[socket.id].velocity)
 })
