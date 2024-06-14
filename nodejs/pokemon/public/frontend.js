@@ -18,6 +18,10 @@ let collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, 70 + i))
 }
+let battleZonesMap = []
+for (let i = 0; i < battleZonesData.length; i += 70) {
+  battleZonesMap.push(battleZonesData.slice(i, 70 + i))
+}
 
 const boundaries = []
 const frontEndPlayers = {}
@@ -41,6 +45,22 @@ collisionsMap.forEach((row, i) => {
   })
 })
 
+const battleZones = []
+battleZonesMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    if (symbol === 1025)
+      battleZones.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      )
+  })
+})
+
+console.log(battleZones)
 const backgroundImage = new Image()
 backgroundImage.src = './img/Pellet Town.png'
 
@@ -99,6 +119,11 @@ function display() {
   boundaries.forEach((boundary) => {
     boundary.draw()
   })
+  // battle zones
+  battleZones.forEach(battleZone => {
+    battleZone.draw()
+  })
+
   // プレイヤー
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
@@ -121,7 +146,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   )
 }
 
-const movables = [background, ...boundaries, foreground]
+const movables = [background, ...boundaries, foreground, ...battleZones]
 
 function move() {
   // 移動前に移動可能か確認
@@ -155,6 +180,35 @@ function move() {
       }
     }
   }
+
+  for (let i = 0; i < battleZones.length; i++) {
+    const battleZone = battleZones[i]
+    if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
+      if (
+        rectangularCollision({
+          rectangle1: {
+            position: {
+              x: frontEndPlayers[socket.id].position.x,
+              y: frontEndPlayers[socket.id].position.y
+            },
+            width: 48,
+            height: 68,
+          },
+          rectangle2: {
+            ...battleZone,
+            position: {
+              x: battleZone.position.x - frontEndPlayers[socket.id].velocity.x,
+              y: battleZone.position.y - frontEndPlayers[socket.id].velocity.y
+            },
+          },
+        })
+      ) {
+        console.log('battle zone collide')
+        break
+      }
+    }
+  }
+
   if (frontEndPlayers[socket.id]) {
     if (moving && frontEndPlayers[socket.id].moving) {
       // // プレイヤー画像選定
@@ -256,7 +310,7 @@ window.addEventListener('mousedown', (e) => {
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 100,
+    y: canvas_height_half + 300,
   }
   const angle = Math.atan2(
     e.offsetY - top - playerPosition.y,
