@@ -60,7 +60,6 @@ battleZonesMap.forEach((row, i) => {
   })
 })
 
-console.log(battleZones)
 const backgroundImage = new Image()
 backgroundImage.src = './img/Pellet Town.png'
 
@@ -193,7 +192,7 @@ function display() {
                     opacity: 0,
                     duration: 0.4,
                   })
-                }
+                },
               })
             },
           })
@@ -249,7 +248,6 @@ function move() {
 
   if (frontEndPlayers[socket.id]) {
     if (moving && frontEndPlayers[socket.id].moving) {
-      // // プレイヤー画像選定
       // 移動
       movables.forEach((movabl) => {
         movabl.position.x -= frontEndPlayers[socket.id].velocity.x
@@ -265,6 +263,9 @@ function move() {
     }
   }
 }
+
+// ==================
+
 let animationId = null
 function animate() {
   animationId = window.requestAnimationFrame(animate)
@@ -280,9 +281,9 @@ battleBackgroundImage.src = './img/battleBackground.png'
 const battleBackgroud = new Sprite({
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
-  image: battleBackgroundImage
+  image: battleBackgroundImage,
 })
 
 const draggleImage = new Image()
@@ -290,13 +291,15 @@ draggleImage.src = './img/draggleSprite.png'
 const draggle = new Sprite({
   position: {
     x: 350,
-    y: 100
+    y: 100,
   },
   image: draggleImage,
   frames: {
-    max: 4
+    max: 4,
   },
-  moving: true
+  moving: true,
+  isEnemy: true,
+  name: 'Draggle'
 })
 
 const embyImage = new Image()
@@ -304,25 +307,42 @@ embyImage.src = './img/embySprite.png'
 const emby = new Sprite({
   position: {
     x: 120,
-    y: 330
+    y: 330,
   },
   image: embyImage,
   frames: {
-    max: 4
+    max: 4,
   },
-  moving: true
+  moving: true,
+  name: 'Emby'
 })
 
-function animateBattle(){
+const renderedSprites = [draggle, emby]
+
+function animateBattle() {
   window.requestAnimationFrame(animateBattle)
   battleBackgroud.draw()
-  draggle.draw()
-  emby.draw()
+
+  renderedSprites.forEach((sprite) => {
+    sprite.draw()
+  })
 }
 
 //animate()
 animateBattle()
 
+// our event listeners for our buttons (attack)
+document.querySelectorAll('button').forEach((button) => {
+  button.addEventListener('click', (e) => {
+    const selectedAttack = attacks[e.currentTarget.innerHTML]
+    emby.attack({
+      attack: selectedAttack,
+      recipient: draggle,
+      renderedSprites
+    })
+  })
+})
+//===========================
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
 
