@@ -7,14 +7,9 @@ const http = require('http')
 const server = http.createServer(app)
 const { Server } = require('socket.io')
 
-const ExampleClass = require('./public/js/classes/testclass')
-
 const io = new Server(server, { pingInterval: 1000, pingTimeout: 3000 })
 
 const port = 3000
-
-let xx = new ExampleClass('ふふふ出来たな')
-console.log(xx.getTest())
 
 const backEndPlayers = {}
 

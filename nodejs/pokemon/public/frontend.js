@@ -275,8 +275,6 @@ function animate() {
   }
 }
 
-//animate()
-
 const battleBackgroundImage = new Image()
 battleBackgroundImage.src = './img/battleBackground.png'
 const battleBackgroud = new Sprite({
@@ -286,12 +284,43 @@ const battleBackgroud = new Sprite({
   },
   image: battleBackgroundImage
 })
+
+const draggleImage = new Image()
+draggleImage.src = './img/draggleSprite.png'
+const draggle = new Sprite({
+  position: {
+    x: 350,
+    y: 100
+  },
+  image: draggleImage,
+  frames: {
+    max: 4
+  },
+  moving: true
+})
+
+const embyImage = new Image()
+embyImage.src = './img/embySprite.png'
+const emby = new Sprite({
+  position: {
+    x: 120,
+    y: 330
+  },
+  image: embyImage,
+  frames: {
+    max: 4
+  },
+  moving: true
+})
+
 function animateBattle(){
   window.requestAnimationFrame(animateBattle)
   battleBackgroud.draw()
-  //console.log('animating battle')
+  draggle.draw()
+  emby.draw()
 }
 
+//animate()
 animateBattle()
 
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {

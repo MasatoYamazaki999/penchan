@@ -82,7 +82,7 @@ class SpritePlayer {
 }
 
 class Sprite {
-  constructor({ position, image, frames = { max: 1 }, sprites }) {
+  constructor({ position, image, frames = { max: 1 }, sprites, moving = false}) {
     this.position = position
     this.image = image
     this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -91,6 +91,7 @@ class Sprite {
       this.height = this.image.height
     })
     this.sprites = sprites
+    this.moving = moving
   }
 
   draw() {
@@ -105,6 +106,17 @@ class Sprite {
       this.image.width / this.frames.max,
       this.image.height
     )
+    if (!this.moving) return
+    if (this.frames.max > 1) {
+      this.frames.elapsed++
+    }
+    if (this.frames.elapsed % 10 === 0) {
+      if (this.frames.val < this.frames.max - 1) {
+        this.frames.val++
+      } else {
+        this.frames.val = 0
+      }
+    }
   }
 }
 class Boundary {
@@ -116,7 +128,7 @@ class Boundary {
     this.height = Boundary.height
   }
   draw() {
-    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
+    ctx.fillStyle = 'rgba(255, 0, 0, 0.0)'
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
 }
