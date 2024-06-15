@@ -187,11 +187,14 @@ function display() {
               gsap.to('#overlappingDiv', {
                 opacity: 1,
                 duration: 0.4,
+                onComplete() {
+                  animateBattle()
+                  gsap.to('#overlappingDiv', {
+                    opacity: 0,
+                    duration: 0.4,
+                  })
+                }
               })
-              // activate a new animation loop
-
-              
-              
             },
           })
           break
@@ -272,12 +275,24 @@ function animate() {
   }
 }
 
-animate()
+//animate()
 
+const battleBackgroundImage = new Image()
+battleBackgroundImage.src = './img/battleBackground.png'
+const battleBackgroud = new Sprite({
+  position: {
+    x: 0,
+    y: 0
+  },
+  image: battleBackgroundImage
+})
 function animateBattle(){
   window.requestAnimationFrame(animateBattle)
-  console.log('animating battle')
+  battleBackgroud.draw()
+  //console.log('animating battle')
 }
+
+animateBattle()
 
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
