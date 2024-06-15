@@ -109,6 +109,10 @@ const keys = {
   },
 }
 
+const battle = {
+  initiated: false,
+}
+
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   document.getElementById('socketId').innerHTML = sockets + '</br>'
@@ -120,14 +124,14 @@ function display() {
     boundary.draw()
   })
   // battle zones
-  battleZones.forEach(battleZone => {
+  battleZones.forEach((battleZone) => {
     battleZone.draw()
   })
 
   // プレイヤー
   for (const id in frontEndPlayers) {
     const frontEndPlayer = frontEndPlayers[id]
-    if(frontEndPlayer.socket === socket.id){
+    if (frontEndPlayer.socket === socket.id) {
       frontEndPlayer.draw(true)
     } else {
       frontEndPlayer.draw(false)
@@ -135,6 +139,66 @@ function display() {
   }
   // 前景
   foreground.draw()
+
+  if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
+    for (let i = 0; i < battleZones.length; i++) {
+      const battleZone = battleZones[i]
+      const overlappingArea =
+        (Math.min(
+          frontEndPlayers[socket.id].position.x +
+            frontEndPlayers[socket.id].width,
+          battleZone.position.x + battleZone.width
+        ) -
+          Math.max(
+            frontEndPlayers[socket.id].position.x,
+            battleZone.position.x
+          )) *
+        (Math.min(
+          frontEndPlayers[socket.id].position.y +
+            frontEndPlayers[socket.id].height,
+          battleZone.position.y + battleZone.height
+        ) -
+          Math.max(
+            frontEndPlayers[socket.id].position.y,
+            battleZone.position.y
+          ))
+      if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
+        if (
+          rectangularCollision({
+            rectangle1: frontEndPlayers[socket.id],
+            rectangle2: battleZone,
+          }) &&
+          overlappingArea >
+            (frontEndPlayers[socket.id].width *
+              frontEndPlayers[socket.id].height) /
+              2 &&
+          Math.random() < 0.1
+        ) {
+          console.log('activate battle')
+          // deactivate current animation loop
+          window.cancelAnimationFrame(animationId)
+          battle.initiated = true
+          gsap.to('#overlappingDiv', {
+            opacity: 1,
+            repeat: 3,
+            yoyo: true,
+            duration: 0.4,
+            onComplete() {
+              gsap.to('#overlappingDiv', {
+                opacity: 1,
+                duration: 0.4,
+              })
+              // activate a new animation loop
+
+              
+              
+            },
+          })
+          break
+        }
+      }
+    }
+  }
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -159,9 +223,8 @@ function move() {
           rectangle1: {
             position: {
               x: frontEndPlayers[socket.id].position.x,
-              y: frontEndPlayers[socket.id].position.y
+              y: frontEndPlayers[socket.id].position.y,
             },
-            //position: { x: 220, y: 380 },
             width: 48,
             height: 68,
           },
@@ -169,41 +232,13 @@ function move() {
             ...boundary,
             position: {
               x: boundary.position.x - frontEndPlayers[socket.id].velocity.x,
-              y: boundary.position.y - frontEndPlayers[socket.id].velocity.y
+              y: boundary.position.y - frontEndPlayers[socket.id].velocity.y,
             },
           },
         })
       ) {
         moving = false
         frontEndPlayers[socket.id].moving = false
-        break
-      }
-    }
-  }
-
-  for (let i = 0; i < battleZones.length; i++) {
-    const battleZone = battleZones[i]
-    if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
-      if (
-        rectangularCollision({
-          rectangle1: {
-            position: {
-              x: frontEndPlayers[socket.id].position.x,
-              y: frontEndPlayers[socket.id].position.y
-            },
-            width: 48,
-            height: 68,
-          },
-          rectangle2: {
-            ...battleZone,
-            position: {
-              x: battleZone.position.x - frontEndPlayers[socket.id].velocity.x,
-              y: battleZone.position.y - frontEndPlayers[socket.id].velocity.y
-            },
-          },
-        })
-      ) {
-        console.log('battle zone collide')
         break
       }
     }
@@ -218,21 +253,31 @@ function move() {
         movabl.position.y -= frontEndPlayers[socket.id].velocity.y
       })
       frontEndPlayers[socket.id].world = background.position
-      socket.emit('updateWorld', 
-        frontEndPlayers[socket.id].world, 
-        frontEndPlayers[socket.id].moving, 
-        frontEndPlayers[socket.id].velocity)
+      socket.emit(
+        'updateWorld',
+        frontEndPlayers[socket.id].world,
+        frontEndPlayers[socket.id].moving,
+        frontEndPlayers[socket.id].velocity
+      )
     }
   }
 }
-
+let animationId = null
 function animate() {
-  window.requestAnimationFrame(animate)
+  animationId = window.requestAnimationFrame(animate)
   display()
-  move()
+  // encount
+  if (!battle.initiated) {
+    move()
+  }
 }
 
 animate()
+
+function animateBattle(){
+  window.requestAnimationFrame(animateBattle)
+  console.log('animating battle')
+}
 
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
@@ -241,7 +286,6 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
     const backEndPlayer = backEndPlayers[id]
     // 初参加プレイヤー
     if (!frontEndPlayers[id]) {
-
       frontEndPlayers[id] = new SpritePlayer({
         position: {
           x: backEndPlayer.position.x,
@@ -260,7 +304,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         socket: backEndPlayer.socket,
         world: background.position,
         velocity: backEndPlayer.velocity,
-        moving: backEndPlayer.moving
+        moving: backEndPlayer.moving,
       })
     } else {
       if (id === socket.id) {
@@ -269,7 +313,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         frontEndPlayers[id].velocity = backEndPlayer.velocity
         frontEndPlayers[id].moving = backEndPlayer.moving
       }
-      frontEndPlayers[id].world = backEndPlayer.world;
+      frontEndPlayers[id].world = backEndPlayer.world
     }
   }
   // this is where we delete frontend players
@@ -298,10 +342,12 @@ window.addEventListener('touchstart', (e) => {
   }
   frontEndPlayers[socket.id].velocity = velocity
   frontEndPlayers[socket.id].moving = true
-  socket.emit('updateWorld', 
-    frontEndPlayers[socket.id].world, 
-    frontEndPlayers[socket.id].moving, 
-    frontEndPlayers[socket.id].velocity)
+  socket.emit(
+    'updateWorld',
+    frontEndPlayers[socket.id].world,
+    frontEndPlayers[socket.id].moving,
+    frontEndPlayers[socket.id].velocity
+  )
 })
 
 window.addEventListener('mousedown', (e) => {
@@ -322,26 +368,32 @@ window.addEventListener('mousedown', (e) => {
   }
   frontEndPlayers[socket.id].velocity = velocity
   frontEndPlayers[socket.id].moving = true
-  socket.emit('updateWorld', 
-    frontEndPlayers[socket.id].world, 
-    frontEndPlayers[socket.id].moving, 
-    frontEndPlayers[socket.id].velocity)
+  socket.emit(
+    'updateWorld',
+    frontEndPlayers[socket.id].world,
+    frontEndPlayers[socket.id].moving,
+    frontEndPlayers[socket.id].velocity
+  )
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
   frontEndPlayers[socket.id].moving = false
-  socket.emit('updateWorld', 
-    frontEndPlayers[socket.id].world, 
-    frontEndPlayers[socket.id].moving, 
-    frontEndPlayers[socket.id].velocity)
+  socket.emit(
+    'updateWorld',
+    frontEndPlayers[socket.id].world,
+    frontEndPlayers[socket.id].moving,
+    frontEndPlayers[socket.id].velocity
+  )
 })
 
 window.addEventListener('mouseup', (e) => {
   e.preventDefault()
   frontEndPlayers[socket.id].moving = false
-  socket.emit('updateWorld', 
-    frontEndPlayers[socket.id].world, 
-    frontEndPlayers[socket.id].moving, 
-    frontEndPlayers[socket.id].velocity)
+  socket.emit(
+    'updateWorld',
+    frontEndPlayers[socket.id].world,
+    frontEndPlayers[socket.id].moving,
+    frontEndPlayers[socket.id].velocity
+  )
 })
