@@ -176,7 +176,6 @@ function display() {
           // deactivate current animation loop
           window.cancelAnimationFrame(animationId)
 
-          audio.Map.stop()
           audio.initBattle.play()
           audio.battle.play()
 
@@ -403,18 +402,4 @@ window.addEventListener('mouseup', (e) => {
     frontEndPlayers[socket.id].moving,
     frontEndPlayers[socket.id].velocity
   )
-})
-
-let clicked = false
-window.addEventListener('touchstart', () => {
-  if(!clicked) {
-    audio.Map.play()
-    clicked = true
-  }
-})
-window.addEventListener('click', () => {
-  if(!clicked) {
-    audio.Map.play()
-    clicked = true
-  }
 })
