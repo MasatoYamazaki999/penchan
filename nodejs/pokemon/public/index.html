@@ -47,29 +47,30 @@
     <div id="userInterface" style="display: none;">
       <!-- represents health bar of draggle(enemy) -->
       <div style="
-      background-color: white;
-      width: 250px;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      border: 4px black solid;
-      padding: 12px;
+        background-color: white;
+        width: 400px;
+        height: 160px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border: 4px black solid;
+        padding: 12px;
       ">
         <h1>Draggle</h1>
         <div style="position: relative;">
           <div style="
-          height: 5px;
-          background-color: #ccc;
-          margin-top: 10px;
+            height: 20px;
+            background-color: #ccc;
+            margin-top: 10px;
           ">
           </div>
           <div id="enemyHealthBar" style="
-          height: 5px;
-          background-color: green;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
           ">
           </div>
         </div>
@@ -77,72 +78,65 @@
 
       <!-- represents health bar of emby(us) -->
       <div style="
-      background-color: white;
-      width: 250px;
-      position: absolute;
-      top: 450px;
-      right: 10px;
-      border: 4px black solid;
-      padding: 12px;
+        background-color: white;
+        width: 380px;
+        height: 160px;
+        position: absolute;
+        top: 1500px;
+        right: 20px;
+        border: 4px black solid;
+        padding: 12px;
       ">
         <h1>Emby</h1>
         <div style="position: relative;">
           <div style="
-          height: 5px;
-          background-color: #ccc;
-          margin-top: 10px;
+            height: 20px;
+            background-color: #ccc;
+            margin-top: 10px;
           ">
           </div>
           <div id="playerHealthBar" style="
-          height: 5px;
-          background-color: green;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
           ">
           </div>
         </div>
       </div>
 
       <div style="
-      background-color: white; 
-      height: 200px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-top: 4px black solid;
-      display: flex;
-      ">
-
-        <div id="dialogueBox" style="
+        height: 680px;
         position: absolute;
-        top: 0;
-        right: 0;
         bottom: 0;
         left: 0;
-        background-color: white;
-        padding: 12px;
-        display: none;
-        cursor: pointer;
+        right: 0;
+        border: 4px blue solid;
+        display: flex;
         ">
-          adfajkdj
+
+        <div id="dialogueBox" style="
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            padding: 10px;
+            display: none;
+            cursor: pointer;
+            font-size: 72pt;
+            border: 4px red solid;
+            ">
         </div>
         <div id="attacksBox" style="
-          width: 66.66%;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          ">
-        </div>
-        <div style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 33.33%;
-      border-left: 4px black solid;
-      ">
-          <h1 id="attackType">Attack Type</h1>
+              width: 98%;
+              padding: 2px;
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              ">
         </div>
       </div>
     </div>
