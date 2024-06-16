@@ -173,9 +173,13 @@ function display() {
               2 &&
           Math.random() < 0.1
         ) {
-          console.log('activate battle')
           // deactivate current animation loop
           window.cancelAnimationFrame(animationId)
+
+          audio.Map.stop()
+          audio.initBattle.play()
+          audio.battle.play()
+
           battle.initiated = true
           gsap.to('#overlappingDiv', {
             opacity: 1,
@@ -266,8 +270,9 @@ function move() {
   }
 }
 
-let animationId = null
+let animationId
 function animate() {
+  animationId = null
   animationId = window.requestAnimationFrame(animate)
   display()
   // encount
@@ -320,9 +325,14 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
     }
   }
 })
-
+let audioPlay = false
 window.addEventListener('touchstart', (e) => {
   e.preventDefault()
+  if(!audioPlay) {
+    audio.Map.play()
+    audioPlay = true
+  }
+
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
@@ -393,4 +403,12 @@ window.addEventListener('mouseup', (e) => {
     frontEndPlayers[socket.id].moving,
     frontEndPlayers[socket.id].velocity
   )
+})
+
+let clicked = false
+window.addEventListener('click', () => {
+  if(!clicked) {
+    audio.Map.play()
+    clicked = true
+  }
 })

@@ -44,7 +44,7 @@
 
     <canvas id="canvas"></canvas>
 
-    <div id="userInterface">
+    <div id="userInterface" style="display: none;">
       <!-- represents health bar of draggle(enemy) -->
       <div style="
       background-color: white;
@@ -105,7 +105,6 @@
         </div>
       </div>
 
-
       <div style="
       background-color: white; 
       height: 200px;
@@ -149,6 +148,9 @@
       </div>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
     integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -157,6 +159,7 @@
   <script src="./data/collisions.js"></script>
   <script src="./data/attacks.js"></script>
   <script src="./data/monsters.js"></script>
+  <script src="./data/audio.js"></script>
   <script src="./classes.js"></script>
   <script src="./frontend.js"></script>
   <script src="./battleScene.js"></script>
