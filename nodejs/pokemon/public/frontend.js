@@ -406,6 +406,12 @@ window.addEventListener('mouseup', (e) => {
 })
 
 let clicked = false
+window.addEventListener('touchstart', () => {
+  if(!clicked) {
+    audio.Map.play()
+    clicked = true
+  }
+})
 window.addEventListener('click', () => {
   if(!clicked) {
     audio.Map.play()
