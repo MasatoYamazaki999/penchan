@@ -122,9 +122,9 @@ function animateBattle() {
   })
 }
 
-//animate()
-initBattle()
-animateBattle()
+animate()
+// initBattle()
+// animateBattle()
 
 document.querySelector('#dialogueBox').addEventListener('touchstart', (e) => {
   if (queue.length > 0) {
