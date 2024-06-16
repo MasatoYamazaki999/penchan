@@ -8,42 +8,17 @@ const battleBackgroud = new Sprite({
   image: battleBackgroundImage,
 })
 
-const draggleImage = new Image()
-draggleImage.src = './img/draggleSprite.png'
-const draggle = new Sprite({
-  position: {
-    x: 350,
-    y: 100,
-  },
-  image: draggleImage,
-  frames: {
-    max: 4,
-  },
-  moving: true,
-  isEnemy: true,
-  name: 'Draggle',
-})
-
-const embyImage = new Image()
-embyImage.src = './img/embySprite.png'
-const emby = new Sprite({
-  position: {
-    x: 120,
-    y: 330,
-  },
-  image: embyImage,
-  frames: {
-    max: 4,
-  },
-  moving: true,
-  name: 'Emby',
-})
+const draggle = new Monster(monsters.Draggle)
+const emby = new Monster(monsters.Emby)
 
 const renderedSprites = [draggle, emby]
-const button = document.createElement('button')
-button.innerHTML = 'Fireball'
 
-document.querySelector('#attacksBox').append(button)
+emby.attacks.forEach((attack) => {
+  const button = document.createElement('button')
+  button.innerHTML = attack.name
+  document.querySelector('#attacksBox').append(button)
+})
+
 function animateBattle() {
   window.requestAnimationFrame(animateBattle)
   battleBackgroud.draw()
@@ -67,16 +42,13 @@ document.querySelectorAll('button').forEach((button) => {
       recipient: draggle,
       renderedSprites,
     })
+
+    const randomAttack = 
+      draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
+    
     queue.push(() => {
       draggle.attack({
-        attack: attacks.Tackle,
-        recipient: emby,
-        renderedSprites,
-      })
-    })
-    queue.push(() => {
-      draggle.attack({
-        attack: attacks.Fireball,
+        attack: randomAttack,
         recipient: emby,
         renderedSprites,
       })

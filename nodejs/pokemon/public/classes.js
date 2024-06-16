@@ -93,9 +93,7 @@ class Sprite {
     frames = { max: 1 },
     sprites,
     moving = false,
-    isEnemy = false,
     rotation = 0,
-    name
   }) {
     this.position = position
     this.image = image
@@ -107,10 +105,7 @@ class Sprite {
     this.sprites = sprites
     this.moving = moving
     this.opacity = 1
-    this.health = 100
-    this.isEnemy = isEnemy
     this.rotation = rotation
-    this.name = name
   }
 
   draw() {
@@ -150,9 +145,36 @@ class Sprite {
       }
     }
   }
+}
+
+class Monster extends Sprite {
+  constructor({
+    position,
+    image,
+    frames = { max: 1 },
+    sprites,
+    moving = false,
+    rotation = 0,
+    isEnemy = false,
+    name,
+    attacks
+  }) {
+    super({
+      position,
+      image,
+      frames,
+      sprites,
+      moving,
+      rotation,
+    })
+    this.health = 100
+    this.isEnemy = isEnemy
+    this.name = name
+    this.attacks = attacks
+  }
   attack({ attack, recipient, renderedSprites }) {
-    document.querySelector('#dialogueBox').style.display = "block"
-    document.querySelector('#dialogueBox').innerHTML = 
+    document.querySelector('#dialogueBox').style.display = 'block'
+    document.querySelector('#dialogueBox').innerHTML =
       this.name + ' used ' + attack.name
 
     let healthBar = '#enemyHealthBar'
@@ -177,7 +199,7 @@ class Sprite {
             max: 4,
           },
           moving: true,
-          rotation
+          rotation,
         })
 
         renderedSprites.splice(1, 0, fireball)
