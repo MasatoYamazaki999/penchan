@@ -9,14 +9,17 @@
     body {
       background-color: black;
     }
+
     h1 {
       margin: 0;
     }
+
     button {
       border: 0;
       cursor: pointer;
       font-size: 16px;
     }
+
     button:hover {
       background-color: #ccc;
     }
@@ -26,8 +29,7 @@
 <body>
   <label id="socketId"></label>
   <div style="display: inline-block; position: relative;">
-    <div id="overlappingDiv"
-      style="
+    <div id="overlappingDiv" style="
       background-color: black; 
       position: absolute; 
       top: 0;
@@ -35,10 +37,16 @@
       bottom: 0;
       left: 0;
       opacity: 0;
-      pointer-events: none;">
+      pointer-events: none;
+      z-index: 10;
+      ">
     </div>
-    <!-- represents health bar of draggle(enemy) -->
-    <div style="
+
+    <canvas id="canvas"></canvas>
+
+    <div id="userInterface">
+      <!-- represents health bar of draggle(enemy) -->
+      <div style="
       background-color: white;
       width: 250px;
       position: absolute;
@@ -47,18 +55,15 @@
       border: 4px black solid;
       padding: 12px;
       ">
-      <h1 style="font-size: 16px;">Draggle</h1>
-      <div style="position: relative;">
-        <div 
-          style="
+        <h1 style="font-size: 16px;">Draggle</h1>
+        <div style="position: relative;">
+          <div style="
           height: 5px;
           background-color: #ccc;
           margin-top: 10px;
           ">
-        </div>
-        <div
-          id="enemyHealthBar"
-          style="
+          </div>
+          <div id="enemyHealthBar" style="
           height: 5px;
           background-color: green;
           position: absolute;
@@ -66,12 +71,12 @@
           left: 0;
           right: 0;
           ">
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- represents health bar of emby(us) -->
-    <div style="
+      <!-- represents health bar of emby(us) -->
+      <div style="
       background-color: white;
       width: 250px;
       position: absolute;
@@ -80,18 +85,15 @@
       border: 4px black solid;
       padding: 12px;
       ">
-      <h1 style="font-size: 16px;">Emby</h1>
-      <div style="position: relative;">
-        <div 
-          style="
+        <h1 style="font-size: 16px;">Emby</h1>
+        <div style="position: relative;">
+          <div style="
           height: 5px;
           background-color: #ccc;
           margin-top: 10px;
           ">
-        </div>
-        <div
-          id="playerHealthBar"
-          style="
+          </div>
+          <div id="playerHealthBar" style="
           height: 5px;
           background-color: green;
           position: absolute;
@@ -99,14 +101,12 @@
           left: 0;
           right: 0;
           ">
+          </div>
         </div>
       </div>
-    </div>
 
 
-    <canvas id="canvas"></canvas>
-
-    <div style="
+      <div style="
       background-color: white; 
       height: 200px;
       position: absolute;
@@ -117,9 +117,7 @@
       display: flex;
       ">
 
-      <div
-        id="dialogueBox"
-        style="
+        <div id="dialogueBox" style="
         position: absolute;
         top: 0;
         right: 0;
@@ -130,17 +128,15 @@
         display: none;
         cursor: pointer;
         ">
-        adfajkdj
-      </div>
-      <div
-        id="attacksBox"
-        style="
+          adfajkdj
+        </div>
+        <div id="attacksBox" style="
           width: 66.66%;
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           ">
-      </div>  
-      <div style="
+        </div>
+        <div style="
       display: flex;
       align-items: center;
       justify-content: center;
@@ -148,7 +144,8 @@
       border-left: 4px black solid;
       font-size: 8px;
       ">
-        <h1>Attack Type</h1>
+          <h1 id="attackType">Attack Type</h1>
+        </div>
       </div>
     </div>
   </div>

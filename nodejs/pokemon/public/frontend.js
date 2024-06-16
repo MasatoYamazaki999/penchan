@@ -187,6 +187,8 @@ function display() {
                 opacity: 1,
                 duration: 0.4,
                 onComplete() {
+                  // activate a new animation loop
+                  initBattle()
                   animateBattle()
                   gsap.to('#overlappingDiv', {
                     opacity: 0,
@@ -264,8 +266,6 @@ function move() {
   }
 }
 
-
-
 let animationId = null
 function animate() {
   animationId = window.requestAnimationFrame(animate)
@@ -275,9 +275,7 @@ function animate() {
     move()
   }
 }
-// ==================
-// battleScene.js
-// ==================
+
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
 
