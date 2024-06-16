@@ -199,7 +199,7 @@ class Monster extends Sprite {
 
     recipient.health -= attack.damage
 
-    switch (attack.name) {
+    switch (attack.kind) {
       case 'Fireball':
         audio.initFireball.play()
         const fireballImage = new Image()

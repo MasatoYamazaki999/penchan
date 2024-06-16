@@ -30,7 +30,7 @@ function initBattle() {
   emby.attacks.forEach((attack) => {
     const button = document.createElement('button')
     button.innerHTML = attack.display
-    button.setAttribute('kind', attack.name)
+    button.setAttribute('kind', attack.kind)
     button.style.fontSize = '72pt'
     document.querySelector('#attacksBox').append(button)
   })
