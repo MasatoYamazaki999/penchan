@@ -2,7 +2,7 @@ class SpritePlayer {
   constructor({
     position,
     image,
-    frames = { max: 1 },
+    frames = { max: 4 },
     sprites,
     socket,
     moving,
