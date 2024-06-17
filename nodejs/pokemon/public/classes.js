@@ -1,4 +1,72 @@
-class SpritePlayer {
+class Sprite {
+  constructor({
+    position,
+    image,
+    frames = { max: 1 },
+    sprites,
+    moving = false,
+    rotation = 0,
+  }) {
+    this.position = position
+    this.image = new Image()
+    this.frames = { ...frames, val: 0, elapsed: 0 }
+    this.image.src = image.src
+    this.image.decode().then(() => {
+      this.width = this.image.width / this.frames.max
+      this.height = this.image.height
+    })
+    this.sprites = sprites
+    this.moving = moving
+    this.opacity = 1
+    this.rotation = rotation
+  }
+
+  translFrame() {
+    ctx.save()
+    ctx.translate(
+      this.position.x + this.width / 2,
+      this.position.y + this.height / 2
+    )
+    ctx.rotate(this.rotation)
+    ctx.translate(
+      -this.position.x - this.width / 2,
+      -this.position.y - this.height / 2
+    )
+    ctx.globalAlpha = this.opacity
+  }
+
+  calcFrame() {
+    if (!this.moving) return
+    if (this.frames.max > 1) {
+      this.frames.elapsed++
+    }
+    if (this.frames.elapsed % 10 === 0) {
+      if (this.frames.val < this.frames.max - 1) {
+        this.frames.val++
+      } else {
+        this.frames.val = 0
+      }
+    }
+  }
+
+  draw() {
+    this.translFrame()
+    ctx.drawImage(
+      this.image,
+      this.frames.val * this.width,
+      0,
+      this.image.width / this.frames.max,
+      this.image.height,
+      this.position.x,
+      this.position.y,
+      this.image.width / this.frames.max,
+      this.image.height
+    )
+    ctx.restore()
+    this.calcFrame()
+  }
+}
+class Player extends Sprite {
   constructor({
     position,
     image,
@@ -7,20 +75,22 @@ class SpritePlayer {
     socket,
     moving,
     velocity,
+    rotation = 0,
   }) {
-    this.position = position
-    this.image = image
-    this.frames = { ...frames, val: 0, elapsed: 0 }
-    this.image.decode().then(() => {
-      this.width = this.image.width / this.frames.max
-      this.height = this.image.height
+    super({
+      position,
+      image,
+      frames,
+      sprites,
+      moving,
+      rotation,
     })
     this.sprites = sprites
     this.socket = socket
     this.moving = moving
     this.velocity = velocity
   }
-
+  
   draw(mine) {
     let px = this.position.x
     let py = this.position.y
@@ -55,7 +125,7 @@ class SpritePlayer {
     } else {
       this.image = this.sprites.down
     }
-
+    this.translFrame()
     ctx.drawImage(
       this.image,
       this.frames.val * this.width,
@@ -67,98 +137,21 @@ class SpritePlayer {
       this.image.width / this.frames.max,
       this.image.height
     )
-    if (!this.moving) return
-    if (this.frames.max > 1) {
-      this.frames.elapsed++
-    }
-    if (this.frames.elapsed % 10 === 0) {
-      if (this.frames.val < this.frames.max - 1) {
-        this.frames.val++
-      } else {
-        this.frames.val = 0
-      }
-    }
-  }
-  attack({ attack, recipient }) {
-    gsap.to(this.position, {
-      x: this.position.x - 20,
-    })
-  }
-}
-
-class Sprite {
-  constructor({
-    position,
-    image,
-    frames = { max: 1 },
-    sprites,
-    moving = false,
-    rotation = 0,
-  }) {
-    this.position = position
-    this.image = new Image()
-    this.frames = { ...frames, val: 0, elapsed: 0 }
-    this.image.src = image.src
-    this.image.decode().then(() => {
-      this.width = this.image.width / this.frames.max
-      this.height = this.image.height
-    })
-    this.sprites = sprites
-    this.moving = moving
-    this.opacity = 1
-    this.rotation = rotation
-  }
-
-  draw() {
-    ctx.save()
-    ctx.translate(
-      this.position.x + this.width / 2,
-      this.position.y + this.height / 2
-    )
-    ctx.rotate(this.rotation)
-    ctx.translate(
-      -this.position.x - this.width / 2,
-      -this.position.y - this.height / 2
-    )
-    ctx.globalAlpha = this.opacity
-    ctx.drawImage(
-      this.image,
-      this.frames.val * this.width,
-      0,
-      this.image.width / this.frames.max,
-      this.image.height,
-      this.position.x,
-      this.position.y,
-      this.image.width / this.frames.max,
-      this.image.height
-    )
     ctx.restore()
-
-    if (!this.moving) return
-    if (this.frames.max > 1) {
-      this.frames.elapsed++
-    }
-    if (this.frames.elapsed % 10 === 0) {
-      if (this.frames.val < this.frames.max - 1) {
-        this.frames.val++
-      } else {
-        this.frames.val = 0
-      }
-    }
+    this.calcFrame()
   }
 }
-
 class Monster extends Sprite {
   constructor({
     position,
     image,
-    frames = { max: 1 },
+    frames = { max: 4 },
     sprites,
     moving = false,
     rotation = 0,
     isEnemy = false,
     name,
-    attacks
+    attacks,
   }) {
     super({
       position,
@@ -177,10 +170,10 @@ class Monster extends Sprite {
   faint() {
     document.querySelector('#dialogueBox').innerHTML = this.name + ' を倒した!'
     gsap.to(this.position, {
-      y: this.position.y + 20
+      y: this.position.y + 20,
     })
     gsap.to(this, {
-      opacity: 0
+      opacity: 0,
     })
     audio.victory.play()
     audio.Map.play()

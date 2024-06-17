@@ -287,7 +287,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
     const backEndPlayer = backEndPlayers[id]
     // 初参加プレイヤー
     if (!frontEndPlayers[id]) {
-      frontEndPlayers[id] = new SpritePlayer({
+      frontEndPlayers[id] = new Player({
         position: {
           x: backEndPlayer.position.x,
           y: backEndPlayer.position.y,
