@@ -5,7 +5,7 @@ const socket = io()
 const devicePixelRatio = window.devicePixelRatio || 1
 
 canvas.width = 480 * devicePixelRatio
-canvas.height = 600 * devicePixelRatio
+canvas.height = 574 * devicePixelRatio
 
 const canvas_width_half = canvas.width / 2
 const canvas_height_half = canvas.height / 2

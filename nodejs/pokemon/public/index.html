@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="content-language" content="jp" />
   <meta name="viewport" content="width=device-width" />
+  <link rel="icon" href="data:,">
   <style>
     body {
       background-color: black;
@@ -23,6 +24,23 @@
     button:hover {
       background-color: #ccc;
     }
+
+    .scroll {
+      overflow-y: scroll;
+    }
+
+    .scroll::-webkit-scrollbar {
+      width: 20px;
+    }
+    .scroll::-webkit-scrollbar-track {
+      background: #dbcfcfd2;
+    }
+
+    .scroll::-webkit-scrollbar-thumb {
+      background: gray;
+    }
+
+    /*バーの色*/
   </style>
 </head>
 
@@ -77,7 +95,6 @@
         </div>
       </div>
 
-
       <!-- represents health bar of emby(us) -->
       <div style="
         background-color: white;
@@ -109,50 +126,39 @@
           </div>
         </div>
       </div>
-
+      <!-- GUIDE -->
       <div style="
         background-color: white;
         height: 500px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border: 2px blue solid;
         font-size: 36pt;
+        top: 0;
+        bottom: 100;
         ">
-        <div id="messages"></div>
+        <div id="messages" class="scroll" style="
+          height: 400px;
+          border: 2px #FF0000 solid;
+          ">
+        </div>
+        <div id="attacksBox">
+          <div>
+          </div>
+        </div>
       </div>
-      <div style="
-        background-color: white;
-        height: 120px;
-        position: absolute;
-        bottom: 32;
-        left: 0;
-        right: 0;
-        border-bottom: 2px blue solid;
-        border-left: 2px blue solid;
-        border-right: 2px blue solid;
-        
-        ">
-        <div id="attacksBox"></div>
-      </div>
-    </div>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
-    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
-    integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-  <script src="./data/battleZones.js"></script>
-  <script src="./data/collisions.js"></script>
-  <script src="./data/attacks.js"></script>
-  <script src="./data/monsters.js"></script>
-  <script src="./data/audio.js"></script>
-  <script src="./classes.js"></script>
-  <script src="./frontend.js"></script>
-  <script src="./battleScene.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+        integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
+        integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+      <script src="./data/battleZones.js"></script>
+      <script src="./data/collisions.js"></script>
+      <script src="./data/attacks.js"></script>
+      <script src="./data/monsters.js"></script>
+      <script src="./data/audio.js"></script>
+      <script src="./classes.js"></script>
+      <script src="./frontend.js"></script>
+      <script src="./battleScene.js"></script>
 </body>
 
 </html>
