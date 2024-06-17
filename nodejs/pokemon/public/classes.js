@@ -142,6 +142,10 @@ class Player extends Sprite {
   }
 }
 
+function messageScroll() {
+  const scrollHeight = document.querySelector('#messages').scrollHeight
+  document.querySelector('#messages').scrollTop = scrollHeight
+}
 class Monster extends Sprite {
   constructor({
     position,
@@ -169,7 +173,9 @@ class Monster extends Sprite {
   }
 
   faint() {
-    document.querySelector('#messages').innerHTML += "</br>" + this.name + ' を倒した!'
+    document.querySelector('#messages').innerHTML += '</br>' + this.name + ' を倒した!'
+    messageScroll()
+
     gsap.to(this.position, {
       y: this.position.y + 20,
     })
@@ -179,13 +185,11 @@ class Monster extends Sprite {
     audio.victory.play()
     audio.Map.play()
   }
-  
-
 
   attack({ attack, recipient, renderedSprites }) {
     document.querySelector('#messages').style.display = 'block'
-    document.querySelector('#messages').innerHTML +=
-      "</br>" + this.name + ' は ' + attack.display + ' を使った'
+    document.querySelector('#messages').innerHTML += '</br>' + this.name + ' は ' + attack.display + ' を使った'
+    messageScroll()
 
     let healthBar = '#enemyHealthBar'
     if (this.isEnemy) healthBar = '#playerHealthBar'

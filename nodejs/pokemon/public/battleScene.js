@@ -143,9 +143,9 @@ function animateBattle() {
   })
 }
 
-// animate()
-initBattle()
-animateBattle()
+animate()
+// initBattle()
+// animateBattle()
 
 // document.querySelector('#messages').addEventListener('touchstart', (e) => {
 //   if (queue.length > 0) {

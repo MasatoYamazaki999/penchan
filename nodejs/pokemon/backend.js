@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
   backEndPlayers[socket.id] = {
     position: {
       x: 220,
-      y: 500,
+      y: 400,
     },
     socket: socket.id,
     moving: false,
