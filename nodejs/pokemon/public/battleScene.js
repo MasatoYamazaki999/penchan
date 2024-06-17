@@ -14,14 +14,19 @@ let renderedSprites
 let battleAnimationId
 let queue
 
+function waitTimer(t) {
+  (async () => {
+    console.time('Waited for')
+    await new Promise((resolve) => setTimeout(resolve, t))
+    console.timeLog('Waited for')
+  })()
+}
 function initBattle() {
   document.querySelector('#userInterface').style.display = 'block'
-  document.querySelector('#dialogueBox').style.display = 'block'
   document.querySelector('#enemyHealthBar').style.width = '100%'
   document.querySelector('#playerHealthBar').style.width = '100%'
+  document.querySelector('#messages').innerHTML = 'バトル開始 !'
   document.querySelector('#attacksBox').replaceChildren()
-  
-  document.querySelector('#dialogueBox').innerHTML = 'バトル開始 !'
 
   draggle = new Monster(monsters.Draggle)
   emby = new Monster(monsters.Emby)
@@ -31,13 +36,12 @@ function initBattle() {
     const button = document.createElement('button')
     button.innerHTML = attack.display
     button.setAttribute('kind', attack.kind)
-    button.style.fontSize = '72pt'
+    button.style.fontSize = '56pt'
     document.querySelector('#attacksBox').append(button)
   })
 
   // our event listeners for our buttons (attack)
   document.querySelectorAll('button').forEach((button) => {
-
     button.addEventListener('touchstart', (e) => {
       attackDetail(e)
     })
@@ -45,11 +49,18 @@ function initBattle() {
     button.addEventListener('click', (e) => {
       attackDetail(e)
     })
-
   })
 }
-function attackDetail(e) {
+
+function sleep(waitSec) {
+  return new Promise(function (resolve) {
+      setTimeout(function() { resolve() }, waitSec);
+  });
+} 
+
+async function attackDetail(e) {
   console.log(e.currentTarget.getAttribute('kind'))
+
   const selectedAttack = attacks[e.currentTarget.getAttribute('kind')]
   emby.attack({
     attack: selectedAttack,
@@ -58,6 +69,7 @@ function attackDetail(e) {
   })
 
   if (draggle.health <= 0) {
+    console.log('draggle DEAD...................')
     queue.push(() => {
       draggle.faint()
     })
@@ -90,6 +102,7 @@ function attackDetail(e) {
     })
 
     if (emby.health <= 0) {
+      console.log('emby DEAD...................')
       queue.push(() => {
         emby.faint()
       })
@@ -111,6 +124,14 @@ function attackDetail(e) {
       })
     }
   })
+  await sleep(700);
+  if (queue.length > 0) {
+    queue[0]()
+    queue.shift()
+  } else {
+    e.currentTarget.style.display = 'none'
+  }
+  
 }
 
 function animateBattle() {
@@ -122,21 +143,20 @@ function animateBattle() {
   })
 }
 
-animate()
-// initBattle()
-// animateBattle()
+// animate()
+initBattle()
+animateBattle()
 
-document.querySelector('#dialogueBox').addEventListener('touchstart', (e) => {
+document.querySelector('#messages').addEventListener('touchstart', (e) => {
   if (queue.length > 0) {
     queue[0]()
     queue.shift()
   } else e.currentTarget.style.display = 'none'
 })
 
-document.querySelector('#dialogueBox').addEventListener('click', (e) => {
+document.querySelector('#messages').addEventListener('click', (e) => {
   if (queue.length > 0) {
     queue[0]()
     queue.shift()
   } else e.currentTarget.style.display = 'none'
 })
-

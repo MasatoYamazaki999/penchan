@@ -8,7 +8,7 @@
   <style>
     body {
       background-color: black;
-      font-size: 36pt;
+
     }
 
     h1 {
@@ -38,13 +38,13 @@
       left: 0;
       opacity: 0;
       pointer-events: none;
-      z-index: 10;
       ">
     </div>
 
     <canvas id="canvas"></canvas>
 
     <div id="userInterface" style="display: none;">
+
       <!-- represents health bar of draggle(enemy) -->
       <div style="
         background-color: white;
@@ -55,6 +55,7 @@
         left: 10px;
         border: 4px black solid;
         padding: 12px;
+        font-size: 36pt;
       ">
         <h1>Draggle</h1>
         <div style="position: relative;">
@@ -76,16 +77,18 @@
         </div>
       </div>
 
+
       <!-- represents health bar of emby(us) -->
       <div style="
         background-color: white;
         width: 380px;
         height: 160px;
         position: absolute;
-        top: 1500px;
-        right: 20px;
+        top: 1000px;
+        right: 150px;
         border: 4px black solid;
         padding: 12px;
+        font-size: 36pt;
       ">
         <h1>Emby</h1>
         <div style="position: relative;">
@@ -108,34 +111,30 @@
       </div>
 
       <div style="
-        height: 680px;
+        background-color: white;
+        height: 500px;
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        border-top: 4px blue solid;
-        display: flex;
+        border: 2px blue solid;
+        font-size: 36pt;
         ">
-
-        <div id="dialogueBox" style="
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: white;
-            padding: 10px;
-            display: none;
-            cursor: pointer;
-            font-size: 72pt;
-            ">
-        </div>
-        <div id="attacksBox" style="
-              width: 100%;
-              display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              ">
-        </div>
+        <div id="messages"></div>
+      </div>
+      <div style="
+        background-color: white;
+        height: 120px;
+        position: absolute;
+        bottom: 32;
+        left: 0;
+        right: 0;
+        border-bottom: 2px blue solid;
+        border-left: 2px blue solid;
+        border-right: 2px blue solid;
+        
+        ">
+        <div id="attacksBox"></div>
       </div>
     </div>
   </div>

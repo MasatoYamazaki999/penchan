@@ -16,7 +16,7 @@ const monsters = {
   },
   Draggle: {
     position: {
-      x: 350,
+      x: 340,
       y: 100,
     },
     image: {

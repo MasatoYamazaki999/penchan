@@ -90,7 +90,7 @@ class Player extends Sprite {
     this.moving = moving
     this.velocity = velocity
   }
-  
+
   draw(mine) {
     let px = this.position.x
     let py = this.position.y
@@ -141,6 +141,7 @@ class Player extends Sprite {
     this.calcFrame()
   }
 }
+
 class Monster extends Sprite {
   constructor({
     position,
@@ -168,7 +169,7 @@ class Monster extends Sprite {
   }
 
   faint() {
-    document.querySelector('#dialogueBox').innerHTML = this.name + ' を倒した!'
+    document.querySelector('#messages').innerHTML += "</br>" + this.name + ' を倒した!'
     gsap.to(this.position, {
       y: this.position.y + 20,
     })
@@ -178,11 +179,13 @@ class Monster extends Sprite {
     audio.victory.play()
     audio.Map.play()
   }
+  
+
 
   attack({ attack, recipient, renderedSprites }) {
-    document.querySelector('#dialogueBox').style.display = 'block'
-    document.querySelector('#dialogueBox').innerHTML =
-      this.name + ' は ' + attack.display + ' を使った'
+    document.querySelector('#messages').style.display = 'block'
+    document.querySelector('#messages').innerHTML +=
+      "</br>" + this.name + ' は ' + attack.display + ' を使った'
 
     let healthBar = '#enemyHealthBar'
     if (this.isEnemy) healthBar = '#playerHealthBar'
