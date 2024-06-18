@@ -175,30 +175,19 @@ function display() {
         ) {
           // deactivate current animation loop
           window.cancelAnimationFrame(animationId)
-
+          audio.Map.stop()
           audio.initBattle.play()
           audio.battle.play()
 
           battle.initiated = true
           gsap.to('#overlappingDiv', {
             opacity: 1,
-            repeat: 3,
+            repeat: 1,
             yoyo: true,
-            duration: 0.4,
+            duration: 0.3,
             onComplete() {
-              gsap.to('#overlappingDiv', {
-                opacity: 1,
-                duration: 0.4,
-                onComplete() {
-                  // activate a new animation loop
-                  initBattle()
-                  animateBattle()
-                  gsap.to('#overlappingDiv', {
-                    opacity: 0,
-                    duration: 0.4,
-                  })
-                },
-              })
+              initBattle()
+              animateBattle()
             },
           })
           break
@@ -274,7 +263,6 @@ function animate() {
   animationId = null
   animationId = window.requestAnimationFrame(animate)
   display()
-  // encount
   if (!battle.initiated) {
     move()
   }
@@ -308,9 +296,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         moving: backEndPlayer.moving,
       })
     } else {
-      if (id === socket.id) {
-        //frontEndPlayers[id].socket = backEndPlayer.socket;
-      } else {
+      if (id !== socket.id) {
         frontEndPlayers[id].velocity = backEndPlayer.velocity
         frontEndPlayers[id].moving = backEndPlayer.moving
       }
@@ -324,14 +310,28 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
     }
   }
 })
+
+function updateWorld(moving, angle = null) {
+  if (angle != null) {
+    const velocity = {
+      x: Math.cos(angle) * 5,
+      y: Math.sin(angle) * 5,
+    }
+    frontEndPlayers[socket.id].velocity = velocity
+  }
+  frontEndPlayers[socket.id].moving = moving
+  socket.emit(
+    'updateWorld',
+    frontEndPlayers[socket.id].world,
+    frontEndPlayers[socket.id].moving,
+    frontEndPlayers[socket.id].velocity
+  )
+}
+
 let audioPlay = false
+
 window.addEventListener('touchstart', (e) => {
   e.preventDefault()
-  if(!audioPlay) {
-    audio.Map.play()
-    audioPlay = true
-  }
-
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
@@ -342,64 +342,38 @@ window.addEventListener('touchstart', (e) => {
     e.touches[0].pageY - top - playerPosition.y,
     e.touches[0].pageX - left - playerPosition.x
   )
-  const velocity = {
-    x: Math.cos(angle) * 5,
-    y: Math.sin(angle) * 5,
-  }
-  frontEndPlayers[socket.id].velocity = velocity
-  frontEndPlayers[socket.id].moving = true
-  socket.emit(
-    'updateWorld',
-    frontEndPlayers[socket.id].world,
-    frontEndPlayers[socket.id].moving,
-    frontEndPlayers[socket.id].velocity
-  )
+  updateWorld(true, angle)
 })
 
 window.addEventListener('mousedown', (e) => {
   e.preventDefault()
+  if (!audioPlay) {
+    audio.Map.play()
+    audioPlay = true
+  }
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 300,
+    y: canvas_height_half + 100,
   }
   const angle = Math.atan2(
     e.offsetY - top - playerPosition.y,
     e.offsetX - left - playerPosition.x
   )
-  const velocity = {
-    x: Math.cos(angle) * 5,
-    y: Math.sin(angle) * 5,
-  }
-  frontEndPlayers[socket.id].velocity = velocity
-  frontEndPlayers[socket.id].moving = true
-  socket.emit(
-    'updateWorld',
-    frontEndPlayers[socket.id].world,
-    frontEndPlayers[socket.id].moving,
-    frontEndPlayers[socket.id].velocity
-  )
+  updateWorld(true, angle)
 })
 
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
-  frontEndPlayers[socket.id].moving = false
-  socket.emit(
-    'updateWorld',
-    frontEndPlayers[socket.id].world,
-    frontEndPlayers[socket.id].moving,
-    frontEndPlayers[socket.id].velocity
-  )
+  updateWorld(false)
+  if (!audioPlay) {
+    audio.Map.play()
+    audioPlay = true
+  }
 })
 
 window.addEventListener('mouseup', (e) => {
   e.preventDefault()
-  frontEndPlayers[socket.id].moving = false
-  socket.emit(
-    'updateWorld',
-    frontEndPlayers[socket.id].world,
-    frontEndPlayers[socket.id].moving,
-    frontEndPlayers[socket.id].velocity
-  )
+  updateWorld(false)
 })

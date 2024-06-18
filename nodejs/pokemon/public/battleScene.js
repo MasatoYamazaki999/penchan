@@ -15,7 +15,7 @@ let battleAnimationId
 let queue
 
 function waitTimer(t) {
-  (async () => {
+  ;(async () => {
     console.time('Waited for')
     await new Promise((resolve) => setTimeout(resolve, t))
     console.timeLog('Waited for')
@@ -54,9 +54,11 @@ function initBattle() {
 
 function sleep(waitSec) {
   return new Promise(function (resolve) {
-      setTimeout(function() { resolve() }, waitSec);
-  });
-} 
+    setTimeout(function () {
+      resolve()
+    }, waitSec)
+  })
+}
 
 async function attackDetail(e) {
   console.log(e.currentTarget.getAttribute('kind'))
@@ -69,6 +71,7 @@ async function attackDetail(e) {
   })
 
   if (draggle.health <= 0) {
+    battle.initiated = false
     console.log('draggle DEAD...................')
     queue.push(() => {
       draggle.faint()
@@ -84,54 +87,67 @@ async function attackDetail(e) {
           gsap.to('#overlappingDiv', {
             opacity: 0,
           })
-          battle.initiated = false
+          audio.battle.stop()
+          audio.Map.play()
         },
       })
     })
   }
 
-  // draggle or enemy attacks right here
-  const randomAttack =
-    draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
+  if (battle.initiated) {
+    // draggle or enemy attacks right here
+    const randomAttack =
+      draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
 
-  queue.push(() => {
-    draggle.attack({
-      attack: randomAttack,
-      recipient: emby,
-      renderedSprites,
-    })
-
-    if (emby.health <= 0) {
-      console.log('emby DEAD...................')
-      queue.push(() => {
-        emby.faint()
+    queue.push(() => {
+      draggle.attack({
+        attack: randomAttack,
+        recipient: emby,
+        renderedSprites,
       })
-      queue.push(() => {
-        // fade back to black
-        gsap.to('#overlappingDiv', {
-          opacity: 1,
-          onComplete: () => {
-            cancelAnimationFrame(battleAnimationId)
-            animate()
-            document.querySelector('#userInterface').style.display = 'none'
-            gsap.to('#overlappingDiv', {
-              opacity: 0,
-            })
-            battle.initiated = false
-            audio.Map.play()
-          },
+
+      if (emby.health <= 0) {
+        battle.initiated = false
+        console.log('emby DEAD...................')
+        queue.push(() => {
+          emby.faint()
         })
-      })
-    }
-  })
-  await sleep(700);
-  if (queue.length > 0) {
-    queue[0]()
-    queue.shift()
-  } else {
-    e.currentTarget.style.display = 'none'
+        queue.push(() => {
+          // fade back to black
+          gsap.to('#overlappingDiv', {
+            opacity: 1,
+            onComplete: () => {
+              cancelAnimationFrame(battleAnimationId)
+              animate()
+              document.querySelector('#userInterface').style.display = 'none'
+              gsap.to('#overlappingDiv', {
+                opacity: 0,
+              })
+              audio.battle.stop()
+              audio.Map.play()
+            },
+          })
+        })
+      }
+    })
   }
-  
+
+  if (!battle.initiated) {
+    while (queue.length != 0) {
+      await sleep(700)
+      queue[0]()
+      queue.shift()
+    }
+    await sleep(2000)
+  } else {
+    await sleep(700)
+    if (queue.length > 0) {
+      queue[0]()
+      queue.shift()
+    } else {
+      e.currentTarget.style.display = 'none'
+    }
+  }
 }
 
 function animateBattle() {
