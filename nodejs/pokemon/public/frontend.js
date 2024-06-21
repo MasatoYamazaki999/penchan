@@ -27,8 +27,8 @@ const boundaries = []
 const frontEndPlayers = {}
 
 const offset = {
-  x: -1000,
-  y: -500,
+  x: -740,
+  y: -600,
 }
 
 collisionsMap.forEach((row, i) => {
@@ -114,7 +114,7 @@ const battle = {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  document.getElementById('socketId').innerHTML = sockets + '</br>'
+  //document.getElementById('socketId').innerHTML = sockets + '</br>'
 
   // 背景
   background.draw()
@@ -336,7 +336,7 @@ window.addEventListener('touchstart', (e) => {
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 400,
+    y: canvas_height_half - 50,
   }
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
@@ -355,7 +355,7 @@ window.addEventListener('mousedown', (e) => {
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
     x: canvas_width_half,
-    y: canvas_height_half + 100,
+    y: canvas_height_half - 50,
   }
   const angle = Math.atan2(
     e.offsetY - top - playerPosition.y,
