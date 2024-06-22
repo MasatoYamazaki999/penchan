@@ -163,16 +163,3 @@ animate()
 // initBattle()
 // animateBattle()
 
-// document.querySelector('#messages').addEventListener('touchstart', (e) => {
-//   if (queue.length > 0) {
-//     queue[0]()
-//     queue.shift()
-//   } else e.currentTarget.style.display = 'none'
-// })
-
-// document.querySelector('#messages').addEventListener('click', (e) => {
-//   if (queue.length > 0) {
-//     queue[0]()
-//     queue.shift()
-//   } else e.currentTarget.style.display = 'none'
-// })

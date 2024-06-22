@@ -118,13 +118,10 @@ function display() {
 
   // 背景
   background.draw()
-  // 衝突用
+
+  // 壁判定
   boundaries.forEach((boundary) => {
     boundary.draw()
-  })
-  // battle zones
-  battleZones.forEach((battleZone) => {
-    battleZone.draw()
   })
 
   // プレイヤー
@@ -136,65 +133,26 @@ function display() {
       frontEndPlayer.draw(false)
     }
   }
+  // status
+  displayStatus()
+
   // 前景
   foreground.draw()
 
-  if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
-    for (let i = 0; i < battleZones.length; i++) {
-      const battleZone = battleZones[i]
-      const overlappingArea =
-        (Math.min(
-          frontEndPlayers[socket.id].position.x +
-            frontEndPlayers[socket.id].width,
-          battleZone.position.x + battleZone.width
-        ) -
-          Math.max(
-            frontEndPlayers[socket.id].position.x,
-            battleZone.position.x
-          )) *
-        (Math.min(
-          frontEndPlayers[socket.id].position.y +
-            frontEndPlayers[socket.id].height,
-          battleZone.position.y + battleZone.height
-        ) -
-          Math.max(
-            frontEndPlayers[socket.id].position.y,
-            battleZone.position.y
-          ))
-      if (frontEndPlayers[socket.id] && frontEndPlayers[socket.id].moving) {
-        if (
-          rectangularCollision({
-            rectangle1: frontEndPlayers[socket.id],
-            rectangle2: battleZone,
-          }) &&
-          overlappingArea >
-            (frontEndPlayers[socket.id].width *
-              frontEndPlayers[socket.id].height) /
-              2 &&
-          Math.random() < 0.1
-        ) {
-          // deactivate current animation loop
-          window.cancelAnimationFrame(animationId)
-          audio.Map.stop()
-          audio.initBattle.play()
-          audio.battle.play()
-
-          battle.initiated = true
-          gsap.to('#overlappingDiv', {
-            opacity: 1,
-            repeat: 1,
-            yoyo: true,
-            duration: 0.3,
-            onComplete() {
-              initBattle()
-              animateBattle()
-            },
-          })
-          break
-        }
-      }
-    }
-  }
+  // Encount!
+  // REM....
+}
+function displayStatus(){
+  charStatus = ""
+  charStatus += "<div>" + "chara name" + "</div>"
+  charStatus += "<div>" + "lvl: " + "</div>"
+  charStatus += "<div>" + "hp: " + "</div>"
+  charStatus += "<div>" + "str: " + "</div>"
+  charStatus += "<div>" + "def: " + "</div>"
+  charStatus += "<div>" + "dex: " + "</div>"
+  charStatus += "<div>" + "exp: " + "</div>"
+  document.querySelector('#status').innerHTML = charStatus
+  document.querySelector('#status2').innerHTML = charStatus
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -328,8 +286,6 @@ function updateWorld(moving, angle = null) {
   )
 }
 
-let audioPlay = false
-
 window.addEventListener('touchstart', (e) => {
   e.preventDefault()
   const canvas = document.querySelector('canvas')
@@ -347,10 +303,6 @@ window.addEventListener('touchstart', (e) => {
 
 window.addEventListener('mousedown', (e) => {
   e.preventDefault()
-  if (!audioPlay) {
-    audio.Map.play()
-    audioPlay = true
-  }
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
@@ -367,10 +319,6 @@ window.addEventListener('mousedown', (e) => {
 window.addEventListener('touchend', (e) => {
   e.preventDefault()
   updateWorld(false)
-  if (!audioPlay) {
-    audio.Map.play()
-    audioPlay = true
-  }
 })
 
 window.addEventListener('mouseup', (e) => {
