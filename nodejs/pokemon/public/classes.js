@@ -76,6 +76,13 @@ class Player extends Sprite {
     moving,
     velocity,
     rotation = 0,
+    name,
+    level = 1,
+    hp = 100,
+    str = 12,
+    def = 8,
+    dex = 6,
+    exp = 0
   }) {
     super({
       position,
@@ -89,6 +96,13 @@ class Player extends Sprite {
     this.socket = socket
     this.moving = moving
     this.velocity = velocity
+    this.name = name
+    this.level = level
+    this.hp = hp
+    this.str = str
+    this.def = def
+    this.dex = dex
+    this.exp = exp
   }
 
   draw(mine) {

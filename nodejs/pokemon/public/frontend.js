@@ -129,12 +129,12 @@ function display() {
     const frontEndPlayer = frontEndPlayers[id]
     if (frontEndPlayer.socket === socket.id) {
       frontEndPlayer.draw(true)
+      displayStatus(frontEndPlayer)
     } else {
       frontEndPlayer.draw(false)
     }
   }
   // status
-  displayStatus()
 
   // 前景
   foreground.draw()
@@ -142,17 +142,18 @@ function display() {
   // Encount!
   // REM....
 }
-function displayStatus(){
+function displayStatus(p){
   charStatus = ""
-  charStatus += "<div>" + "chara name" + "</div>"
-  charStatus += "<div>" + "lvl: " + "</div>"
-  charStatus += "<div>" + "hp: " + "</div>"
+  charStatus += "<div>" + p.name + "</div>"
+  charStatus += "<div>" + "lvl: " + p.level + "</div>"
+  charStatus += "<div>" + "hp: " + p.hp + "</div>"
   charStatus += "<div>" + "str: " + "</div>"
   charStatus += "<div>" + "def: " + "</div>"
   charStatus += "<div>" + "dex: " + "</div>"
   charStatus += "<div>" + "exp: " + "</div>"
   document.querySelector('#status').innerHTML = charStatus
-  document.querySelector('#status2').innerHTML = charStatus
+  message = "Masatoはenemyに10のダメージを与えた"
+  document.querySelector('#message').innerHTML = message
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -252,6 +253,9 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         world: background.position,
         velocity: backEndPlayer.velocity,
         moving: backEndPlayer.moving,
+        name: 'MASATO',
+        level: 123,
+        hp: 6543
       })
     } else {
       if (id !== socket.id) {
