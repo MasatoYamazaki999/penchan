@@ -27,7 +27,10 @@ const monsters = {
     },
     moving: true,
     isEnemy: true,
-    name: 'Draggle',
-    attacks: [attacks.Tackle, attacks.Fireball]
+    name: 'penchan',
+    attacks: [attacks.Tackle, attacks.Fireball],
+    hp: 30,
+    str: 10,
+    dex: 2,
   },
 }

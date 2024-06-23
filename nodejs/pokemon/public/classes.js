@@ -78,7 +78,7 @@ class Player extends Sprite {
     rotation = 0,
     name,
     level = 1,
-    hp = 100,
+    hp = 30,
     str = 12,
     def = 8,
     dex = 6,
@@ -171,6 +171,10 @@ class Monster extends Sprite {
     isEnemy = false,
     name,
     attacks,
+    hp = 30,
+    str = 12,
+    def = 8,
+    dex = 6,
   }) {
     super({
       position,
@@ -184,6 +188,10 @@ class Monster extends Sprite {
     this.isEnemy = isEnemy
     this.name = name
     this.attacks = attacks
+    this.hp = hp
+    this.str = str
+    this.def = def
+    this.dex = dex
   }
 
   faint() {

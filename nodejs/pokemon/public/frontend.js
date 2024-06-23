@@ -140,6 +140,7 @@ function display() {
   foreground.draw()
 
   // Encount!
+
   // REM....
 }
 function displayStatus(p){
@@ -147,13 +148,13 @@ function displayStatus(p){
   charStatus += "<div>" + p.name + "</div>"
   charStatus += "<div>" + "lvl: " + p.level + "</div>"
   charStatus += "<div>" + "hp: " + p.hp + "</div>"
-  charStatus += "<div>" + "str: " + "</div>"
-  charStatus += "<div>" + "def: " + "</div>"
-  charStatus += "<div>" + "dex: " + "</div>"
-  charStatus += "<div>" + "exp: " + "</div>"
+  charStatus += "<div>" + "str: " + p.str + "</div>"
+  charStatus += "<div>" + "def: " + p.def + "</div>"
+  charStatus += "<div>" + "dex: " + p.dex + "</div>"
+  charStatus += "<div>" + "exp: " + p.exp + "</div>"
   document.querySelector('#status').innerHTML = charStatus
-  message = "Masatoはenemyに10のダメージを与えた"
-  document.querySelector('#message').innerHTML = message
+  // message = "Masatoはenemyに10のダメージを与えた"
+  // document.querySelector('#message').innerHTML = message
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -213,6 +214,15 @@ function move() {
         frontEndPlayers[socket.id].moving,
         frontEndPlayers[socket.id].velocity
       )
+      // check encount...
+      const r = Math.floor(50 * Math.random())
+      if(r==1){
+        console.log('Encount!')
+        const mons = new Monster(monsters.Draggle)
+        frontEndPlayers[socket.id].hp = 30
+        battleLogic(frontEndPlayers[socket.id], mons)
+      }
+
     }
   }
 }
@@ -254,9 +264,8 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         velocity: backEndPlayer.velocity,
         moving: backEndPlayer.moving,
         name: 'MASATO',
-        level: 123,
-        hp: 6543
       })
+
     } else {
       if (id !== socket.id) {
         frontEndPlayers[id].velocity = backEndPlayer.velocity
@@ -298,6 +307,10 @@ window.addEventListener('touchstart', (e) => {
     x: canvas_width_half,
     y: canvas_height_half - 50,
   }
+
+  const yLimit = e.touches[0].pageY - top - playerPosition.y
+  if(yLimit > 900) return
+
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
     e.touches[0].pageX - left - playerPosition.x
@@ -313,6 +326,10 @@ window.addEventListener('mousedown', (e) => {
     x: canvas_width_half,
     y: canvas_height_half - 50,
   }
+
+  const yLimit = e.offsetY - top - playerPosition.y
+  if(yLimit > 330) return
+  
   const angle = Math.atan2(
     e.offsetY - top - playerPosition.y,
     e.offsetX - left - playerPosition.x
