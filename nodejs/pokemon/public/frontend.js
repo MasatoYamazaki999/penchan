@@ -112,6 +112,24 @@ const battle = {
   initiated: false,
 }
 
+
+const fightButton = document.createElement('button')
+fightButton.innerHTML = '戦う'
+fightButton.style.fontSize = '56pt'
+document.querySelector('#buttonBox').append(fightButton)
+fightButton.addEventListener('click', (e) => {
+  oneBattle()
+})
+
+const runButton = document.createElement('button')
+runButton.innerHTML = '逃げる'
+runButton.style.fontSize = '56pt'
+document.querySelector('#buttonBox').append(runButton)
+runButton.addEventListener('click', (e) => {
+  socket.emit('mouse', "逃げるボタンがクリックされました")
+})
+
+
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   //document.getElementById('socketId').innerHTML = sockets + '</br>'
@@ -140,9 +158,6 @@ function display() {
   // 前景
   foreground.draw()
 
-  // Encount!
-
-  // REM....
 }
 function displayStatus(p){
   document.getElementById('yourName').innerHTML = p.name
@@ -154,8 +169,6 @@ function displayStatus(p){
   charStatus += "<div>" + "dex: " + p.dex + "</div>"
   charStatus += "<div>" + "exp: " + p.exp + "</div>"
   document.querySelector('#status').innerHTML = charStatus
-  // message = "Masatoはenemyに10のダメージを与えた"
-  // document.querySelector('#message').innerHTML = message
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -218,9 +231,9 @@ function move() {
       // check encount...
       const r = Math.floor(50 * Math.random())
       if(r==1){
-        console.log('Encount!')
-        const mons = new Monster(monsters.Draggle)
+        const mons = new Monster(monsters.Penchan)
         frontEndPlayers[socket.id].hp = 30
+        battle.initiated = true
         battleLogic(frontEndPlayers[socket.id], mons)
       }
 
@@ -301,7 +314,7 @@ function updateWorld(moving, angle = null) {
 }
 
 window.addEventListener('touchstart', (e) => {
-  e.preventDefault()
+  //e.preventDefault()
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
@@ -309,6 +322,7 @@ window.addEventListener('touchstart', (e) => {
     y: canvas_height_half - 50,
   }
 
+  
   const yLimit = e.touches[0].pageY - top - playerPosition.y
   if(yLimit > 900) return
 
@@ -319,31 +333,28 @@ window.addEventListener('touchstart', (e) => {
   updateWorld(true, angle)
 })
 
-window.addEventListener('mousedown', (e) => {
-  e.preventDefault()
-  const canvas = document.querySelector('canvas')
-  const { top, left } = canvas.getBoundingClientRect()
-  const playerPosition = {
-    x: canvas_width_half,
-    y: canvas_height_half - 50,
-  }
-
-  const yLimit = e.offsetY - top - playerPosition.y
-  if(yLimit > 330) return
-  
-  const angle = Math.atan2(
-    e.offsetY - top - playerPosition.y,
-    e.offsetX - left - playerPosition.x
-  )
-  updateWorld(true, angle)
-})
-
 window.addEventListener('touchend', (e) => {
-  e.preventDefault()
+  //e.preventDefault()
   updateWorld(false)
 })
 
-window.addEventListener('mouseup', (e) => {
-  e.preventDefault()
-  updateWorld(false)
-})
+// window.addEventListener('mousedown', (e) => {
+//   //e.preventDefault()
+//   const canvas = document.querySelector('canvas')
+//   const { top, left } = canvas.getBoundingClientRect()
+//   const playerPosition = {
+//     x: canvas_width_half,
+//     y: canvas_height_half - 50,
+//   }
+//   const yLimit = e.offsetY - top - playerPosition.y
+//   if(yLimit > 330) return
+//   const angle = Math.atan2(
+//     e.offsetY - top - playerPosition.y,
+//     e.offsetX - left - playerPosition.x
+//   )
+//   updateWorld(true, angle)
+// })
+// window.addEventListener('mouseup', (e) => {
+//   //e.preventDefault()
+//   updateWorld(false)
+// })

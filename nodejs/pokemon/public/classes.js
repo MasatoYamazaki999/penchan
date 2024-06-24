@@ -175,6 +175,7 @@ class Monster extends Sprite {
     str = 12,
     def = 8,
     dex = 6,
+    exp = 10
   }) {
     super({
       position,
@@ -192,6 +193,7 @@ class Monster extends Sprite {
     this.str = str
     this.def = def
     this.dex = dex
+    this.exp = exp
   }
 
   faint() {

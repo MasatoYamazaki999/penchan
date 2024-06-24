@@ -31,33 +31,45 @@ function gaveDamege(sub, obj) {
   return false
 }
 
-function oneBattle(p, e) {
-  if (checkHit(p, e)) {
-    if (gaveDamege(p, e)) {
+function oneBattle() {
+  if (checkHit(player, enemy)) {
+    if (gaveDamege(player, enemy)) {
       displayMsg('player won' + '</br>')
+      player.exp += Math.floor(enemy.exp + rnd())
+      battle.initiated = false
       return true
     }
   }
 
-  if (checkHit(e, p)) {
-    if (gaveDamege(e, p)) {
+  if (checkHit(enemy, player)) {
+    if (gaveDamege(enemy, player)) {
       displayMsg('enemy won' + '</br>')
+      battle.initiated = false
       return true
     }
   }
+  let hp = Math.floor((player.hp / 30) * 100)
+  gsap.to('#playerHealthBar', {
+    width: hp + '%',
+  })
+}
+let player
+let enemy
+
+function battleLogic(p, e) {
+  player = p
+  enemy = e
+  msg.innerHTML = 'モンスターが現れた!' + '</br>'
 }
 
-function battleLogic(player, enemy) {
-  battle.initiated = true
-  msg.innerHTML = 'バトル開始!' + '</br>'
-  while (true) {
-    let hp = Math.floor((player.hp / 30) * 100)
-    gsap.to('#playerHealthBar', {
-      width: hp + '%',
-    })
-    if (oneBattle(player, enemy)) {
-      break
-    }
-  }
-  battle.initiated = false
-}
+// while (true) {
+//   let hp = Math.floor((player.hp / 30) * 100)
+//   gsap.to('#playerHealthBar', {
+//     width: hp + '%',
+//   })
+//   if (oneBattle(player, enemy)) {
+//     break
+//   }
+// }
+// battle.initiated = false
+// }

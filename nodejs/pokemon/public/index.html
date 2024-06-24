@@ -17,12 +17,7 @@
     }
 
     button {
-      border: 0;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ccc;
+      font-size: 48pt;
     }
 
     .scroll {
@@ -50,14 +45,14 @@
       padding: 20px 30px;
       text-align: center;
     }
-
-    /*バーの色*/
   </style>
 </head>
 
 <body>
+  
   <!-- <label id="socketId"></label> -->
   <div style="display: inline-block; position: relative;">
+
     <div id="overlappingDiv" style="
       background-color: black; 
       position: absolute; 
@@ -99,7 +94,7 @@
       <div class="item" id="status" style="
             padding-left: 54px;
             background-color: white;
-            width: 20%;
+            width: 14%;
             height: 500px;
             font-size: 36pt;
             top: 0;
@@ -109,7 +104,7 @@
       </div>
       <div class="item scroll" id="message" style="
             background-color: rgb(140, 226, 232);
-            width: 70%;
+            width: 76%;
             height: 500px;
             font-size: 36pt;
             top: 0;
@@ -118,22 +113,28 @@
             ">
       </div>
     </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
-      integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
-      integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-    <script src="./data/battleZones.js"></script>
-    <script src="./data/collisions.js"></script>
-    <script src="./data/attacks.js"></script>
-    <script src="./data/monsters.js"></script>
-    <script src="./classes.js"></script>
-    <script src="./frontend.js"></script>
-    <script src="./battle.js"></script>
-    <script src="./main.js"></script>
+  <div id="buttonBox" style="
+    display: grid;
+    grid-template-columns: 200px 250px
+  "></div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
+    integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script src="./data/battleZones.js"></script>
+  <script src="./data/collisions.js"></script>
+  <script src="./data/attacks.js"></script>
+  <script src="./data/monsters.js"></script>
+  <script src="./classes.js"></script>
+  <script src="./battle.js"></script>
+  <script src="./frontend.js"></script>
+  <script src="./main.js"></script>
 </body>
 
 </html>

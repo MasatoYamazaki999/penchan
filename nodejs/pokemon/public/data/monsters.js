@@ -1,5 +1,5 @@
 const monsters = {
-  Emby: {
+  Shirokuma: {
     position: {
       x: 120,
       y: 330,
@@ -11,10 +11,14 @@ const monsters = {
       max: 4,
     },
     moving: true,
-    name: 'Emby',
-    attacks: [attacks.Tackle, attacks.Fireball]
+    name: 'しろくま',
+    attacks: [attacks.Tackle, attacks.Fireball],
+    hp: 30,
+    str: 12,
+    dex: 4,
+    exp: 10
   },
-  Draggle: {
+  Penchan: {
     position: {
       x: 340,
       y: 100,
@@ -27,10 +31,11 @@ const monsters = {
     },
     moving: true,
     isEnemy: true,
-    name: 'penchan',
+    name: 'ペンちゃん',
     attacks: [attacks.Tackle, attacks.Fireball],
     hp: 30,
     str: 10,
-    dex: 2,
+    dex: 5,
+    exp: 3
   },
 }
