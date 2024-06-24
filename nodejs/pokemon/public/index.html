@@ -66,12 +66,34 @@
       bottom: 0;
       left: 0;
       opacity: 0;
-      pointer-events: none;
       ">
     </div>
 
     <canvas id="canvas"></canvas>
-
+    <!-- HealhBar -->
+    <div style="
+      background-color: white;
+      width: 300px;
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      border: 4px black solid;
+      padding: 12px;
+      user-select: none;
+    ">
+      <h1 id="yourName" style="font-size: 36px"></h1>
+      <div style="position: relative">
+        <div style="height: 25px; background-color: #ccc; margin-top: 10px"></div>
+        <div id="playerHealthBar" style="
+          height: 25px;
+          background-color: green;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+        "></div>
+      </div>
+    </div>
     <!-- STATUS -->
     <div class="contents">
       <div class="item" id="status" style="

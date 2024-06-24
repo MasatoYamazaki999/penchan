@@ -51,6 +51,10 @@ function battleLogic(player, enemy) {
   battle.initiated = true
   msg.innerHTML = 'バトル開始!' + '</br>'
   while (true) {
+    let hp = Math.floor((player.hp / 30) * 100)
+    gsap.to('#playerHealthBar', {
+      width: hp + '%',
+    })
     if (oneBattle(player, enemy)) {
       break
     }

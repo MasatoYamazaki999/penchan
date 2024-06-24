@@ -134,6 +134,7 @@ function display() {
       frontEndPlayer.draw(false)
     }
   }
+  
   // status
 
   // 前景
@@ -144,8 +145,8 @@ function display() {
   // REM....
 }
 function displayStatus(p){
+  document.getElementById('yourName').innerHTML = p.name
   charStatus = ""
-  charStatus += "<div>" + p.name + "</div>"
   charStatus += "<div>" + "lvl: " + p.level + "</div>"
   charStatus += "<div>" + "hp: " + p.hp + "</div>"
   charStatus += "<div>" + "str: " + p.str + "</div>"
