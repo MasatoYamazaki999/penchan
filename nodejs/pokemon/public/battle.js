@@ -32,7 +32,7 @@ function gaveDamege(sub, obj) {
 }
 
 function levelUp(player){
-  const levelUpValue = player.level * 10
+  const levelUpValue = player.level * 100
   if(levelUpValue <= player.exp){
     player.level++
     displayMsg('レベルアップした! ' + player.level + '</br>')
