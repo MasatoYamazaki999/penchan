@@ -78,6 +78,7 @@ class Player extends Sprite {
     rotation = 0,
     name,
     level = 1,
+    maxhp = 30,
     hp = 30,
     str = 12,
     def = 8,
@@ -98,6 +99,7 @@ class Player extends Sprite {
     this.velocity = velocity
     this.name = name
     this.level = level
+    this.maxhp = maxhp
     this.hp = hp
     this.str = str
     this.def = def

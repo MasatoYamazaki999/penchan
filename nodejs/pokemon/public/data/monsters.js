@@ -35,7 +35,7 @@ const monsters = {
     attacks: [attacks.Tackle, attacks.Fireball],
     hp: 30,
     str: 10,
-    dex: 5,
-    exp: 3
+    dex: 7,
+    exp: 10
   },
 }

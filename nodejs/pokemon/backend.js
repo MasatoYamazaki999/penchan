@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
   }
   io.emit('updatePlayers', backEndPlayers, sockets)
 
-  socket.on('mouse', (e) => {
+  socket.on('log', (e) => {
     console.log(e)
   })
 

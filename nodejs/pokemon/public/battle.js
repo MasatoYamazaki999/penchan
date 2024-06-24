@@ -31,12 +31,28 @@ function gaveDamege(sub, obj) {
   return false
 }
 
+function levelUp(player){
+  const levelUpValue = player.level * 10
+  if(levelUpValue <= player.exp){
+    player.level++
+    displayMsg('レベルアップした! ' + player.level + '</br>')
+    socket.emit('log', 'Level UP! ' + player.level)
+    player.maxhp += Math.floor((10) + (rnd() + (RND_DEF/2)))
+    player.hp = player.maxhp
+    player.str += Math.floor(rnd() + (RND_DEF/2))
+    player.def += Math.floor(rnd() + (RND_DEF/2))
+    player.dex += Math.floor(rnd() + (RND_DEF/2))
+    displayStatus(player)
+  }
+}
+
 function oneBattle() {
   if (checkHit(player, enemy)) {
     if (gaveDamege(player, enemy)) {
       displayMsg('player won' + '</br>')
       player.exp += Math.floor(enemy.exp + rnd() + (RND_DEF/2))
       battle.initiated = false
+      levelUp(player)
       return true
     }
   }
@@ -48,10 +64,10 @@ function oneBattle() {
       return true
     }
   }
-  let hp = Math.floor((player.hp / 30) * 100)
-  gsap.to('#playerHealthBar', {
-    width: hp + '%',
-  })
+  // let hp = Math.floor((player.hp / player.maxhp) * 100)
+  // gsap.to('#playerHealthBar', {
+  //   width: hp + '%',
+  // })
 }
 let player
 let enemy

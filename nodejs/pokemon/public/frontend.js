@@ -132,7 +132,6 @@ runButton.addEventListener('click', (e) => {
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  //document.getElementById('socketId').innerHTML = sockets + '</br>'
 
   // 背景
   background.draw()
@@ -176,6 +175,10 @@ function displayStatus(p){
   charStatus += "<div>" + "dex: " + p.dex + "</div>"
   charStatus += "<div>" + "exp: " + p.exp + "</div>"
   document.querySelector('#status').innerHTML = charStatus
+  let hp = Math.floor((p.hp / p.maxhp) * 100)
+  gsap.to('#playerHealthBar', {
+    width: hp + '%',
+  })
 }
 // detect collision
 function rectangularCollision({ rectangle1, rectangle2 }) {
@@ -239,7 +242,7 @@ function move() {
       const r = Math.floor(50 * Math.random())
       if(r==1){
         const mons = new Monster(monsters.Penchan)
-        frontEndPlayers[socket.id].hp = 30
+        frontEndPlayers[socket.id].hp = frontEndPlayers[socket.id].maxhp
         battle.initiated = true
         battleLogic(frontEndPlayers[socket.id], mons)
       }
@@ -284,7 +287,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         world: background.position,
         velocity: backEndPlayer.velocity,
         moving: backEndPlayer.moving,
-        name: 'MASATO',
+        name: 'あなた',
       })
 
     } else {
