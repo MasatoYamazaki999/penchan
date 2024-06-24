@@ -153,7 +153,14 @@ function display() {
     }
   }
   
-  // status
+  // button
+  if(battle.initiated){
+    fightButton.disabled = false
+    runButton.disabled = false
+  } else {
+    fightButton.disabled = true
+    runButton.disabled = true
+  }
 
   // 前景
   foreground.draw()

@@ -12,14 +12,14 @@ function rnd() {
 }
 
 function checkHit(sub, obj) {
-  if (sub.dex + rnd() < obj.dex + rnd()) {
+  if ((sub.dex + rnd() + (RND_DEF/2)) < obj.dex + rnd()) {
     displayMsg(obj.name + 'は' + sub.name + 'の攻撃をかわした' + '</br>')
     return false
   }
   return true
 }
 function gaveDamege(sub, obj) {
-  let damage = Math.floor(sub.str / 2 + rnd() - (obj.def / 4 + rnd()))
+  let damage = Math.floor(sub.str / 2 + rnd() + (RND_DEF/2) - (obj.def / 4 + rnd()))
   if (damage <= 0) damage = 1
   displayMsg(
     sub.name + 'は' + obj.name + 'に' + damage + 'のダメージを与えた' + '</br>'
@@ -35,7 +35,7 @@ function oneBattle() {
   if (checkHit(player, enemy)) {
     if (gaveDamege(player, enemy)) {
       displayMsg('player won' + '</br>')
-      player.exp += Math.floor(enemy.exp + rnd())
+      player.exp += Math.floor(enemy.exp + rnd() + (RND_DEF/2))
       battle.initiated = false
       return true
     }
