@@ -52,7 +52,7 @@ function oneBattle() {
       displayMsg('player won' + '</br>')
       player.exp += Math.floor(enemy.exp + rnd() + (RND_DEF/2))
       battle.initiated = false
-      levelUp(player)
+      //levelUp(player)
       return true
     }
   }

@@ -33,9 +33,9 @@ const monsters = {
     isEnemy: true,
     name: 'ペンちゃん',
     attacks: [attacks.Tackle, attacks.Fireball],
-    hp: 30,
-    str: 10,
-    dex: 7,
+    hp: 10,
+    str: 4,
+    dex: 2,
     exp: 10
   },
 }

@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', (reason) => {
-    console.log('disconnect ' + socket.id)
+    console.log('disconnect ' + socket.id + " " + reason)
     sockets = sockets.filter((item) => item !== socket.id)
 
     delete backEndPlayers[socket.id]
