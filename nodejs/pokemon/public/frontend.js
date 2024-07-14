@@ -287,7 +287,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         world: background.position,
         velocity: backEndPlayer.velocity,
         moving: backEndPlayer.moving,
-        name: 'あなた',
+        name: backEndPlayer.name,
       })
 
     } else {
@@ -296,6 +296,7 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         frontEndPlayers[id].moving = backEndPlayer.moving
       }
       frontEndPlayers[id].world = backEndPlayer.world
+      frontEndPlayers[id].name = backEndPlayer.name
     }
   }
   // this is where we delete frontend players
@@ -324,7 +325,6 @@ function updateWorld(moving, angle = null) {
 }
 
 window.addEventListener('touchstart', (e) => {
-  //e.preventDefault()
   const canvas = document.querySelector('canvas')
   const { top, left } = canvas.getBoundingClientRect()
   const playerPosition = {
@@ -344,27 +344,16 @@ window.addEventListener('touchstart', (e) => {
 })
 
 window.addEventListener('touchend', (e) => {
-  //e.preventDefault()
   updateWorld(false)
 })
 
-// window.addEventListener('mousedown', (e) => {
-//   //e.preventDefault()
-//   const canvas = document.querySelector('canvas')
-//   const { top, left } = canvas.getBoundingClientRect()
-//   const playerPosition = {
-//     x: canvas_width_half,
-//     y: canvas_height_half - 50,
-//   }
-//   const yLimit = e.offsetY - top - playerPosition.y
-//   if(yLimit > 330) return
-//   const angle = Math.atan2(
-//     e.offsetY - top - playerPosition.y,
-//     e.offsetX - left - playerPosition.x
-//   )
-//   updateWorld(true, angle)
-// })
-// window.addEventListener('mouseup', (e) => {
-//   //e.preventDefault()
-//   updateWorld(false)
-// })
+document.querySelector("#usernameForm").addEventListener("submit", (
+  event) => {
+  event.preventDefault();
+  document.querySelector('#usernameForm').style.display = 'none'
+  const name = document.querySelector("#usernameInput").value
+  socket.emit("initGame", {
+    name: name
+  });
+  frontEndPlayers[socket.id].name = name
+});

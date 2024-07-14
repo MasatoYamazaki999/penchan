@@ -48,8 +48,13 @@ io.on('connection', (socket) => {
     backEndPlayers[socket.id].velocity = velocity
   })
 
+  socket.on('initGame', ({ name }) => {
+    backEndPlayers[socket.id].name = name
+    io.emit('updatePlayers', backEndPlayers, sockets)
+  })
+
   socket.on('disconnect', (reason) => {
-    console.log('disconnect ' + socket.id + " " + reason)
+    console.log('disconnect ' + socket.id + ' ' + reason)
     sockets = sockets.filter((item) => item !== socket.id)
 
     delete backEndPlayers[socket.id]
