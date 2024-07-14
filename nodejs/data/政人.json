@@ -1,10 +1,10 @@
 {
   "name": "政人",
-  "level": 1,
-  "maxhp": 30,
-  "hp": 25,
+  "level": 2,
+  "maxhp": 41,
+  "hp": 41,
   "str": 12,
-  "def": 8,
-  "dex": 6,
-  "exp": 33
+  "def": 9,
+  "dex": 7,
+  "exp": 118
 }
