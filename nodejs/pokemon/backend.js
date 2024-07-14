@@ -1,3 +1,6 @@
+// file system
+var fs = require('fs')
+
 // express setup
 const express = require('express')
 const app = express()
@@ -21,6 +24,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 })
 
+class PlayerData {
+  constructor(player) {
+    this.name = player.name
+    this.level = player.level
+    this.maxhp = player.maxhp
+    this.hp = player.hp
+    this.str = player.str
+    this.def = player.def
+    this.dex = player.dex
+    this.exp = player.exp
+  }
+}
+
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
 
@@ -35,6 +51,7 @@ io.on('connection', (socket) => {
     moving: false,
     velocity: { x: 0, y: 0 },
     world: { x: 0, y: 0 },
+    exp: 0
   }
   io.emit('updatePlayers', backEndPlayers, sockets)
 
@@ -51,6 +68,19 @@ io.on('connection', (socket) => {
   socket.on('initGame', ({ name }) => {
     backEndPlayers[socket.id].name = name
     io.emit('updatePlayers', backEndPlayers, sockets)
+  })
+
+  socket.on('save', (player) => {
+    let data = new PlayerData(player)
+    console.log('save on')
+    const json = JSON.stringify(data, null, 2)
+    fs.writeFileSync('../data/' + player.name + '.json', json)
+  })
+
+  socket.on('load', (player) => {
+    const data = fs.readFileSync('../data/' + player.name + '.json',
+      { encoding: 'utf8', flag: 'r' })
+    io.emit('loadPlayer', data)
   })
 
   socket.on('disconnect', (reason) => {

@@ -112,7 +112,6 @@ const battle = {
   initiated: false,
 }
 
-
 const fightButton = document.createElement('button')
 fightButton.innerHTML = '戦う'
 fightButton.style.fontSize = '56pt'
@@ -126,9 +125,24 @@ runButton.innerHTML = '逃げる'
 runButton.style.fontSize = '56pt'
 document.querySelector('#buttonBox').append(runButton)
 runButton.addEventListener('click', (e) => {
-  socket.emit('mouse', "逃げるボタンがクリックされました")
+  socket.emit('mouse', '逃げるボタンがクリックされました')
 })
 
+const saveButton = document.createElement('button')
+saveButton.innerHTML = '保存'
+saveButton.style.fontSize = '56pt'
+document.querySelector('#buttonBox').append(saveButton)
+saveButton.addEventListener('click', (e) => {
+  socket.emit('save', frontEndPlayers[socket.id])
+})
+
+const loadButton = document.createElement('button')
+loadButton.innerHTML = '読込'
+loadButton.style.fontSize = '56pt'
+document.querySelector('#buttonBox').append(loadButton)
+loadButton.addEventListener('click', (e) => {
+  socket.emit('load', frontEndPlayers[socket.id])
+})
 
 function display() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -151,29 +165,32 @@ function display() {
       frontEndPlayer.draw(false)
     }
   }
-  
+
   // button
-  if(battle.initiated){
+  if (battle.initiated) {
     fightButton.disabled = false
     runButton.disabled = false
+    saveButton.disabled = true
+    loadButton.disabled = true
   } else {
     fightButton.disabled = true
     runButton.disabled = true
+    saveButton.disabled = false
+    loadButton.disabled = false
   }
 
   // 前景
   foreground.draw()
-
 }
-function displayStatus(p){
+function displayStatus(p) {
   document.getElementById('yourName').innerHTML = p.name
-  charStatus = ""
-  charStatus += "<div>" + "lvl: " + p.level + "</div>"
-  charStatus += "<div>" + "hp: " + p.hp + "</div>"
-  charStatus += "<div>" + "str: " + p.str + "</div>"
-  charStatus += "<div>" + "def: " + p.def + "</div>"
-  charStatus += "<div>" + "dex: " + p.dex + "</div>"
-  charStatus += "<div>" + "exp: " + p.exp + "</div>"
+  charStatus = ''
+  charStatus += '<div>' + 'lvl: ' + p.level + '</div>'
+  charStatus += '<div>' + 'hp: ' + p.hp + '</div>'
+  charStatus += '<div>' + 'str: ' + p.str + '</div>'
+  charStatus += '<div>' + 'def: ' + p.def + '</div>'
+  charStatus += '<div>' + 'dex: ' + p.dex + '</div>'
+  charStatus += '<div>' + 'exp: ' + p.exp + '</div>'
   document.querySelector('#status').innerHTML = charStatus
   let hp = Math.floor((p.hp / p.maxhp) * 100)
   gsap.to('#playerHealthBar', {
@@ -240,13 +257,12 @@ function move() {
       )
       // check encount...
       const r = Math.floor(50 * Math.random())
-      if(r==1){
+      if (r == 1) {
         const mons = new Monster(monsters.Penchan)
         frontEndPlayers[socket.id].hp = frontEndPlayers[socket.id].maxhp
         battle.initiated = true
         battleLogic(frontEndPlayers[socket.id], mons)
       }
-
     }
   }
 }
@@ -260,6 +276,17 @@ function animate() {
     move()
   }
 }
+
+socket.on('loadPlayer', (json) => {
+  const player = JSON.parse(json)
+  frontEndPlayers[socket.id].level = player.level
+  frontEndPlayers[socket.id].maxhp = player.maxhp
+  frontEndPlayers[socket.id].hp = player.hp
+  frontEndPlayers[socket.id].str = player.str
+  frontEndPlayers[socket.id].def = player.def
+  frontEndPlayers[socket.id].dex = player.dex
+  frontEndPlayers[socket.id].exp = player.exp
+})
 
 socket.on('updatePlayers', (backEndPlayers, pSockets) => {
   sockets = pSockets
@@ -287,16 +314,14 @@ socket.on('updatePlayers', (backEndPlayers, pSockets) => {
         world: background.position,
         velocity: backEndPlayer.velocity,
         moving: backEndPlayer.moving,
-        name: backEndPlayer.name,
       })
-
+      socket.emit('log', 'xxx ' + frontEndPlayers[id].exp)
     } else {
       if (id !== socket.id) {
         frontEndPlayers[id].velocity = backEndPlayer.velocity
         frontEndPlayers[id].moving = backEndPlayer.moving
       }
       frontEndPlayers[id].world = backEndPlayer.world
-      frontEndPlayers[id].name = backEndPlayer.name
     }
   }
   // this is where we delete frontend players
@@ -332,9 +357,8 @@ window.addEventListener('touchstart', (e) => {
     y: canvas_height_half - 50,
   }
 
-  
   const yLimit = e.touches[0].pageY - top - playerPosition.y
-  if(yLimit > 900) return
+  if (yLimit > 900) return
 
   const angle = Math.atan2(
     e.touches[0].pageY - top - playerPosition.y,
@@ -347,13 +371,12 @@ window.addEventListener('touchend', (e) => {
   updateWorld(false)
 })
 
-document.querySelector("#usernameForm").addEventListener("submit", (
-  event) => {
-  event.preventDefault();
+document.querySelector('#usernameForm').addEventListener('submit', (event) => {
+  event.preventDefault()
   document.querySelector('#usernameForm').style.display = 'none'
-  const name = document.querySelector("#usernameInput").value
-  socket.emit("initGame", {
-    name: name
-  });
+  const name = document.querySelector('#usernameInput').value
+  socket.emit('initGame', {
+    name: name,
+  })
   frontEndPlayers[socket.id].name = name
-});
+})

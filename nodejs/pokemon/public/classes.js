@@ -66,6 +66,7 @@ class Sprite {
     this.calcFrame()
   }
 }
+
 class Player extends Sprite {
   constructor({
     position,
@@ -83,7 +84,7 @@ class Player extends Sprite {
     str = 12,
     def = 8,
     dex = 6,
-    exp = 0
+    exp = 0,
   }) {
     super({
       position,
@@ -177,7 +178,7 @@ class Monster extends Sprite {
     str = 12,
     def = 8,
     dex = 6,
-    exp = 10
+    exp = 10,
   }) {
     super({
       position,
@@ -199,7 +200,8 @@ class Monster extends Sprite {
   }
 
   faint() {
-    document.querySelector('#messages').innerHTML += '</br>' + this.name + ' を倒した!'
+    document.querySelector('#messages').innerHTML +=
+      '</br>' + this.name + ' を倒した!'
     messageScroll()
 
     gsap.to(this.position, {
@@ -214,7 +216,8 @@ class Monster extends Sprite {
 
   attack({ attack, recipient, renderedSprites }) {
     document.querySelector('#messages').style.display = 'block'
-    document.querySelector('#messages').innerHTML += '</br>' + this.name + ' は ' + attack.display + ' を使った'
+    document.querySelector('#messages').innerHTML +=
+      '</br>' + this.name + ' は ' + attack.display + ' を使った'
     messageScroll()
 
     let healthBar = '#enemyHealthBar'
