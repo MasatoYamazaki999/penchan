@@ -36,6 +36,16 @@ class PlayerData {
     this.exp = player.exp
   }
 }
+function dataLoad(player) {
+  let data = null
+  try{
+    data = fs.readFileSync('../data/' + player.name + '.json',
+      { encoding: 'utf8', flag: 'r' })
+  } catch(err){
+    return
+  }
+  io.emit('loadPlayer', data)
+}
 
 io.on('connection', (socket) => {
   console.log('a user connected: ' + socket.id)
@@ -67,6 +77,7 @@ io.on('connection', (socket) => {
 
   socket.on('initGame', ({ name }) => {
     backEndPlayers[socket.id].name = name
+    dataLoad(backEndPlayers[socket.id])
     io.emit('updatePlayers', backEndPlayers, sockets)
   })
 
@@ -78,9 +89,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('load', (player) => {
-    const data = fs.readFileSync('../data/' + player.name + '.json',
-      { encoding: 'utf8', flag: 'r' })
-    io.emit('loadPlayer', data)
+    dataLoad(player)
   })
 
   socket.on('disconnect', (reason) => {

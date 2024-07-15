@@ -133,7 +133,10 @@ saveButton.innerHTML = '保存'
 saveButton.style.fontSize = '56pt'
 document.querySelector('#buttonBox').append(saveButton)
 saveButton.addEventListener('click', (e) => {
-  socket.emit('save', frontEndPlayers[socket.id])
+  const conf = confirm('保存しますか?')
+  if (conf) {
+    socket.emit('save', frontEndPlayers[socket.id])
+  }
 })
 
 const loadButton = document.createElement('button')
@@ -141,7 +144,10 @@ loadButton.innerHTML = '読込'
 loadButton.style.fontSize = '56pt'
 document.querySelector('#buttonBox').append(loadButton)
 loadButton.addEventListener('click', (e) => {
-  socket.emit('load', frontEndPlayers[socket.id])
+  let conf = confirm('読込ますか?')
+  if (conf) {
+    socket.emit('load', frontEndPlayers[socket.id])
+  }
 })
 
 function display() {
