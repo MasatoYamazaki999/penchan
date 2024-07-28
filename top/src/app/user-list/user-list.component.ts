@@ -11,14 +11,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './user-list.component.css',
 })
 export class UserListComponent implements OnInit {
-  @Input() childData: string = '';
-  @Output() sharedData = new EventEmitter<string>();
+  
+  //@Output() sharedData = new EventEmitter<string>();
   users: User[] = [];
 
   constructor() {}
-  submitData() {
-    this.sharedData.emit('子データ');
-  }
+
   ngOnInit() {
     let user1 = new User('user1', '一郎', '田中', 'tanaka@test.com');
     let user2 = new User('user2', '二郎', '小林', 'kobayashi@test.com');

@@ -9,16 +9,16 @@ import { UserListComponent } from '../user-list/user-list.component';
   styleUrl: './screen1.component.css',
 })
 export class Screen1Component implements OnInit {
-  parentData: string = '';
+
   scr1Data: string = '----';
 
   constructor() {
   }
 
   ngOnInit() {
-    this.parentData = '親から子へ';
+
   }
   onReceiveData(event: string) {
-    this.parentData = event;
+
   }
 }

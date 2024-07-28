@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './entry.component.css'
 })
 export class EntryComponent {
-
+  @Input() paramData: string = '';
   inputData: string = '';
   constructor() {}
 }
