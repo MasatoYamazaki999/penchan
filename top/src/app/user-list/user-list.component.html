@@ -1,0 +1,21 @@
+<hr/>
+<div>親からのデータ: {{childData}}</div>
+共通画面部品 一覧表示
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>名字</th>
+      <th>名前</th>
+      <th>email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.username }}</td>
+      <td>{{ user.lastname }}</td>
+      <td>{{ user.firstname }}</td>
+      <td>{{ user.email }}</td>
+    </tr>
+  </tbody>
+  </table>
