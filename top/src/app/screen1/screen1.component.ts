@@ -1,24 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserListComponent } from '../user-list/user-list.component';
+import { Component } from '@angular/core';
+import { Comp0Component } from "../comp0/comp0.component";
+import { Comp1Component } from "../comp1/comp1.component";
+import { Comp2Component } from "../comp2/comp2.component";
 
 @Component({
   selector: 'app-screen1',
   standalone: true,
-  imports: [UserListComponent],
+  imports: [Comp0Component, Comp1Component, Comp2Component],
   templateUrl: './screen1.component.html',
-  styleUrl: './screen1.component.css',
+  styleUrl: './screen1.component.css'
 })
-export class Screen1Component implements OnInit {
+export class Screen1Component {
 
-  scr1Data: string = '----';
-
-  constructor() {
-  }
-
-  ngOnInit() {
-
-  }
-  onReceiveData(event: string) {
-
-  }
 }

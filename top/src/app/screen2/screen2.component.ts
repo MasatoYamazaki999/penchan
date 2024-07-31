@@ -1,23 +1,15 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { EntryComponent } from '../entry/entry.component';
+import { Component } from '@angular/core';
+import { Comp0Component } from "../comp0/comp0.component";
+import { Comp1Component } from "../comp1/comp1.component";
+import { Comp2Component } from "../comp2/comp2.component";
 
 @Component({
   selector: 'app-screen2',
   standalone: true,
-  imports: [EntryComponent],
+  imports: [Comp0Component, Comp1Component, Comp2Component],
   templateUrl: './screen2.component.html',
-  styleUrl: './screen2.component.css',
+  styleUrl: './screen2.component.css'
 })
-export class Screen2Component implements OnInit {
-  @ViewChild(EntryComponent) entry!: EntryComponent;
-  scr1Data: string = '';
-  scr2Data: string = '';
-  
-  submitData() {
-    this.scr1Data = this.entry.inputData;
-    this.scr2Data = this.entry.inputData;
-  }
-  ngOnInit(): void {
-    this.scr2Data = '初期値';
-  }
+export class Screen2Component {
+
 }
