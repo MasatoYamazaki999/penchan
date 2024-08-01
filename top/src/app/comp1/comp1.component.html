@@ -1,23 +1,40 @@
 <table>
-    <tr style="border-bottom: 0px;">
-        <td style="display: flex; width: 160px; height: 80px; background-color: #f2f2f2;">
-            <span style="margin: 10px 6px 0px 4px;">
-                口座番号
-            </span>
-            <img style="margin-top: 5px;" src="./必須.png" width="34" height="32"/>
-        </td>
-        <td style="width: 400px; height: 80px;">
-            <span style="margin: 0px 0px 0px 10px;">
-                口座番号を入力してください。
-            </span>
-            <p></p>
-            <span style="margin: 0px 0px 0px 10px;">
-                <input type="text" name="test" placeholder="***********"/>
-                <a style="font-size: 11px; text-decoration: none;margin-left: 5px;" href=".blank">
-                    <img style="margin: 0px 0px -2px 10px;" src="./口座番号表示.png" width="17" height="12"/>
-                    口座番号を表示
-                </a>
-            </span>
-        </td>
+    <tr [style.border-bottom]="lineColor">
+        @if(entryMode) {
+            <td style="display: flex; width: 160px; height: 80px; background-color: #f2f2f2;">
+                <span style="margin: 10px 6px 0px 4px;">
+                    口座番号
+                </span>
+                <img style="margin-top: 5px;" src="./必須.png" width="34" height="32"/>
+            </td>
+            <td style="width: 400px; height: 80px;">
+                <span style="margin: 0px 0px 0px 10px;">
+                    口座番号を入力してください。
+                </span>
+                <p></p>
+                <span style="margin: 0px 0px 0px 10px;">
+                    <input type="text" name="test" placeholder="***********"/>
+                    <a style="font-size: 11px; text-decoration: none;margin-left: 5px;" href=".blank">
+                        <img style="margin: 0px 0px -2px 10px;" src="./口座番号表示.png" width="17" height="12"/>
+                        口座番号を表示
+                    </a>
+                </span>
+            </td>            
+        } @else {
+            <td style="display: flex; width: 160px; height: 40px; background-color: #f2f2f2;">
+                <span style="margin: 10px 6px 0px 4px;">
+                    口座番号
+                </span>
+            </td>
+            <td style="width: 400px; height: 40px;">
+                <span style="margin: 0px 0px 0px 10px;">
+                    ***********
+                    <a style="font-size: 11px; text-decoration: none;margin-left: 5px;" href=".blank">
+                        <img style="margin: 0px 0px -2px 10px;" src="./口座番号表示.png" width="17" height="12"/>
+                        口座番号を表示
+                    </a>
+                </span>
+            </td>    
+        }
     </tr>
 </table>
