@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, model } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-comp2',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './comp2.component.html',
   styleUrl: './comp2.component.css'
 })
@@ -18,6 +19,10 @@ export class Comp2Component {
   // 最終ラインの色
   lineColor: string = '';
 
+  shared: string = 'initial value';
+  name: string = '....'
+  @Input() partsId: string = '';
+  
   // コンストラクタ
   constructor() {}
   
@@ -28,5 +33,8 @@ export class Comp2Component {
     } else {
       this.lineColor = '1px lightgray solid'
     }
+  }
+  getData(): string {
+    return  this.name
   }
 }
