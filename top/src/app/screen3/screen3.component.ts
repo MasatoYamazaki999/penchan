@@ -23,7 +23,7 @@ export class Screen3Component {
       for(let item of this.comp2Component.toArray()){
         //console.log(item.partsId + " : " + item.getData())
       }
-      const element = this.comp2Component.filter((element, index) => element.partsId === 'id2');
+      const element = this.comp2Component.filter((element) => element.partsId === 'id2');
       console.log(element[0].getData())
     }
 }
