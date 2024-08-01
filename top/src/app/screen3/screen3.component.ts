@@ -25,5 +25,6 @@ export class Screen3Component {
       }
       const element = this.comp2Component.filter((element) => element.partsId === 'id2');
       console.log(element[0].getData())
+      alert('data is  ' + element[0].getData())
     }
 }

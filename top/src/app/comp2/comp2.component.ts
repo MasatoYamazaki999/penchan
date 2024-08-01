@@ -20,7 +20,7 @@ export class Comp2Component {
   lineColor: string = '';
 
   shared: string = 'initial value';
-  name: string = '....'
+  name: string = ''
   @Input() partsId: string = '';
   
   // コンストラクタ
