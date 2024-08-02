@@ -20,11 +20,13 @@ export class Screen3Component {
 
     }
     pushed(){
+      let inputData = ''
       for(let item of this.comp2Component.toArray()){
-        //console.log(item.partsId + " : " + item.getData())
+        inputData += item.getData() + '\r\n'
       }
-      const element = this.comp2Component.filter((element) => element.partsId === 'id2');
-      console.log(element[0].getData())
-      alert('data is  ' + element[0].getData())
+      alert(inputData)
+      // const element = this.comp2Component.filter((element) => element.partsId === 'id2');
+      // console.log(element[0].getData())
+      // alert('data is  ' + element[0].getData())
     }
 }
