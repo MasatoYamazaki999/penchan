@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-comp1',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './comp1.component.html',
   styleUrl: './comp1.component.css',
 })
@@ -15,7 +16,7 @@ export class Comp1Component {
 
   // 最終ラインの色
   lineColor: string = '';
-
+  name: string = ''
   // コンストラクタ
   constructor() {}
 
@@ -26,5 +27,8 @@ export class Comp1Component {
     } else {
       this.lineColor = '1px lightgray solid';
     }
+  }
+  getData(): string {
+    return  this.name
   }
 }

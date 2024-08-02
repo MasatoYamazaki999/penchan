@@ -11,16 +11,20 @@ import { Comp2Component } from "../comp2/comp2.component";
   styleUrl: './screen3.component.css'
 })
 export class Screen3Component {
-    @ViewChildren(Comp2Component) comp2Component!:  QueryList<Comp2Component>;
+  @ViewChildren(Comp1Component) comp1Component!:  QueryList<Comp1Component>;
+  @ViewChildren(Comp2Component) comp2Component!:  QueryList<Comp2Component>;
 
     ngAfterViewInit() {
-      //console.log('over ngAfterViewInit....');
+  
     }
     ngOnInit(){
 
     }
     pushed(){
       let inputData = ''
+      for(let item of this.comp1Component.toArray()){
+        inputData += item.getData() + '\r\n'
+      }
       for(let item of this.comp2Component.toArray()){
         inputData += item.getData() + '\r\n'
       }
