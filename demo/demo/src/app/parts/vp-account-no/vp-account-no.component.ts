@@ -11,16 +11,18 @@ export class VpAccountNoComponent implements OnInit {
   @Input() lastLine: boolean = false;
   // 最終ラインの色
   lineColor: string = '';
-  
+  // 表タイトル
+  @Input() title: string = '';
+
   name: string = '';
 
   constructor() {}
 
   ngOnInit(): void {
-    if(this.lastLine){
-      this.lineColor = '1px gray solid'
+    if (this.lastLine) {
+      this.lineColor = '1px gray solid';
     } else {
-      this.lineColor = '1px lightgray solid'
+      this.lineColor = '1px lightgray solid';
     }
   }
 }

@@ -11,14 +11,17 @@ export class VpTextComponent implements OnInit {
   @Input() entry: boolean = true;
   // 明細最終ライン
   @Input() lastLine: boolean = false;
-    // 値
+  // 値
   @Input() value: string = '';
+  // 表タイトル
+  @Input() title: string = '';
+
   // 最終ラインの色
   lineColor: string = '';
 
   // スタイル
-  headerStyle: any
-  contentsStyle: any
+  headerStyle: any;
+  contentsStyle: any;
   constructor() {}
 
   ngOnInit(): void {
@@ -27,24 +30,23 @@ export class VpTextComponent implements OnInit {
     } else {
       this.lineColor = '1px lightgray solid';
     }
-    if(this.entry){
+    if (this.entry) {
       this.headerStyle = {
         display: 'flex',
         width: '160px',
         height: '80px',
         'background-color': '#f2f2f2',
       };
-      this.contentsStyle = { width: '400px'};
+      this.contentsStyle = { width: '400px' };
     } else {
       this.headerStyle = {
         display: 'flex',
         width: '160px',
         height: '40px',
-        'background-color': '#f2f2f2'
+        'background-color': '#f2f2f2',
       };
-      this.contentsStyle = { width: '400px'};
+      this.contentsStyle = { width: '400px' };
     }
-    
   }
   getData(): string {
     return this.value;

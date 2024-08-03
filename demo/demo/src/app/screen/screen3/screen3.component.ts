@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class Screen3Component implements OnInit {
  @Input() value: string = '';
+
   constructor() { }
 
   ngOnInit(): void {

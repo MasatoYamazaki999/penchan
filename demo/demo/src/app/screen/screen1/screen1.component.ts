@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-screen1',
   templateUrl: './screen1.component.html',
-  styleUrls: ['./screen1.component.css']
+  styleUrls: ['./screen1.component.css'],
 })
 export class Screen1Component implements OnInit {
   value: string = '';
-  constructor() { }
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.value = '上からの値!!'
+    this.value = '上からの値';
   }
-
 }

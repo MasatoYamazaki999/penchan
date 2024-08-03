@@ -1,4 +1,9 @@
 <table>
+  <tr *ngIf="title != ''">
+    <td colspan="2" style="width: 560px; font-weight: bold; font-size: 14px;border-bottom: 1px gray solid;">
+      {{ title }}
+    </td>
+  </tr>
   <tr [style.border-bottom]="lineColor">
     <td [ngStyle]="headerStyle">
       <span style="margin: 10px 6px 0px 4px"> 口座名義人(漢字) </span>
@@ -8,7 +13,6 @@
         width="34"
         height="32"
       />
-      
     </td>
     <td [ngStyle]="contentsStyle">
       <span *ngIf="entry" style="margin: 0px 0px 0px 10px">
