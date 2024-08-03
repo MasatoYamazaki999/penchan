@@ -34,15 +34,15 @@ export class VpTextComponent implements OnInit {
         height: '80px',
         'background-color': '#f2f2f2',
       };
-      this.contentsStyle = { width: '400px', height: '80px' };
+      this.contentsStyle = { width: '400px'};
     } else {
       this.headerStyle = {
         display: 'flex',
         width: '160px',
         height: '40px',
-        'background-color': '#f2f2f2',
+        'background-color': '#f2f2f2'
       };
-      this.contentsStyle = { width: '400px', height: '40px' };
+      this.contentsStyle = { width: '400px'};
     }
     
   }
