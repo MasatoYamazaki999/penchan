@@ -1,0 +1,25 @@
+<table>
+    <tr [style.border-bottom]="lineColor">
+      <td
+        style="
+          display: flex;
+          width: 160px;
+          height: 80px;
+          background-color: #f2f2f2;
+        "
+      >
+        <span style="margin: 10px 6px 0px 4px"> 口座名義人(漢字) </span>
+        <img style="margin-top: 5px" src="../../../assets/必須.png" width="34" height="32" />
+      </td>
+      <td style="width: 400px; height: 80px">
+        <span style="margin: 0px 0px 0px 10px">
+          姓と名の間には空白（全角）を入れてください。
+        </span>
+        <p></p>
+        <span style="margin: 0px 0px 0px 10px">
+          <input type="text" placeholder="中小　太郎"   [(ngModel)]="name"/>　さま
+        </span>
+      </td>
+    </tr>
+  </table>
+  

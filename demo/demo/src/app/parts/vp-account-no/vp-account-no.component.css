@@ -1,0 +1,12 @@
+table {
+    font-size:12px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+  .extenal-link::before {
+    padding: 0 0 0 0.6rem;
+    display: inline-block;
+    width: 1rem;
+    content:url("../../../assets/口座番号表示.png");
+  }
