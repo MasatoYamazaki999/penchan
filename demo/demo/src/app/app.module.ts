@@ -4,7 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { Screen1Component } from './screen/screen1/screen1.component';
+import { Screen2Component } from './screen/screen2/screen2.component';
+import { Screen3Component } from './screen/screen3/screen3.component';
+
 import { VpTitleComponent } from './parts/vp-title/vp-title.component';
 import { VpAccountNoComponent } from './parts/vp-account-no/vp-account-no.component';
 import { VpTextComponent } from './parts/vp-text/vp-text.component';
@@ -16,6 +20,14 @@ export const routes: Routes = [
     path: 'screen1',
     component: Screen1Component,
   },
+  {
+    path: 'screen2',
+    component: Screen2Component,
+  },
+  {
+    path: 'screen3',
+    component: Screen3Component,
+  },
 ];
 
 @NgModule({
@@ -24,7 +36,9 @@ export const routes: Routes = [
     Screen1Component,
     VpTitleComponent,
     VpAccountNoComponent,
-    VpTextComponent
+    VpTextComponent,
+    Screen2Component,
+    Screen3Component
   ],
   imports: [
     BrowserModule,

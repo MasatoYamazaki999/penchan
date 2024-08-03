@@ -9,8 +9,6 @@ import { FormsModule } from '@angular/forms';
 export class VpAccountNoComponent implements OnInit {
   // 明細最終ライン
   @Input() lastLine: boolean = false;
-  // 入力・表示用フラグ
-  @Input() entryMode: boolean = true;
   // 最終ラインの色
   lineColor: string = '';
   
