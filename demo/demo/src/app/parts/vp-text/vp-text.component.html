@@ -6,7 +6,7 @@
   </tr>
   <tr [style.border-bottom]="lineColor">
     <td [ngStyle]="headerStyle">
-      <span
+      <span  class="entry"
         >{{ headerText }}
         <img
           *ngIf="required"
@@ -17,14 +17,14 @@
       /></span>
     </td>
     <td [ngStyle]="contentsStyle">
-      <span *ngIf="entry" style="margin: 0px 0px 0px 10px">
-        姓と名の間には空白（全角）を入れてください。
+      <span *ngIf="entry" class="display">
+        {{ contentsText }}
       </span>
       <p *ngIf="entry"></p>
-      <span *ngIf="entry" style="margin: 0px 0px 0px 10px">
-        <input type="text" placeholder="中小　太郎" [(ngModel)]="value" />　さま
+      <span *ngIf="entry"  class="display">
+        <input type="text" placeholder="中小　太郎" [(ngModel)]="value" [size]="size"/>　さま
       </span>
-      <span *ngIf="!entry" style="margin-left: 10px">
+      <span *ngIf="!entry" class="display">
         {{ value }}
       </span>
     </td>

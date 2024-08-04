@@ -19,27 +19,28 @@ export class VpTextComponent implements OnInit {
   @Input() required: boolean = false;
   // 必須位置
   @Input() requiredPos: string = '0px';
-
   // ヘッダーテキスト
   @Input() headerText: string = '';
-
+  // コンテンツテキスト
+  contentsText: string = '';
   // ヘッダー幅
-  @Input() headerWidth:string = '';
+  @Input() headerWidth: string = '';
   // コンテンツ幅
   @Input() contentsWidth: string = '';
-
+  // 高さ
+  @Input() height: string = ''
   // 最終ラインの色
   lineColor: string = '';
-
   // 必須スタイル
   requiredStyle: any;
-
   // ヘッダースタイル
   headerStyle: any;
   // タイトルスタイル
   titleStyle: any;
   // コンテンツスタイル
   contentsStyle: any;
+  // コンテンツサイズ
+  @Input() size: string = '';
 
   constructor() {}
 
@@ -53,21 +54,24 @@ export class VpTextComponent implements OnInit {
       this.headerStyle = {
         display: 'flex',
         width: this.headerWidth + 'px',
-        height: '80px',
+        height: this.height + 'px',
         'background-color': '#f2f2f2',
       };
     } else {
       this.headerStyle = {
         display: 'flex',
         width: this.headerWidth + 'px',
-        height: '40px',
+        height: (parseInt(this.height) / 2) + 'px',
         'background-color': '#f2f2f2',
       };
     }
-    this.contentsStyle = { width: parseInt(this.contentsWidth) + 'px' };
+    this.contentsStyle = {
+      width: parseInt(this.contentsWidth) + 'px',
+      'white-space': 'pre-wrap',
+    };
     this.requiredStyle = {
       'margin-top': this.requiredPos,
-      'vertical-align': 'top'
+      'vertical-align': 'top',
     };
     this.titleStyle = {
       width: parseInt(this.headerWidth) + parseInt(this.contentsWidth) + 'px',
@@ -75,6 +79,8 @@ export class VpTextComponent implements OnInit {
       'font-size': '14px',
       'border-bottom': '1px gray solid',
     };
+    this.contentsText =
+      '氏名（漢字）を全角で入力してください。姓と名の間には空白（全角）を入れてください。\n   ※アルファベットも入力できます。';
   }
   getData(): string {
     return this.value;
