@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseTextComponent } from '../../base/base-text/base-text.component';
 
@@ -8,6 +15,8 @@ import { BaseTextComponent } from '../../base/base-text/base-text.component';
   styleUrls: ['./table-text.component.css'],
 })
 export class TableTextComponent implements OnInit {
+  // 部品id
+  @Input() id: string = '';
   // 入力・表示
   @Input() entry: boolean = true;
   // 明細最終ライン
@@ -24,15 +33,15 @@ export class TableTextComponent implements OnInit {
   @Input() headerText: string = '';
   // コンテンツテキスト(親から)
   @Input() contentsTextFromParent: string[] = [];
-
-  // コンテンツテキスト(画面)
-  contentsText: string = '';
   // ヘッダー幅
   @Input() headerWidth: string = '';
   // コンテンツ幅
   @Input() contentsWidth: string = '';
   // 高さ
   @Input() height: string = '';
+
+  // コンテンツテキスト(画面)
+  contentsText: string = '';
   // 最終ラインの色
   lineColor: string = '';
   // 必須スタイル
@@ -91,10 +100,16 @@ export class TableTextComponent implements OnInit {
     this.contentsText = this.contentsTextFromParent.join('\n  ');
   }
   getValue(): string {
-    let result = ''
-    this.childs.forEach(child => {
-      result += child.getValue()
-    })
-    return result
+    let result = '';
+    this.childs.forEach((child) => {
+      result += child.getValue();
+    });
+    return result;
+  }
+  getId(): string {
+    return this.id;
+  }
+  setId(id: string){
+    this.id = id;
   }
 }

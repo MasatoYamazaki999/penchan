@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { BaseTextComponent } from './parts/base/base-text/base-text.component';
 import { TableTextComponent } from './parts/middle/table-text/table-text.component';
 import { MksInfoComponent } from './parts/top/mks-info/mks-info.component';
+import { BaseRadioComponent } from './parts/base/base-radio/base-radio.component';
 
 export const routes: Routes = [
   {
@@ -42,7 +43,8 @@ export const routes: Routes = [
     Screen3Component,
     BaseTextComponent,
     TableTextComponent,
-    MksInfoComponent
+    MksInfoComponent,
+    BaseRadioComponent
   ],
   imports: [
     BrowserModule,

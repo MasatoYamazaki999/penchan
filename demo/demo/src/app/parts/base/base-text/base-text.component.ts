@@ -6,6 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./base-text.component.css'],
 })
 export class BaseTextComponent implements OnInit {
+  // 部品id
+  @Input() id: string = '';
   // 値
   @Input() value: string;
   // サイズ
@@ -26,5 +28,9 @@ export class BaseTextComponent implements OnInit {
   }
   setValue(value: string) {
     this.value = value;
+  }
+
+  getId(): string {
+    return this.id;
   }
 }
