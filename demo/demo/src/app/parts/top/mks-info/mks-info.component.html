@@ -4,6 +4,7 @@
     <app-table-text
       title="申込者情報"
       id="id001"
+      type="text"
       [required]="true"
       requiredPos="-4px"
       [headerText]="mksnmkjHeaderText"
@@ -22,6 +23,7 @@
     <app-table-text
       title=""
       id="id002"
+      type="text"
       [required]="true"
       requiredPos="-4px"
       [headerText]="mksnmknHeaderText"
@@ -40,6 +42,7 @@
     <app-table-text
       title=""
       id="id003"
+      type="text"
       [required]="false"
       requiredPos="-4px"
       headerText="申込者の生年月日（和暦）"
@@ -58,6 +61,7 @@
     <app-table-text
       title=""
       id="id004"
+      type="text"
       [required]="false"
       requiredPos="-4px"
       headerText="申込者の年齢"
@@ -72,9 +76,24 @@
       [entry]="false"
       value="58 歳"
     ></app-table-text>
-
-
-    
+    <!-- 事業主の性別  -->
+    <app-table-radio
+      title=""
+      id="rd005"
+      type="radio"
+      [required]="true"
+      requiredPos="-4px"
+      headerText="事業主の性別"
+      [contentsTextFromParent]="jgnsexContentsText"
+      titleStyle="titleStyle"
+      headerWidth="180"
+      contentsWidth="550"
+      height="70"
+      size="28"
+      [lastLine]="true"
+      [entry]="true"
+      guide="男性"
+    ></app-table-radio>
     <br />
   </div>
 </div>

@@ -1,1 +1,12 @@
-<p>base-radio works!</p>
+  <ng-container *ngFor="let a of sex; index as i">
+    <label>
+    <input
+      type="radio"
+      name="sex"
+      id="sex{{ i }}"
+      [(ngModel)]="value"
+      [value]="a.display"
+      [checked]="value == a.value"
+    />{{ a.display }}
+  </label>
+  </ng-container>

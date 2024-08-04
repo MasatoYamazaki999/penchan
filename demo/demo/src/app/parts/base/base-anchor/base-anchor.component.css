@@ -1,0 +1,15 @@
+a {
+    text-decoration: none;
+}
+.anchor-link::before {
+    padding: 0 0 0 0.6rem;
+    display: inline-block;
+    width: 1rem;
+    content:url("../../../../assets/help.png");
+  }
+  /* .anchor-link::after {
+    padding: 0 0 0 0.2rem;
+    display: flex;
+    width: 1rem;
+    content:url("../../../../assets/linkAfter.svg");
+  } */

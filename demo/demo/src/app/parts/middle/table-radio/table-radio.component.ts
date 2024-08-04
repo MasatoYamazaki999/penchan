@@ -1,18 +1,18 @@
 import {
   Component,
-  OnInit,
   Input,
+  OnInit,
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { BaseTextComponent } from '../../base/base-text/base-text.component';
+import { BaseRadioComponent } from '../../base/base-radio/base-radio.component';
 
 @Component({
-  selector: 'app-table-text',
-  templateUrl: './table-text.component.html',
-  styleUrls: ['./table-text.component.css'],
+  selector: 'app-table-radio',
+  templateUrl: './table-radio.component.html',
+  styleUrls: ['./table-radio.component.css'],
 })
-export class TableTextComponent implements OnInit {
+export class TableRadioComponent implements OnInit {
   // 部品id
   @Input() id: string = '';
   // 部品type
@@ -57,8 +57,8 @@ export class TableTextComponent implements OnInit {
   // コンテンツサイズ
   @Input() size: string = '';
 
-  @ViewChildren(BaseTextComponent)
-  public childs!: QueryList<BaseTextComponent>;
+  @ViewChildren(BaseRadioComponent)
+  public childs!: QueryList<BaseRadioComponent>;
 
   constructor() {}
 
@@ -109,7 +109,7 @@ export class TableTextComponent implements OnInit {
   getId(): string {
     return this.id;
   }
-  setId(id: string){
+  setId(id: string) {
     this.id = id;
   }
 }

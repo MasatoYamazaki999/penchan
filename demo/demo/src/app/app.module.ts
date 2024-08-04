@@ -17,6 +17,8 @@ import { BaseTextComponent } from './parts/base/base-text/base-text.component';
 import { TableTextComponent } from './parts/middle/table-text/table-text.component';
 import { MksInfoComponent } from './parts/top/mks-info/mks-info.component';
 import { BaseRadioComponent } from './parts/base/base-radio/base-radio.component';
+import { TableRadioComponent } from './parts/middle/table-radio/table-radio.component';
+import { BaseAnchorComponent } from './parts/base/base-anchor/base-anchor.component';
 
 export const routes: Routes = [
   {
@@ -44,7 +46,9 @@ export const routes: Routes = [
     BaseTextComponent,
     TableTextComponent,
     MksInfoComponent,
-    BaseRadioComponent
+    BaseRadioComponent,
+    TableRadioComponent,
+    BaseAnchorComponent
   ],
   imports: [
     BrowserModule,

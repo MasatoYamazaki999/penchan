@@ -1,5 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TableTextComponent } from '../../middle/table-text/table-text.component';
+import { TableRadioComponent } from '../../middle/table-radio/table-radio.component';
 
 @Component({
   selector: 'app-mks-info',
@@ -10,6 +11,9 @@ export class MksInfoComponent implements OnInit {
   @ViewChildren(TableTextComponent)
   public childs!: QueryList<TableTextComponent>;
   
+  @ViewChildren(TableRadioComponent)
+  public radioChilds!: QueryList<TableRadioComponent>;
+
   honor: string = '';
   mksnmkj: string = '';
   mksnmkn: string = '';
@@ -17,7 +21,7 @@ export class MksInfoComponent implements OnInit {
   mksnmknHeaderText: string = '';
   mkskjContentsText: string[] = [];
   mksknContentsText: string[] = [];
-
+  jgnsexContentsText: string[] = []
   constructor() {}
 
   ngOnInit(): void {
@@ -36,13 +40,18 @@ export class MksInfoComponent implements OnInit {
       '氏名（フリガナ）を全角で入力してください。姓と名の間には空白（全角）を入れてください。',
       '※ひらがなでも入力できます。（確認画面でカタカナに変換されます）',
     ];
+    this.jgnsexContentsText = ['性別を選択してください。']
+;
   }
 
   public getValue(): any {
     let result: string[] = []
+    
     this.childs.forEach(child => {
       result.push(child.getValue())
     })
+    let ans = this.radioChilds.filter(n => n.id==='rd005');
+    result.push(ans[0].getValue())
     return result;
   }
 }
