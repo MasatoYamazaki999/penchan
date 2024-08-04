@@ -11,6 +11,6 @@ export class Screen1Component implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.nameKanji = '最上位からの値';
+    this.nameKanji = '';
   }
 }
