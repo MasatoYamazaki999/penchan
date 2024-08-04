@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { TableTextComponent } from '../../middle/table-text/table-text.component';
 
 @Component({
   selector: 'app-mks-info',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mks-info.component.css'],
 })
 export class MksInfoComponent implements OnInit {
+  @ViewChildren(TableTextComponent)
+  public childs!: QueryList<TableTextComponent>;
+  
   honor: string = '';
   mksnmkj: string = '';
   mksnmkn: string = '';
@@ -32,5 +36,13 @@ export class MksInfoComponent implements OnInit {
       '氏名（フリガナ）を全角で入力してください。姓と名の間には空白（全角）を入れてください。',
       '※ひらがなでも入力できます。（確認画面でカタカナに変換されます）',
     ];
+  }
+
+  public getValue(): any {
+    let result: string[] = []
+    this.childs.forEach(child => {
+      result.push(child.getValue())
+    })
+    return result;
   }
 }

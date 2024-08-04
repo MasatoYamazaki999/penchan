@@ -1,7 +1,6 @@
 <div style="background-color: white; border-radius: 8px">
-  <br />
-
-  <div style="margin-left: 12px">
+    <br/>
+    <div style="margin-left: 12px">
     <app-table-text
       title="申込者情報"
       [required]="true"
@@ -35,10 +34,40 @@
       [entry]="true"
       [value]="mksnmkn"
     ></app-table-text>
+    <!-- 申込者の生年月日（和暦） -->
+    <app-table-text
+      title=""
+      [required]="false"
+      requiredPos="-4px"
+      headerText="申込者の生年月日（和暦）"
+      [contentsTextFromParent]="mksknContentsText"
+      [honor]="honor"
+      titleStyle="titleStyle"
+      headerWidth="180"
+      contentsWidth="550"
+      height="70"
+      size="28"
+      [lastLine]="false"
+      [entry]="false"
+      value="昭和40年 10月 1日"
+    ></app-table-text>
+    <!-- 申込者の年齢  -->
+    <app-table-text
+      title=""
+      [required]="false"
+      requiredPos="-4px"
+      headerText="申込者の年齢"
+      [contentsTextFromParent]="mksknContentsText"
+      [honor]="honor"
+      titleStyle="titleStyle"
+      headerWidth="180"
+      contentsWidth="550"
+      height="70"
+      size="28"
+      [lastLine]="false"
+      [entry]="false"
+      value="58 歳"
+    ></app-table-text>
     <br />
-
   </div>
-  
-  <br />
-
 </div>

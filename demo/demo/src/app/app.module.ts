@@ -20,7 +20,7 @@ import { MksInfoComponent } from './parts/top/mks-info/mks-info.component';
 export const routes: Routes = [
   {
     path: 'screen1',
-    component: MksInfoComponent,
+    component: Screen1Component,
   },
   {
     path: 'screen2',

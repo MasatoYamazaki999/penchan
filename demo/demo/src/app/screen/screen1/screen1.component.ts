@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { MksInfoComponent } from 'src/app/parts/top/mks-info/mks-info.component';
 
 @Component({
   selector: 'app-screen1',
@@ -6,11 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screen1.component.css'],
 })
 export class Screen1Component implements OnInit {
-  nameKanji: string = '';
+  @ViewChildren(MksInfoComponent)
+  public mksInfo!: QueryList<MksInfoComponent>;
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.nameKanji = '';
+  ngOnInit(): void {}
+  onClick(): void {
+    this.mksInfo.forEach(child => {
+      alert("■" + child.getValue())
+    })
   }
 }

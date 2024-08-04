@@ -21,7 +21,7 @@ export class BaseTextComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getValue(): string {
+  public getValue(): string {
     return this.value;
   }
   setValue(value: string) {

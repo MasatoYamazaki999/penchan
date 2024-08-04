@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BaseTextComponent } from '../../base/base-text/base-text.component';
 
 @Component({
   selector: 'app-table-text',
@@ -47,6 +48,9 @@ export class TableTextComponent implements OnInit {
   // コンテンツサイズ
   @Input() size: string = '';
 
+  @ViewChildren(BaseTextComponent)
+  public childs!: QueryList<BaseTextComponent>;
+
   constructor() {}
 
   ngOnInit(): void {
@@ -86,7 +90,11 @@ export class TableTextComponent implements OnInit {
     };
     this.contentsText = this.contentsTextFromParent.join('\n  ');
   }
-  getData(): string {
-    return this.value;
+  getValue(): string {
+    let result = ''
+    this.childs.forEach(child => {
+      result += child.getValue()
+    })
+    return result
   }
 }

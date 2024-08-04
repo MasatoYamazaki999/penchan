@@ -10,5 +10,4 @@ export class Screen2Component implements OnInit {
 
   ngOnInit(): void {
   }
-
 }
