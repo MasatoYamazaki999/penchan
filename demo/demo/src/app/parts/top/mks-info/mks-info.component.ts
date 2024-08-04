@@ -40,8 +40,7 @@ export class MksInfoComponent implements OnInit {
       '氏名（フリガナ）を全角で入力してください。姓と名の間には空白（全角）を入れてください。',
       '※ひらがなでも入力できます。（確認画面でカタカナに変換されます）',
     ];
-    this.jgnsexContentsText = ['性別を選択してください。']
-;
+    this.jgnsexContentsText = ['性別を選択してください。'];
   }
 
   public getValue(): any {

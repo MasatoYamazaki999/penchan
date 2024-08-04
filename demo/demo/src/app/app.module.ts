@@ -9,9 +9,6 @@ import { Screen1Component } from './screen/screen1/screen1.component';
 import { Screen2Component } from './screen/screen2/screen2.component';
 import { Screen3Component } from './screen/screen3/screen3.component';
 
-import { VpAccountNoComponent } from './parts/vp-account-no/vp-account-no.component';
-import { VpTextComponent } from './parts/vp-text/vp-text.component';
-
 import { FormsModule } from '@angular/forms';
 import { BaseTextComponent } from './parts/base/base-text/base-text.component';
 import { TableTextComponent } from './parts/middle/table-text/table-text.component';
@@ -38,8 +35,6 @@ export const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    VpAccountNoComponent,
-    VpTextComponent,
     Screen1Component,
     Screen2Component,
     Screen3Component,
