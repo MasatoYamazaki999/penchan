@@ -1,33 +1,38 @@
 <table>
-    <tr *ngIf="title !== ''">
-      <td colspan="2" [ngStyle]="titleStyle">
-        {{ title }}
-      </td>
-    </tr>
-    <tr [style.border-bottom]="lineColor">
-      <td [ngStyle]="headerStyle">
-        <span  class="entry"
-          >{{ headerText }}
-          <img
-            *ngIf="required"
-            [ngStyle]="requiredStyle"
-            src="assets/必須.png"
-            width="34"
-            height="32"
-        /></span>
-      </td>
-      <td [ngStyle]="contentsStyle">
-        <span *ngIf="entry" class="display">
+  <tr *ngIf="title !== ''">
+    <td colspan="2" [ngStyle]="titleStyle">
+      {{ title }}
+    </td>
+  </tr>
+  <tr [style.border-bottom]="lineColor">
+    <td [ngStyle]="headerStyle">
+      <span class="entry"
+        >{{ headerText }}
+        <img
+          *ngIf="required"
+          [ngStyle]="requiredStyle"
+          src="assets/必須.png"
+          width="34"
+          height="32"
+      /></span>
+    </td>
+    <td [ngStyle]="contentsStyle">
+      <div *ngIf="entry" class="display" [ngStyle]="contentsWordStyle">
           {{ contentsText }}
-        </span>
-        <p *ngIf="entry"></p>
-        <span *ngIf="entry" class="display">
-          <app-base-text [id]="id" [type]="type" [value]="value"  size="25" suffix="{{honor}}"></app-base-text>
-        </span>
-        <span *ngIf="!entry" class="display">
-          {{ value }}
-        </span>
-      </td>
-    </tr>
-  </table>
-  
+      </div>
+      <p *ngIf="entry"></p>
+      <span *ngIf="entry" class="display">
+        <app-base-text
+          [id]="id"
+          [type]="type"
+          [value]="value"
+          size="25"
+          suffix="{{ honor }}"
+        ></app-base-text>
+      </span>
+      <span *ngIf="!entry" class="display">
+        {{ value }}
+      </span>
+    </td>
+  </tr>
+</table>

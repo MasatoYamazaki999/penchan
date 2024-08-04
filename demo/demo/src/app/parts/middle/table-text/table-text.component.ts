@@ -39,6 +39,8 @@ export class TableTextComponent implements OnInit {
   @Input() contentsWidth: string = '';
   // 高さ
   @Input() height: string = '';
+  // コンテンツ文字背景色黄色
+  @Input() contentsWordBackYeallow: boolean = false;
 
   // コンテンツテキスト(画面)
   contentsText: string = '';
@@ -52,6 +54,8 @@ export class TableTextComponent implements OnInit {
   titleStyle: any;
   // コンテンツスタイル
   contentsStyle: any;
+  contentsWordStyle: any = '';
+
   @Input() honor: string = '';
 
   // コンテンツサイズ
@@ -97,7 +101,12 @@ export class TableTextComponent implements OnInit {
       'font-size': '14px',
       'border-bottom': '1px gray solid',
     };
-    this.contentsText = this.contentsTextFromParent.join('\n  ');
+    this.contentsText = this.contentsTextFromParent.join('\n ');
+    if (this.contentsWordBackYeallow) {
+      this.contentsWordStyle = {
+        'background-color': 'yellow',
+      };
+    }
   }
   getValue(): string {
     let result = '';
@@ -109,7 +118,7 @@ export class TableTextComponent implements OnInit {
   getId(): string {
     return this.id;
   }
-  setId(id: string){
+  setId(id: string) {
     this.id = id;
   }
 }
