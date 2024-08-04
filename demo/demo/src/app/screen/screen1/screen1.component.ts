@@ -11,6 +11,6 @@ export class Screen1Component implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.value = '上からの値';
+    this.value = '親からの値';
   }
 }

@@ -15,13 +15,32 @@ export class VpTextComponent implements OnInit {
   @Input() value: string = '';
   // 表タイトル
   @Input() title: string = '';
+  // 必須
+  @Input() required: boolean = false;
+  // 必須位置
+  @Input() requiredPos: string = '0px';
+
+  // ヘッダーテキスト
+  @Input() headerText: string = '';
+
+  // ヘッダー幅
+  @Input() headerWidth:string = '';
+  // コンテンツ幅
+  @Input() contentsWidth: string = '';
 
   // 最終ラインの色
   lineColor: string = '';
 
-  // スタイル
+  // 必須スタイル
+  requiredStyle: any;
+
+  // ヘッダースタイル
   headerStyle: any;
+  // タイトルスタイル
+  titleStyle: any;
+  // コンテンツスタイル
   contentsStyle: any;
+
   constructor() {}
 
   ngOnInit(): void {
@@ -33,20 +52,29 @@ export class VpTextComponent implements OnInit {
     if (this.entry) {
       this.headerStyle = {
         display: 'flex',
-        width: '160px',
+        width: this.headerWidth + 'px',
         height: '80px',
         'background-color': '#f2f2f2',
       };
-      this.contentsStyle = { width: '400px' };
     } else {
       this.headerStyle = {
         display: 'flex',
-        width: '160px',
+        width: this.headerWidth + 'px',
         height: '40px',
         'background-color': '#f2f2f2',
       };
-      this.contentsStyle = { width: '400px' };
     }
+    this.contentsStyle = { width: parseInt(this.contentsWidth) + 'px' };
+    this.requiredStyle = {
+      'margin-top': this.requiredPos,
+      'vertical-align': 'top'
+    };
+    this.titleStyle = {
+      width: parseInt(this.headerWidth) + parseInt(this.contentsWidth) + 'px',
+      'font-weight': 'bold',
+      'font-size': '14px',
+      'border-bottom': '1px gray solid',
+    };
   }
   getData(): string {
     return this.value;

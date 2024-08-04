@@ -1,18 +1,20 @@
 <table>
-  <tr *ngIf="title != ''">
-    <td colspan="2" style="width: 560px; font-weight: bold; font-size: 14px;border-bottom: 1px gray solid;">
+  <tr *ngIf="title !== ''">
+    <td colspan="2" [ngStyle]="titleStyle">
       {{ title }}
     </td>
   </tr>
   <tr [style.border-bottom]="lineColor">
     <td [ngStyle]="headerStyle">
-      <span style="margin: 10px 6px 0px 4px"> 口座名義人(漢字) </span>
-      <img
-        style="margin-top: 5px"
-        src="assets/必須.png"
-        width="34"
-        height="32"
-      />
+      <span
+        >{{ headerText }}
+        <img
+          *ngIf="required"
+          [ngStyle]="requiredStyle"
+          src="assets/必須.png"
+          width="34"
+          height="32"
+      /></span>
     </td>
     <td [ngStyle]="contentsStyle">
       <span *ngIf="entry" style="margin: 0px 0px 0px 10px">

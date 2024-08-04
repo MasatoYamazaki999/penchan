@@ -1,2 +1,25 @@
-<app-vp-text title="口座情報" [value]="value"></app-vp-text>
+<app-vp-text title="口座情報" [lastLine]="true" [value]="value"></app-vp-text><app-vp-text
+title="口座情報"
+[required]="true"
+requiredPos= "10px"
+headerText="口座名義人(漢字)１２３４５６７８９０１２３４５６７８９０１２３４５６７８"
+titleStyle="titleStyle"
+headerWidth="180"
+contentsWidth="400"
+[lastLine]="true"
+[entry]="true"
+[value]="value"
+></app-vp-text><p></p>
+<app-vp-text
+  title="口座情報２"
+  [required]="true"
+  requiredPos= "10px"
+  headerText="口座名義人(漢字)１２３４５６７８９０１２３４５６７８９０１２３４５６７８"
+  titleStyle="titleStyle"
+  headerWidth="180"
+  contentsWidth="400"
+  [lastLine]="true"
+  [entry]="true"
+  [value]="value"
+></app-vp-text>
 <app-vp-account-no [lastLine]="true"></app-vp-account-no>
