@@ -14,11 +14,13 @@ import { VpTextComponent } from './parts/vp-text/vp-text.component';
 
 import { FormsModule } from '@angular/forms';
 import { BaseTextComponent } from './parts/base/base-text/base-text.component';
+import { TableTextComponent } from './parts/middle/table-text/table-text.component';
+import { MksInfoComponent } from './parts/top/mks-info/mks-info.component';
 
 export const routes: Routes = [
   {
     path: 'screen1',
-    component: Screen1Component,
+    component: MksInfoComponent,
   },
   {
     path: 'screen2',
@@ -38,7 +40,9 @@ export const routes: Routes = [
     Screen1Component,
     Screen2Component,
     Screen3Component,
-    BaseTextComponent
+    BaseTextComponent,
+    TableTextComponent,
+    MksInfoComponent
   ],
   imports: [
     BrowserModule,
