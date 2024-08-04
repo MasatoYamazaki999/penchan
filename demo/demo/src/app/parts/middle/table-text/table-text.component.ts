@@ -42,6 +42,8 @@ export class TableTextComponent implements OnInit {
   titleStyle: any;
   // コンテンツスタイル
   contentsStyle: any;
+  @Input() honor: string = '';
+
   // コンテンツサイズ
   @Input() size: string = '';
 
@@ -82,14 +84,7 @@ export class TableTextComponent implements OnInit {
       'font-size': '14px',
       'border-bottom': '1px gray solid',
     };
-    this.contentsText = '';
-    for (let i = 0; i < 2; i++) {
-      if (i == this.contentsTextFromParent.length - 1) {
-        this.contentsText += this.contentsTextFromParent[i];
-      } else {
-        this.contentsText += this.contentsTextFromParent[i] + '\n  ';
-      }
-    }
+    this.contentsText = this.contentsTextFromParent.join('\n  ');
   }
   getData(): string {
     return this.value;
