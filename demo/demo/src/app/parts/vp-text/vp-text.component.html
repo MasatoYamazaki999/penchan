@@ -22,7 +22,7 @@
       </span>
       <p *ngIf="entry"></p>
       <span *ngIf="entry"  class="display">
-        <input type="text" placeholder="中小　太郎" [(ngModel)]="value" [size]="size"/>　さま
+        <app-base-text [value]="value"  size="25" suffix="さま"></app-base-text>
       </span>
       <span *ngIf="!entry" class="display">
         {{ value }}

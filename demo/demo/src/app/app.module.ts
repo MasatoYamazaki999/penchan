@@ -13,6 +13,7 @@ import { VpAccountNoComponent } from './parts/vp-account-no/vp-account-no.compon
 import { VpTextComponent } from './parts/vp-text/vp-text.component';
 
 import { FormsModule } from '@angular/forms';
+import { BaseTextComponent } from './parts/base/base-text/base-text.component';
 
 export const routes: Routes = [
   {
@@ -36,7 +37,8 @@ export const routes: Routes = [
     VpTextComponent,
     Screen1Component,
     Screen2Component,
-    Screen3Component
+    Screen3Component,
+    BaseTextComponent
   ],
   imports: [
     BrowserModule,

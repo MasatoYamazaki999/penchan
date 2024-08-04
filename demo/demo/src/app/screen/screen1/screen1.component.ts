@@ -6,11 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screen1.component.css'],
 })
 export class Screen1Component implements OnInit {
-  value: string = '';
+  nameKanji: string = '';
 
   constructor() {}
 
   ngOnInit(): void {
-    this.value = '親からの値';
+    this.nameKanji = '最上位からの値';
   }
 }
