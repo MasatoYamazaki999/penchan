@@ -1,4 +1,9 @@
 .white_panel{
     background-color: white;
     border-radius: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.inner_panel{
+    margin-left: 12px;
 }
