@@ -12,14 +12,13 @@ import { ApiService } from 'src/app/service/api.service';
 export class Screen1Component implements OnInit {
   @ViewChildren(MksInfoComponent)
   public mksInfo!: QueryList<MksInfoComponent>;
-
   constructor(private apiService: ApiService) {}
-  public users!: any;
+
   ngOnInit(): void {}
   async onClick(): Promise<any> {
     const res = await this.apiService.fetch();
     console.log('======================');
-    console.log(res);
+    console.log(res.messages[0]);
     console.log('----------------------');
     // this.mksInfo.forEach((child) => {
     //   // alert('■' + child.getValue());
