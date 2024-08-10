@@ -9,6 +9,7 @@ var strage = {
 const strages = [strage];
 
 app.get("/msg/get", function (req, res, next) {
+    res.set({ "Access-Control-Allow-Origin": "*" });
     res.status(200);
     res.json({
         status: 200,
