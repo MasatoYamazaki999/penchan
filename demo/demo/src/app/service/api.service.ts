@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService {
   constructor(private httpClient: HttpClient) {}
+
   async fetch(): Promise<any> {
     const res = await fetch('http://localhost:3000/msg/get');
     const result = await res.json();
