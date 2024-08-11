@@ -18,6 +18,7 @@ export class Screen1Component implements OnInit {
   async onClick(): Promise<any> {
     const res = await this.apiService.fetch();
     console.log('======================');
+    console.log(res.response);
     console.log(res.messages[0]);
     console.log('----------------------');
     // this.mksInfo.forEach((child) => {
