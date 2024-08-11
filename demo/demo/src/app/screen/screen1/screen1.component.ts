@@ -15,14 +15,9 @@ export class Screen1Component implements OnInit {
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {}
-  async onClick(): Promise<any> {
-    const res = await this.apiService.fetch();
-    console.log('======================');
-    console.log(res.response);
-    console.log(res.messages[0]);
-    console.log('----------------------');
-    // this.mksInfo.forEach((child) => {
-    //   // alert('■' + child.getValue());
-    // });
+  onClick(): void {
+    this.mksInfo.forEach((child) => {
+      alert('■' + child.getValue());
+    });
   }
 }

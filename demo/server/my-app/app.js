@@ -25,14 +25,20 @@ const strage = {
 };
 const strages = [strage];
 
-function dbtest() {
+function getDbData(res) {
     console.log("server_log: test2");
-    const sql_str = "select id, data from table1";
+    const sql_str = "select data as dt from table1 where id=1";
     ibm_db.open(db_con_str, function (err, conn) {
         if (err) return console.log(err);
         conn.query(sql_str, function (err, data) {
             if (err) console.log(err);
-            console.log(data);
+            res.set({ "Access-Control-Allow-Origin": "*" });
+            res.status(200);
+            res.json({
+                status: 200,
+                response: data[0].DT,
+                messages: strages,
+            });
             conn.close(function () {
                 console.log("done");
             });
@@ -41,14 +47,7 @@ function dbtest() {
 }
 
 app.get("/msg/get", function (req, res, next) {
-    dbtest();
-    res.set({ "Access-Control-Allow-Origin": "*" });
-    res.status(200);
-    res.json({
-        status: 200,
-        response: "山崎テスト",
-        messages: strages,
-    });
+    getDbData(res);
 });
 
 app.get("/", (req, res) => {
