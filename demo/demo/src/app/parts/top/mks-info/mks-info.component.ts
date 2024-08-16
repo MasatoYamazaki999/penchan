@@ -1,6 +1,8 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TableTextComponent } from '../../middle/table-text/table-text.component';
 import { TableRadioComponent } from '../../middle/table-radio/table-radio.component';
+import { Injectable } from '@angular/core';
+import { ApiService } from 'src/app/service/api.service';
 
 @Component({
   selector: 'app-mks-info',
@@ -10,7 +12,7 @@ import { TableRadioComponent } from '../../middle/table-radio/table-radio.compon
 export class MksInfoComponent implements OnInit {
   @ViewChildren(TableTextComponent)
   public childs!: QueryList<TableTextComponent>;
-  
+
   @ViewChildren(TableRadioComponent)
   public radioChilds!: QueryList<TableRadioComponent>;
 
@@ -21,12 +23,13 @@ export class MksInfoComponent implements OnInit {
   mksnmknHeaderText: string = '';
   mkskjContentsText: string[] = [];
   mksknContentsText: string[] = [];
-  jgnsexContentsText: string[] = []
-  constructor() {}
+  jgnsexContentsText: string[] = [];
+  constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<any> {
+    const res = await this.apiService.fetch();
     this.honor = 'さま';
-    this.mksnmkj = '申込者(漢字)';
+    this.mksnmkj = res.response;
     this.mksnmkn = '申込者(フリガナ)';
 
     this.mksnmkjHeaderText = '申込者の氏名（漢字）';
@@ -44,13 +47,13 @@ export class MksInfoComponent implements OnInit {
   }
 
   public getValue(): any {
-    let result: string[] = []
-    
-    this.childs.forEach(child => {
-      result.push(child.getValue())
-    })
-    let ans = this.radioChilds.filter(n => n.id==='rd005');
-    result.push(ans[0].getValue())
+    let result: string[] = [];
+
+    this.childs.forEach((child) => {
+      result.push(child.getValue());
+    });
+    let ans = this.radioChilds.filter((n) => n.id === 'rd005');
+    result.push(ans[0].getValue());
     return result;
   }
 }
